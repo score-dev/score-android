@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".onBoarding.Onboarding4Fragment">
+
+    <TextView
+        android:id="@+id/textView_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_onboarding_tag"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="학교그룹"
+        android:textColor="@color/main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_info"
+        style="@style/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/onboarding4"
+        android:textColor="@color/text_color1"
+        app:layout_constraintEnd_toEndOf="@+id/textView_tag"
+        app:layout_constraintStart_toStartOf="@+id/textView_tag"
+        app:layout_constraintTop_toBottomOf="@+id/textView_tag" />
+
+    <ImageView
+        android:id="@+id/imageView_onboarding"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_onboarding4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_info" />
+</androidx.constraintlayout.widget.ConstraintLayout>

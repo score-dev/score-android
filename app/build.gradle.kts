@@ -70,4 +70,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:3.11.0")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.9.0")
+
+    // dot indicator
+    implementation("com.tbuonomo:dotsindicator:5.0")
 }
