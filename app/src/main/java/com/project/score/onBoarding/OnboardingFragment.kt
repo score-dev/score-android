@@ -66,6 +66,9 @@ class OnboardingFragment : Fragment() {
         override fun createFragment(position: Int): Fragment {
             val resultFragment = when(position){
                 0 -> Onboarding1Fragment()
+                1 -> Onboarding2Fragment()
+                2 -> Onboarding3Fragment()
+                3 -> Onboarding4Fragment()
                 else -> Onboarding1Fragment()
             }
             return resultFragment
