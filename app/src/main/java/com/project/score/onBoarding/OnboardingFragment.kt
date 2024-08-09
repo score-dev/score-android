@@ -65,6 +65,7 @@ class OnboardingFragment : Fragment() {
         // position번째 fragment 반환하여 보여준다.
         override fun createFragment(position: Int): Fragment {
             val resultFragment = when(position){
+                0 -> Onboarding1Fragment()
                 else -> Onboarding1Fragment()
             }
             return resultFragment
