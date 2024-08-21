@@ -15,4 +15,5 @@
     <color name="icon_color">#6B737F</color>
     <color name="red">#FF4343</color>
     <color name="blue">#1975FF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>
