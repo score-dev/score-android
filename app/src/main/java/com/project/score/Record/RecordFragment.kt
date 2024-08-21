@@ -21,4 +21,15 @@ class RecordFragment : Fragment() {
 
         return binding.root
     }
+
+    fun initView() {
+        binding.run {
+            toolbar.run {
+                textViewHead.text = "기록하기"
+                buttonBack.setOnClickListener {
+
+                }
+            }
+        }
+    }
 }
