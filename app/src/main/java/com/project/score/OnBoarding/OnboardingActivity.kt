@@ -1,4 +1,4 @@
-package com.project.score.onBoarding
+package com.project.score.OnBoarding
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
