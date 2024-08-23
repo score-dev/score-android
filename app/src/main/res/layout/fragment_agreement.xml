@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_next" />
+            android:src="@drawable/ic_next_white" />
     </LinearLayout>
 
     <LinearLayout
@@ -142,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_next" />
+            android:src="@drawable/ic_next_white" />
     </LinearLayout>
 
     <LinearLayout
@@ -179,7 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_next" />
+            android:src="@drawable/ic_next_white" />
 
     </LinearLayout>
 

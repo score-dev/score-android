@@ -1,4 +1,4 @@
-package com.project.score.onBoarding
+package com.project.score.OnBoarding
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.project.score.MainActivity
-import com.project.score.R
 import com.project.score.databinding.FragmentOnboardingBinding
 
 class OnboardingFragment : Fragment() {

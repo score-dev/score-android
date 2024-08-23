@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".onBoarding.Onboarding1Fragment">
+    tools:context=".OnBoarding.Onboarding1Fragment">
 
     <TextView
         android:id="@+id/textView_tag"

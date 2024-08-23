@@ -1,23 +1,19 @@
-package com.project.score.onBoarding
+package com.project.score.Mypage.Setting
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.project.score.databinding.FragmentOnboarding2Binding
+import com.project.score.R
 
-class Onboarding2Fragment : Fragment() {
-
-    lateinit var binding: FragmentOnboarding2Binding
+class NotificationSettingFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        binding = FragmentOnboarding2Binding.inflate(layoutInflater)
-
-        return binding.root
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_notification_setting, container, false)
     }
 }

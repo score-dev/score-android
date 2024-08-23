@@ -48,13 +48,13 @@
         <item name="android:lineSpacingExtra">0dp</item>
     </style>
 
-    <!-- 버튼 스타일 -->
+    <!-- 하단 버튼 스타일 -->
     <style name="Button" parent="button">
         <item name="android:padding">10dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:backgroundTint">@color/main</item>
+        <item name="android:backgroundTint">@drawable/selector_button_background</item>
         <item name="cornerRadius">15dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
@@ -72,6 +72,19 @@
         <item name="cornerRadius">15dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <!--  EditText -->
+    <!-- Title, Topic, SubTopic -->
+    <style name="OneLineEditText">
+        <item name="android:layout_height">47dp</item>
+        <item name="android:maxLength">15</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColor">#2A3038</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">@color/text_color3</item>
+        <item name="android:background">@drawable/background_edittext</item>
     </style>
 
 </resources>

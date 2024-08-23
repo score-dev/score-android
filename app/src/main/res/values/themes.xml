@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/main</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
+        <item name="colorSurfaceVariant">@color/grey3</item>
         <item name="android:windowLightStatusBar">true</item>   <!-- 상태바 아이콘(true: 검정 / false: 흰색) -->
     </style>
 
