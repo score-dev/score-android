@@ -105,7 +105,7 @@
         app:layout_constraintTop_toBottomOf="@+id/button_cause3" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/editText_cause"
         style="@style/OneLineEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -119,6 +119,17 @@
         app:layout_constraintStart_toStartOf="@+id/button_cause4"
         app:layout_constraintTop_toBottomOf="@+id/button_cause4" />
 
+    <ImageView
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:src="@drawable/ic_clear"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_cause"
+        app:layout_constraintEnd_toEndOf="@+id/editText_cause"
+        app:layout_constraintTop_toTopOf="@+id/editText_cause" />
+
     <Button
         android:id="@+id/button_withdraw"
         style="@style/Button"
@@ -128,9 +139,10 @@
         android:layout_marginTop="109dp"
         android:layout_marginEnd="16dp"
         android:text="탈퇴하기"
+        android:enabled="false"
         app:cornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_cause" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
