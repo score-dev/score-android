@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignUp.SignUpGoalTimeFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="19dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="건너뛰기"
+        android:textColor="@color/text_color2"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <TextView
+            android:id="@+id/progress1"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_selected" />
+
+        <TextView
+            android:id="@+id/progress2"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_selected" />
+
+        <TextView
+            android:id="@+id/progress3"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_selected" />
+
+        <TextView
+            android:id="@+id/progress4"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_selected" />
+
+        <TextView
+            android:id="@+id/progress5"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_selected" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_goal_time_intro1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="꾸준히 운동할 수 있게 스코어가 도와드릴게요!"
+        android:textColor="@color/icon_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/textView_goal_time_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="사용자"
+        android:textColor="@color/main"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@id/textView_goal_time_intro1"
+        app:layout_constraintTop_toBottomOf="@+id/textView_goal_time_intro1" />
+
+    <TextView
+        android:id="@+id/textView_goal_time_intro2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="님이 운동할 시간을"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/textView_goal_time_username"
+        app:layout_constraintTop_toTopOf="@+id/textView_goal_time_username" />
+
+    <TextView
+        android:id="@+id/textView_goal_time_intro3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="설정해주세요!"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/textView_goal_time_username"
+        app:layout_constraintTop_toBottomOf="@+id/textView_goal_time_intro2" />
+
+    <EditText
+        android:id="@+id/editText_goal_time"
+        style="@style/OneLineEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="목표 운동 시간"
+        android:inputType="text"
+        android:paddingHorizontal="17dp"
+        android:paddingVertical="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_goal_time_intro3"
+        tools:maxLength="10" />
+
+    <Button
+        android:id="@+id/button_next"
+        style="@style/Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="21dp"
+        android:text="다음으로"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
