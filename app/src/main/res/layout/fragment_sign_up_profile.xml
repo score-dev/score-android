@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SignUp.SignUpProfileFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <TextView
+            android:id="@+id/progress1"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_selected" />
+
+        <TextView
+            android:id="@+id/progress2"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_unselected" />
+
+        <TextView
+            android:id="@+id/progress3"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_unselected" />
+
+        <TextView
+            android:id="@+id/progress4"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_unselected" />
+
+        <TextView
+            android:id="@+id/progress5"
+            android:layout_width="61dp"
+            android:layout_height="3dp"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_progress_unselected" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_profile_intro1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="처음 방문하셨군요! 환영해요:)"
+        android:textColor="@color/icon_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/textView_profile_intro2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="사용할 사진을 골라주세요!"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/textView_profile_intro1"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile_intro1" />
+
+    <Button
+        android:id="@+id/button_next"
+        style="@style/Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="21dp"
+        android:enabled="false"
+        android:text="다음으로"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile_intro2" />
+
+    <FrameLayout
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/background_function"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_profile"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_profile">
+
+        <ImageView
+            android:id="@+id/button_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_camera" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView_profile_intro3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="마음에 드는 사진이 없나요?\n그럼 아래 캐릭터 중에 하나를 골라보세요!"
+        android:textColor="@color/text_color2"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profile" />
+
+    <FrameLayout
+        android:id="@+id/layout_profile1"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="21dp"
+        android:background="@drawable/background_profile1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile_intro3">
+
+        <ImageView
+            android:id="@+id/imageView_profile1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_profile1" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_profile2"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/background_profile2"
+        app:layout_constraintStart_toEndOf="@+id/layout_profile1"
+        app:layout_constraintTop_toTopOf="@+id/layout_profile1">
+
+        <ImageView
+            android:id="@+id/imageView_profile2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_profile2" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_profile3"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/background_profile3"
+        app:layout_constraintStart_toEndOf="@+id/layout_profile2"
+        app:layout_constraintTop_toTopOf="@+id/layout_profile2">
+
+        <ImageView
+            android:id="@+id/imageView_profile3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_profile3" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_profile4"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_marginTop="17dp"
+        android:background="@drawable/background_profile4"
+        app:layout_constraintStart_toStartOf="@+id/layout_profile1"
+        app:layout_constraintTop_toBottomOf="@+id/layout_profile1">
+
+        <ImageView
+            android:id="@+id/imageView_profile4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_profile4" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_profile5"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/background_profile5"
+        app:layout_constraintStart_toEndOf="@+id/layout_profile4"
+        app:layout_constraintTop_toTopOf="@+id/layout_profile4">
+
+        <ImageView
+            android:id="@+id/imageView_profile5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_profile5" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
