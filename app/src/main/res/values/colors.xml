@@ -16,4 +16,8 @@
     <color name="red">#FF4343</color>
     <color name="blue">#1975FF</color>
     <color name="transparent">#00FFFFFF</color>
+    
+    <!-- calendar color-->
+    <color name="text_gray">#A8A8A8</color>
+    <color name="layout_gray">#F2F3F7</color>
 </resources>
