@@ -17,6 +17,11 @@ class MypageMainFragment : Fragment() {
     private lateinit var binding: FragmentMypageMainBinding
     private lateinit var mainActivity: MainActivity
 
+    // Fragment 리스트를 onCreateView에서만 설정
+    private val fragmentList = listOf(
+        MypageFeedFragment(),
+        MypageCalendarFragment()
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +44,13 @@ class MypageMainFragment : Fragment() {
             }
 
 
+            pagerTab.isUserInputEnabled = false
+            pagerTab.adapter = TabAdapterClass(mainActivity, fragmentList)
+
+            // 탭 구성
+            TabLayoutMediator(tab, pagerTab) { tab: TabLayout.Tab, i: Int ->
+                tab.text = tabName[i]
+            }.attach()
         }
 
         return binding.root
