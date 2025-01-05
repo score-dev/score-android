@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Mypage.MypageMainFragment" >
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+            <TextView
+                android:id="@+id/background"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_main"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView_profile"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginBottom="36dp"
+                android:src="@drawable/ic_profile"
+                app:layout_constraintBottom_toBottomOf="@+id/background"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/layout_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/layout_notification_time"
+                app:layout_constraintStart_toStartOf="@+id/layout_notification_time"
+                app:layout_constraintTop_toBottomOf="@+id/layout_notification_time">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_mate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_button_mypage"
+                    android:paddingHorizontal="19dp"
+                    android:paddingVertical="13dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imageView_mate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_mate" />
+
+                        <TextView
+                            android:id="@+id/textView_mate"
+                            style="@style/body3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="내 친구"
+                            android:textColor="@color/text_color1" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_edit_profile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_button_mypage"
+                    android:paddingHorizontal="19dp"
+                    android:paddingVertical="13dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imageView_edit_profile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_edit" />
+
+                        <TextView
+                            android:id="@+id/textView_edit_profile"
+                            style="@style/body3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="프로필 수정"
+                            android:textColor="@color/text_color1" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_notification_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/background_button_mypage"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="13dp"
+                app:layout_constraintEnd_toEndOf="@+id/layout_level"
+                app:layout_constraintStart_toStartOf="@+id/layout_level"
+                app:layout_constraintTop_toBottomOf="@+id/layout_level">
+
+                <TextView
+                    android:id="@+id/textView_notification"
+                    style="@style/body3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="운동 알림 시간"
+                    android:textColor="@color/text_color1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView_notification_time"
+                    style="@style/body3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="운동 알림 시간"
+                    android:textColor="@color/text_color1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/background_level"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout_profile">
+
+                <ImageView
+                    android:id="@+id/imageView_level_profile"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:src="@drawable/ic_profile"
+                    app:layout_constraintBottom_toBottomOf="@+id/graph_level"
+                    app:layout_constraintStart_toStartOf="@+id/layout_level"
+                    app:layout_constraintTop_toTopOf="@+id/textView_level" />
+
+                <TextView
+                    android:id="@+id/textView_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="Lv. NN"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView_level_profile"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView_level_point_description"
+                    style="@style/caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="다음 레벨까지"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView_level"
+                    app:layout_constraintEnd_toStartOf="@+id/textView_level_point"
+                    app:layout_constraintTop_toTopOf="@+id/textView_level" />
+
+                <TextView
+                    android:id="@+id/textView_level_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
+                    android:text="nn 포인트"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView_level_point_description"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView_level_point_description" />
+
+                <TextView
+                    android:id="@+id/graph_level"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/background_level_status_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_level_point"
+                    app:layout_constraintStart_toStartOf="@+id/textView_level"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_level" />
+
+                <TextView
+                    android:id="@+id/graph_level_my_status"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/background_level_status_main"
+                    app:layout_constraintBottom_toBottomOf="@+id/graph_level"
+                    app:layout_constraintEnd_toEndOf="@+id/graph_level"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/graph_level"
+                    app:layout_constraintTop_toTopOf="@+id/graph_level"
+                    app:layout_constraintWidth_percent="0.5" />
+
+                <ImageView
+                    android:id="@+id/imageView_level_step"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:src="@drawable/ic_footsteps"
+                    app:layout_constraintBottom_toBottomOf="@+id/graph_level_my_status"
+                    app:layout_constraintStart_toEndOf="@+id/graph_level_my_status"
+                    app:layout_constraintTop_toTopOf="@+id/graph_level_my_status" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_profile"
+                app:layout_constraintStart_toEndOf="@+id/imageView_profile"
+                app:layout_constraintTop_toTopOf="@+id/imageView_profile">
+
+                <TextView
+                    android:id="@+id/textView_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
+                    android:text="닉네임"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/textView_school"
+                    style="@style/body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="학교 학년"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/layout_button"
+                app:layout_constraintStart_toStartOf="@+id/layout_button"
+                app:layout_constraintTop_toBottomOf="@+id/layout_button"
+                app:tabIndicatorColor="@color/sub"
+                app:tabIndicatorFullWidth="true"
+                app:tabRippleColor="@color/transparent"
+                app:tabTextColor="@color/text_color1">
+            </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pagerTab"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tab"
+        app:layout_constraintStart_toStartOf="@id/tab"
+        app:layout_constraintTop_toBottomOf="@id/tab"
+        app:layout_constraintVertical_bias="0.0" />
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </androidx.core.widget.NestedScrollView>-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
