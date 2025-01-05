@@ -1,9 +1,16 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
+
+val properties = Properties().apply {
+    load(FileInputStream(rootProject.file("local.properties")))
+}
+val kakaoNativeKey = properties.getProperty("kakao_app_key")
 
 android {
     namespace = "com.project.score"
@@ -19,6 +26,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String","server_url",getApiKey("server_url"))
+        buildConfigField("String", "KAKAO_APP_KEY", "\"${properties["kakao_key"]}\"")
+
+        manifestPlaceholders["kakao_native_key"] = kakaoNativeKey
     }
 
     buildFeatures {
@@ -71,6 +81,8 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.9.0")
 
+    // 카카오 로그인
+    implementation("com.kakao.sdk:v2-user:2.20.6")
     // dot indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
 }
