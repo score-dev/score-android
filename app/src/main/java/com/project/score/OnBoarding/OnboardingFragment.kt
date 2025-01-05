@@ -1,6 +1,7 @@
 package com.project.score.OnBoarding
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +9,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.project.score.Login.LoginFragment
 import com.project.score.MainActivity
+import com.project.score.R
 import com.project.score.databinding.FragmentOnboardingBinding
 
 class OnboardingFragment : Fragment() {
 
     lateinit var binding: FragmentOnboardingBinding
-    lateinit var mainActivity: MainActivity
+    lateinit var onboardingActivity: OnboardingActivity
+
+    var totalPager = 4
+    var currentItem = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,17 +28,35 @@ class OnboardingFragment : Fragment() {
     ): View? {
 
         binding = FragmentOnboardingBinding.inflate(layoutInflater)
-        mainActivity = activity as MainActivity
+        onboardingActivity = activity as OnboardingActivity
 
         binding.run {
             pager2.run{
-                adapter = MainFragmentStateAdapter(mainActivity)
+                adapter = MainFragmentStateAdapter(onboardingActivity)
 
-                binding.run {
-                    dotsIndicator.setViewPager2(binding.pager2)
-                    buttonNext.setOnClickListener {
+                dotsIndicator.setViewPager2(binding.pager2)
+                buttonNext.setOnClickListener {
+                    currentItem = binding.pager2.currentItem
+                    Log.d("##", "current item : ${currentItem}")
 
+                    if (currentItem < totalPager - 1) {
+                        Log.d("##", "current item < totalPager")
+                        // 현재 페이지가 마지막 페이지가 아니면 다음 페이지로 이동
+                        pager2.setCurrentItem(currentItem + 1, true)
+                    } else {
+                        Log.d("##", "current item == totalPager")
+                        // 마지막 페이지면 버튼을 비활성화하거나 다른 작업 수행
+                        onboardingActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_onboarding, LoginFragment())
+                            .addToBackStack(null)
+                            .commit()
                     }
+                }
+                buttonSkip.setOnClickListener {
+                    onboardingActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_onboarding, LoginFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
 
                 // LAYOUT_DIRECTION_RTL : 스크롤 방향 - 오른쪽
