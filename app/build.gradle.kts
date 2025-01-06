@@ -5,6 +5,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 val properties = Properties().apply {
@@ -26,6 +27,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String","server_url",getApiKey("server_url"))
+        buildConfigField("String","google_key",getApiKey("google_key"))
         buildConfigField("String", "KAKAO_APP_KEY", "\"${properties["kakao_key"]}\"")
 
         manifestPlaceholders["kakao_native_key"] = kakaoNativeKey
@@ -83,6 +85,15 @@ dependencies {
 
     // 카카오 로그인
     implementation("com.kakao.sdk:v2-user:2.20.6")
+
+    // 구글 로그인
+    implementation("com.google.gms:google-services:4.3.15")
+    implementation("com.google.firebase:firebase-auth:22.0.0")
+    implementation("com.google.firebase:firebase-auth")
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+
     // dot indicator
     implementation("com.tbuonomo:dotsindicator:5.0")
 }

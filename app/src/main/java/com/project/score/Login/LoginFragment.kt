@@ -9,6 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -36,6 +41,22 @@ class LoginFragment : Fragment() {
             viewModel.checkOauth(onboardingActivity, "kakao", token.idToken.toString())
         }
     }
+
+    private val googleSignInClient: GoogleSignInClient by lazy { getGoogleClient() }
+    private val googleAuthLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+
+        try {
+            val account = task.getResult(ApiException::class.java)
+            // ID 토큰
+            account.idToken?.let {
+                viewModel.checkOauth(onboardingActivity,"google", it.toString())
+            }
+        } catch (e: ApiException) {
+            Log.d("##", "google login fail: ${e}")
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +92,28 @@ class LoginFragment : Fragment() {
                     UserApiClient.instance.loginWithKakaoAccount(onboardingActivity, callback = callback)
                 }
             }
+            buttonGoogle.setOnClickListener {
+                requestGoogleLogin()
+            }
+        }
 
         return binding.root
+    }
+
+    private fun requestGoogleLogin() {
+        googleSignInClient.signOut()
+        val signInIntent = googleSignInClient.signInIntent
+        googleAuthLauncher.launch(signInIntent)
+    }
+
+    private fun getGoogleClient(): GoogleSignInClient {
+        val googleSignInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope("https://www.googleapis.com/auth/pubsub"))
+            .requestServerAuthCode(BuildConfig.google_key) // 콘솔에서 가져온 client id 를 이용해 server authcode를 요청한다.
+            .requestIdToken(BuildConfig.google_key) // 콘솔에서 가져온 client id 를 이용해 id token을 요청한다.
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(requireActivity(), googleSignInOption)
     }
 }
