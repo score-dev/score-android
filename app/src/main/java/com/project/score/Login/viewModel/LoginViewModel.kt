@@ -3,6 +3,7 @@ package com.project.score.Login.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.project.score.API.ApiClient
+import com.project.score.API.request.signUp.OauthRequest
 import com.project.score.API.response.EmptyResponse
 import com.project.score.Login.AgreementFragment
 import com.project.score.Login.LoginFragment
@@ -20,7 +21,7 @@ class LoginViewModel  : ViewModel() {
     fun checkOauth(activity: OnboardingActivity, type: String, token: String) {
         val apiClient = ApiClient(activity)
 
-        apiClient.apiService.checkOauth(type, token).enqueue(object :
+        apiClient.apiService.checkOauth(type, OauthRequest(token)).enqueue(object :
             Callback<EmptyResponse> {
             override fun onResponse(
                 call: Call<EmptyResponse>,
