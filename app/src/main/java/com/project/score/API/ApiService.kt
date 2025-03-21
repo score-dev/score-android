@@ -29,6 +29,15 @@ interface ApiService {
         @Path("nickname") nickname: String
     ): Call<Int>
 
+    // 신규 회원 정보 저장
+    @Multipart
+    @POST("score/public/onboarding/fin")
+    fun signUp(
+        @Part("userDto") userDto: RequestBody,
+        @Part("schoolDto") schoolDto: RequestBody,
+        @Part file: MultipartBody.Part
+    ): Call<LoginResponse>
+
     // FCM 토큰 저장
     @POST("{userId}/token")
     fun setFcmToken(

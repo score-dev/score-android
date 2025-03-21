@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.kakao.sdk.user.model.User
 import com.project.score.BasicDialog
 import com.project.score.BasicDialogInterface
+import com.project.score.Home.HomeFragment
 import com.project.score.Login.viewModel.UserViewModel
 import com.project.score.MainActivity
 import com.project.score.OnBoarding.OnboardingActivity
@@ -50,7 +51,7 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
             }
 
             buttonNext.setOnClickListener {
-                setNotification()
+                viewModel.signUp(onboardingActivity)
             }
         }
 

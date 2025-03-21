@@ -10,6 +10,8 @@ import okhttp3.MultipartBody
 class MyApplication : Application() {
     companion object {
         lateinit var preferences: PreferenceUtil
+
+        var signUpImage: MultipartBody.Part? = null
         var signUpInfo: SignUpRequest? = SignUpRequest(
             userDto = Users(
                 nickname = "",
