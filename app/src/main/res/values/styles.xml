@@ -88,4 +88,21 @@
         <item name="android:background">@drawable/background_edittext</item>
     </style>
 
+    <!-- 이미지 round style-->
+    <style name="RoundSector50">
+        <item name="cornerSizeTopLeft">50dp</item>
+        <item name="cornerSizeTopRight">50dp</item>
+        <item name="cornerSizeBottomRight">50dp</item>
+        <item name="cornerSizeBottomLeft">50dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="RoundSector20">
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomRight">20dp</item>
+        <item name="cornerSizeBottomLeft">20dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
 </resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_level"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_level"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="13dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView_level_profile"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_profile_null"
+        app:layout_constraintBottom_toBottomOf="@+id/graph_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView_level" />
+
+    <TextView
+        android:id="@+id/textView_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="Lv. NN"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView_level_profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_level_point_description"
+        style="@style/caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:text="다음 레벨까지"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_level"
+        app:layout_constraintEnd_toStartOf="@+id/textView_level_point"
+        app:layout_constraintTop_toTopOf="@+id/textView_level" />
+
+    <TextView
+        android:id="@+id/textView_level_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="nn 포인트"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_level_point_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView_level_point_description" />
+
+    <TextView
+        android:id="@+id/graph_level"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/background_level_status_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_level_point"
+        app:layout_constraintStart_toStartOf="@+id/textView_level"
+        app:layout_constraintTop_toBottomOf="@+id/textView_level" />
+
+    <TextView
+        android:id="@+id/graph_level_my_status"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:background="@drawable/background_level_status_main"
+        app:layout_constraintBottom_toBottomOf="@+id/graph_level"
+        app:layout_constraintEnd_toEndOf="@+id/graph_level"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/graph_level"
+        app:layout_constraintTop_toTopOf="@+id/graph_level"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/imageView_level_step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:src="@drawable/ic_footsteps"
+        app:layout_constraintBottom_toBottomOf="@+id/graph_level_my_status"
+        app:layout_constraintStart_toEndOf="@+id/graph_level_my_status"
+        app:layout_constraintTop_toTopOf="@+id/graph_level_my_status" />
+</androidx.constraintlayout.widget.ConstraintLayout>
