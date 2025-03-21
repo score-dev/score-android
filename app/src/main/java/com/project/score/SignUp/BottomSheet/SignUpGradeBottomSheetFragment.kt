@@ -1,60 +1,57 @@
 package com.project.score.SignUp.BottomSheet
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.project.score.MainActivity
 import com.project.score.R
+import com.project.score.Utils.MyApplication
+import com.project.score.databinding.FragmentSignUpGradeBottomSheetBinding
+import com.project.score.databinding.FragmentSignUpSchoolBottomSheetBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+interface SignUpGradeBottomSheetListener {
+    fun onGradeSelected(grade: String)
+}
+class SignUpGradeBottomSheetFragment : BottomSheetDialogFragment() {
+    private lateinit var listener: SignUpGradeBottomSheetListener
+    lateinit var binding: FragmentSignUpGradeBottomSheetBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpGradeBottomSheetFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SignUpGradeBottomSheetFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        listener = parentFragment as SignUpGradeBottomSheetListener
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up_grade_bottom_sheet, container, false)
+        binding = FragmentSignUpGradeBottomSheetBinding.inflate(inflater, container, false)
+
+        binding.run {
+            textViewGrade1.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.grade = 1
+                onItemClicked(textViewGrade1.text.toString())
+            }
+            textViewGrade2.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.grade = 2
+                onItemClicked(textViewGrade2.text.toString())
+            }
+            textViewGrade3.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.grade = 3
+                onItemClicked(textViewGrade3.text.toString())
+            }
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpGradeBottomSheetFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpGradeBottomSheetFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun onItemClicked(grade: String) {
+        listener.onGradeSelected(grade)
+        dismiss()
     }
 }

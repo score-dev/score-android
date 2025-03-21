@@ -166,6 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:ems="10"
+        android:focusable="false"
         android:hint="학년 선택"
         android:inputType="text"
         android:paddingHorizontal="17dp"

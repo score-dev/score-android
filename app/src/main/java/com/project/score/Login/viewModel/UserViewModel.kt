@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.project.score.API.ApiClient
 import com.project.score.API.TokenManager
+import com.project.score.API.neis.NeisApiClient
+import com.project.score.API.neis.response.NeisSchoolResponse
+import com.project.score.API.neis.response.SchoolDto
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.Login.AgreementFragment
 import com.project.score.MainActivity
@@ -24,6 +27,7 @@ import retrofit2.Response
 class UserViewModel  : ViewModel() {
 
     var isUniqueNickName: MutableLiveData<Boolean> = MutableLiveData()
+    var schoolInfoList = MutableLiveData<MutableList<SchoolDto>>()
     fun checkOauth(activity: OnboardingActivity, type: String, token: String) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
@@ -109,6 +113,57 @@ class UserViewModel  : ViewModel() {
             }
 
             override fun onFailure(call: Call<Int>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 학교 정보 API
+    fun getSchoolList(activity: Activity, apiKey: String, input: String) {
+
+        var tempSchoolDto = mutableListOf<SchoolDto>()
+        val apiClient = NeisApiClient(activity)
+
+        apiClient.apiService.getSchoolList(apiKey, "json", 1, 100, input).enqueue(object :
+            Callback<NeisSchoolResponse> {
+            override fun onResponse(
+                call: Call<NeisSchoolResponse>,
+                response: Response<NeisSchoolResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+
+                    val schoolList = response.body()?.schoolInfo?.get(1)?.row ?: emptyList()
+
+                    Log.d("##", "school list : ${schoolList}")
+
+                    for (school in schoolList) {
+                        var schoolCode = school.SD_SCHUL_CODE
+                        var schoolName = school.SCHUL_NM
+                        var schoolAddress = school.ORG_RDNMA
+
+                        tempSchoolDto.add(SchoolDto(schoolCode, schoolName, schoolAddress))
+
+                        Log.d("NEIS_API", "코드 : ${school.SD_SCHUL_CODE} 학교명: ${school.SCHUL_NM}, 위치: ${school.ORG_RDNMA}")
+                    }
+
+                    schoolInfoList.value = tempSchoolDto
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: NeisSchoolResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<NeisSchoolResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
