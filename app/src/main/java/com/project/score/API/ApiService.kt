@@ -3,11 +3,16 @@ package com.project.score.API
 import com.project.score.API.request.signUp.OauthRequest
 import com.project.score.API.response.EmptyResponse
 import com.project.score.API.response.login.LoginResponse
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -18,4 +23,10 @@ interface ApiService {
         @Query("provider") provider: String,
         @Body body: RequestBody
     ): Call<LoginResponse>
+
+    // 닉네임 중복 검사
+    @GET("score/public/{nickname}/exists")
+    fun checkNickName(
+        @Path("nickname") nickname: String
+    ): Call<Int>
 }

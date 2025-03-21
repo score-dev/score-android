@@ -132,9 +132,16 @@ class SignUpNicknameFragment : Fragment() {
     }
 
     fun initView() {
-        binding.toolbar.run {
-            buttonBack.setOnClickListener {
-                fragmentManager?.popBackStack()
+        binding.run {
+            root.setOnTouchListener { v, event ->
+                onboardingActivity.hideKeyboard()
+                false
+            }
+
+            toolbar.run {
+                buttonBack.setOnClickListener {
+                    fragmentManager?.popBackStack()
+                }
             }
         }
     }
