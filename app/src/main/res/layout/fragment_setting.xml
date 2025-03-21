@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"
+        layout="@layout/toolbar_back_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -27,6 +27,7 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="알림 설정"
             android:textColor="@color/text_color1" />
@@ -35,7 +36,8 @@
             android:id="@+id/imageView_notification_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next_black" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,6 +55,7 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="차단한 메이트 관리하기"
             android:textColor="@color/text_color1" />
@@ -61,7 +64,8 @@
             android:id="@+id/imageView_mate_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next_black" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
     <LinearLayout
@@ -79,6 +83,7 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="문의하기"
             android:textColor="@color/text_color1" />
@@ -87,7 +92,8 @@
             android:id="@+id/imageView_qna_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next_black" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
     <LinearLayout
@@ -105,6 +111,7 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="이용약관"
             android:textColor="@color/text_color1" />
@@ -113,7 +120,8 @@
             android:id="@+id/imageView_agreement_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next_black" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
     <LinearLayout
@@ -131,6 +139,7 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="로그아웃"
             android:textColor="@color/text_color1" />
@@ -139,7 +148,8 @@
             android:id="@+id/imageView_logout_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next_black" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
     <LinearLayout
@@ -157,6 +167,7 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:text="탈퇴하기"
             android:textColor="@color/text_color1" />
@@ -165,7 +176,8 @@
             android:id="@+id/imageView_withdraw_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_next_black" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
 

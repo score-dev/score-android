@@ -29,7 +29,7 @@
             tools:targetApi="q" />
 
         <NumberPicker
-            android:id="@+id/spinner_minute"
+            android:id="@+id/spinner_hour"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:baselineAligned="false"
@@ -49,7 +49,7 @@
             android:textSize="24sp" />
 
         <NumberPicker
-            android:id="@+id/spinner_second"
+            android:id="@+id/spinner_minute"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"

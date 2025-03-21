@@ -6,27 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".Login.AgreementFragment" >
 
-    <ImageView
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_back_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/pretendard_semi_bold"
         android:text="서비스 이용 동의"
         android:textColor="#1E1F23"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/button_back"
-        app:layout_constraintTop_toBottomOf="@+id/button_back" />
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <LinearLayout
         android:id="@+id/layout_agreement_all"
