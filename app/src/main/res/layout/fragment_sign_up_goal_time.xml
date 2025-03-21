@@ -136,6 +136,7 @@
         android:ems="10"
         android:hint="목표 운동 시간"
         android:inputType="text"
+        android:focusable="false"
         android:paddingHorizontal="17dp"
         android:paddingVertical="18dp"
         app:layout_constraintEnd_toEndOf="parent"
