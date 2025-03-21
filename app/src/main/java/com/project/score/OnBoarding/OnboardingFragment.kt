@@ -48,14 +48,12 @@ class OnboardingFragment : Fragment() {
                         // 마지막 페이지면 버튼을 비활성화하거나 다른 작업 수행
                         onboardingActivity.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainerView_onboarding, LoginFragment())
-                            .addToBackStack(null)
                             .commit()
                     }
                 }
                 buttonSkip.setOnClickListener {
                     onboardingActivity.supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_onboarding, LoginFragment())
-                        .addToBackStack(null)
                         .commit()
                 }
 

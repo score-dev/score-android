@@ -27,7 +27,6 @@ class SplashFragment : Fragment() {
 
             val transaction = onboardingActivity.supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainerView_onboarding, nextFragment)
-//            transaction.addToBackStack("")
             transaction.commit()
         }, 3000)
 

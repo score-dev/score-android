@@ -2,6 +2,8 @@ package com.project.score.API
 
 import com.project.score.API.request.signUp.OauthRequest
 import com.project.score.API.response.EmptyResponse
+import com.project.score.API.response.login.LoginResponse
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,6 +16,6 @@ interface ApiService {
     @POST("score/auth/oauth")
     fun checkOauth(
         @Query("provider") provider: String,
-        @Body parameters: OauthRequest
-    ): Call<EmptyResponse>
+        @Body body: RequestBody
+    ): Call<LoginResponse>
 }
