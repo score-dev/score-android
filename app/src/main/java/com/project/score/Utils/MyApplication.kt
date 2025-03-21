@@ -32,5 +32,9 @@ class MyApplication : Application() {
             ),
             file = ""
         )
+
+        var userInfo: UserInfoResponse? = null
+        var userNickname = ""
+
     }
 }

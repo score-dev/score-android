@@ -12,6 +12,7 @@ import com.project.score.API.neis.NeisApiClient
 import com.project.score.API.neis.response.NeisSchoolResponse
 import com.project.score.API.neis.response.SchoolDto
 import com.project.score.API.request.signUp.FcmRequest
+import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.Login.AgreementFragment
 import com.project.score.MainActivity
@@ -55,8 +56,6 @@ class UserViewModel  : ViewModel() {
                     } else {
                         tokenManager.saveTokens("Bearer ${result?.accessToken.toString()}", "Bearer ${result?.refreshToken.toString()}")
                         tokenManager.saveUserId(result?.id ?: 0)
-
-                        getUserInfo(activity)
 
                         val mainIntent = Intent(activity, MainActivity::class.java)
                         mainIntent.putExtra("isLogin", true)
@@ -261,4 +260,44 @@ class UserViewModel  : ViewModel() {
             }
         })
     }
+
+    // 유저 정보
+    fun getUserInfo(activity: Activity) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getUserInfo(tokenManager.getUserId(), tokenManager.getAccessToken().toString()).enqueue(object :
+            Callback<UserInfoResponse> {
+            override fun onResponse(
+                call: Call<UserInfoResponse>,
+                response: Response<UserInfoResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: UserInfoResponse? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    MyApplication.userInfo = result
+                    MyApplication.userNickname = result?.nickname.toString()
+                    Log.d("##", "viewModel user info : ${MyApplication.userInfo}")
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: UserInfoResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
 }

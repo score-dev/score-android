@@ -2,6 +2,7 @@ package com.project.score.API
 
 import com.project.score.API.request.signUp.FcmRequest
 import com.project.score.API.response.login.LoginResponse
+import com.project.score.API.response.login.UserInfoResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -45,4 +46,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body body: FcmRequest
     ): Call<String>
+
+    // 유저 정보
+    @GET("score/user/info")
+    fun getUserInfo(
+        @Query("id") id: Int,
+        @Header("Authorization") token: String
+    ): Call<UserInfoResponse>
 }
