@@ -61,4 +61,12 @@ interface ApiService {
         @Query("id") id: Int,
         @Header("Authorization") token: String
     ): Call<HomeResponse>
+
+    // 바통 찌르기
+    @POST("score/groups/mates/baton")
+    fun batonGroupMember(
+        @Query("senderId") senderId: Int,
+        @Query("receiverId") receiverId: Int,
+        @Header("Authorization") token: String
+    ): Call<Boolean>
 }

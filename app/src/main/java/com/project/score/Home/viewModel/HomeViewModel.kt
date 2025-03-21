@@ -54,4 +54,40 @@ class HomeViewModel: ViewModel() {
         })
     }
 
+    // 바통 찌르기
+    fun batonGroupMember(activity: Activity, receiverId: Int) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.batonGroupMember(tokenManager.getUserId(), receiverId, tokenManager.getAccessToken().toString()).enqueue(object :
+            Callback<Boolean> {
+            override fun onResponse(
+                call: Call<Boolean>,
+                response: Response<Boolean>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: Boolean? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: Boolean? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
 }
