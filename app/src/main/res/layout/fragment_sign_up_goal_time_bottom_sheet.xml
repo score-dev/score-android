@@ -7,6 +7,16 @@
     android:background="@drawable/background_bottom_sheet"
     tools:context=".SignUp.BottomSheet.SignUpGoalTimeBottomSheetFragment">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#FFF0EC"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout_goal_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout_goal_time" />
+
     <LinearLayout
         android:id="@+id/linearLayout_goal_time"
         android:layout_width="wrap_content"
@@ -29,7 +39,7 @@
             tools:targetApi="q" />
 
         <NumberPicker
-            android:id="@+id/spinner_minute"
+            android:id="@+id/spinner_hour"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:baselineAligned="false"
@@ -49,7 +59,7 @@
             android:textSize="24sp" />
 
         <NumberPicker
-            android:id="@+id/spinner_second"
+            android:id="@+id/spinner_minute"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"

@@ -6,8 +6,17 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="colorSurfaceVariant">@color/grey3</item>
+        <item name="android:textColor">@color/text_color1</item>
+        <item name="colorControlActivated">@color/main</item> <!-- 커서 색상 -->
         <item name="android:windowLightStatusBar">true</item>   <!-- 상태바 아이콘(true: 검정 / false: 흰색) -->
     </style>
 
     <style name="Theme.Score" parent="Base.Theme.Score" />
+
+    <style name="AppTheme.NumberPicker" parent="Base.Theme.Score">
+        <item name="colorControlNormal">@color/transparent</item>
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#2A3038</item>
+    </style>
 </resources>

@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"
+        layout="@layout/toolbar_back_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +124,7 @@
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="학교 이름"
+        android:focusable="false"
         android:inputType="text"
         android:paddingHorizontal="17dp"
         android:paddingVertical="18dp"
@@ -165,6 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:ems="10"
+        android:focusable="false"
         android:hint="학년 선택"
         android:inputType="text"
         android:paddingHorizontal="17dp"

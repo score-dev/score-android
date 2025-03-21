@@ -11,10 +11,11 @@ import com.project.score.databinding.DialogBasicBinding
 
 interface BasicDialogInterface {
     fun onClickRightButton()
+    fun onClickLeftButton()
 }
 class BasicDialog(
     basicDialogInterface: BasicDialogInterface,
-    title: String, content: String?, leftButtonText: String, rightButtonText: String
+    title: String, content: String?, leftButtonText: String, rightButtonText: String, isCloseEnabled: Boolean
 ) : DialogFragment() {
 
     private var _binding: DialogBasicBinding? = null
@@ -26,6 +27,7 @@ class BasicDialog(
     private var content: String? = null
     private var leftButtonText: String? = null
     private var rightButtonText: String? = null
+    private var isCloseEnabled: Boolean? = null
     private var id: Int? = null
 
     init {
@@ -33,6 +35,7 @@ class BasicDialog(
         this.content = content
         this.leftButtonText = leftButtonText
         this.rightButtonText = rightButtonText
+        this.isCloseEnabled = isCloseEnabled
         this.id = id
         this.basicDialogInterface = basicDialogInterface
     }
@@ -57,6 +60,12 @@ class BasicDialog(
                 textViewDescription.text = content
             }
 
+            if(isCloseEnabled == true) {
+                buttonClose.visibility = View.VISIBLE
+            } else {
+                buttonClose.visibility = View.INVISIBLE
+            }
+
             // 닫기 버튼
             buttonClose.setOnClickListener {
                 dismiss()
@@ -66,6 +75,7 @@ class BasicDialog(
             buttonLeft.run {
                 text = leftButtonText
                 setOnClickListener {
+                    this@BasicDialog.basicDialogInterface?.onClickLeftButton()
                     dismiss()
                 }
             }
