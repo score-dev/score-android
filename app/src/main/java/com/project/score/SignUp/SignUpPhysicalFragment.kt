@@ -1,60 +1,112 @@
 package com.project.score.SignUp
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import com.project.score.OnBoarding.OnboardingActivity
 import com.project.score.R
+import com.project.score.Utils.MyApplication
+import com.project.score.databinding.FragmentSignUpPhysicalBinding
+import kotlin.math.sign
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpPhysicalFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpPhysicalFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var binding: FragmentSignUpPhysicalBinding
+    lateinit var onboardingActivity: OnboardingActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up_physical, container, false)
+
+        binding = FragmentSignUpPhysicalBinding.inflate(layoutInflater)
+        onboardingActivity = activity as OnboardingActivity
+
+        initView()
+        observeKeyboardState()
+
+        binding.run {
+
+            editTextPhysicalHeight.addTextChangedListener {
+                checkEnable()
+            }
+
+            editTextPhysicalWeight.addTextChangedListener {
+                checkEnable()
+            }
+
+            buttonNext.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.height = editTextPhysicalHeight.text.toString().toInt()
+                MyApplication.signUpInfo?.userDto?.weight = editTextPhysicalWeight.text.toString().toInt()
+
+                onboardingActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_onboarding, SignUpGoalTimeFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+            buttonSkip.setOnClickListener {
+                onboardingActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_onboarding, SignUpGoalTimeFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpPhysicalFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpPhysicalFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun observeKeyboardState() {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+            var originHeight = -1
+            if ( binding.root.height > originHeight) {
+                originHeight =  binding.root.height
+            }
+
+            val visibleFrameSize = Rect()
+            binding.root.getWindowVisibleDisplayFrame(visibleFrameSize)
+
+            val visibleFrameHeight = visibleFrameSize.bottom - visibleFrameSize.top
+            val keyboardHeight = originHeight - visibleFrameHeight
+
+            if (keyboardHeight > visibleFrameHeight * 0.15) {
+                // 키보드가 올라옴
+                binding.buttonNext.translationY = - keyboardHeight.toFloat() // 버튼을 키보드 위로 이동
+            } else {
+                // 키보드가 내려감
+                binding.buttonNext.translationY = + keyboardHeight.toFloat() // 버튼을 키보드 위로 이동
+            }
+        }
+    }
+
+    fun checkEnable() {
+        binding.run {
+            if(editTextPhysicalHeight.text.isNotEmpty() && editTextPhysicalWeight.text.isNotEmpty()) {
+                buttonNext.visibility = View.VISIBLE
+            } else {
+                buttonNext.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    fun initView() {
+        binding.run {
+            root.setOnTouchListener { v, event ->
+                onboardingActivity.hideKeyboard()
+                false
+            }
+
+            buttonNext.visibility = View.INVISIBLE
+
+            toolbar.run {
+                buttonBack.setOnClickListener {
+                    fragmentManager?.popBackStack()
                 }
             }
+        }
     }
 }
