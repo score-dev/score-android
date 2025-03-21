@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.Home.adapter.GroupRelayAdapter
 import com.project.score.Home.adapter.WeeklyCalendarAdapter
+import com.project.score.Home.viewModel.HomeViewModel
 import com.project.score.Login.viewModel.UserViewModel
 import com.project.score.MainActivity
 import com.project.score.R
@@ -29,6 +30,7 @@ class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var mainActivity: MainActivity
+    lateinit var viewModel: HomeViewModel
 
     lateinit var weeklyGraphAdapter : WeeklyCalendarAdapter
     private lateinit var groupPagerAdapter: GroupRelayAdapter
@@ -43,8 +45,10 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
+        viewModel = ViewModelProvider(mainActivity)[HomeViewModel::class.java]
 
         initAdapter()
+        observeViewModel()
 
         binding.run {
             layoutWeeklyResult.recyclerViewGraph.apply {
@@ -107,8 +111,46 @@ class HomeFragment : Fragment() {
     }
 
 
+    fun observeViewModel() {
+        viewModel.run {
+            homeData.observe(viewLifecycleOwner) {
+                getHomeData = it
+
+                binding.run {
+                    textViewNickname.text = "${getHomeData?.nickname}님"
+                    textViewExerciseDay.text = "${getHomeData?.consecutiveDate}일 연속 운동 중이에요!"
+
+                    // 레벨 layout
+                    layoutLevel.run {
+                        Glide.with(mainActivity).load(getHomeData?.profileImgUrl).into(imageViewLevelProfile)
+                        textViewLevel.text = "Lv.${getHomeData?.level}"
+                        textViewLevelPoint.text = "${500 - (getHomeData?.point ?: 0)} 포인트"
+                        val params = graphLevelMyStatus.layoutParams as ConstraintLayout.LayoutParams
+                        params.matchConstraintPercentWidth =
+                            (getHomeData?.point?.div(500))?.toFloat() ?: 0f
+                        graphLevelMyStatus.layoutParams = params
+                    }
+
+                    // 주간 운동 기록 layout
+                    layoutWeeklyResult.run {
+                        val weekDates = CalendarUtil.getCurrentWeekDates() // 이번 주 날짜 가져오기
+                        val exerciseResults = getHomeData?.weeklyExerciseTimeByDay ?: List(7) { 0 } // 운동 결과 데이터
+                        weeklyGraphAdapter.updateList(weekDates, exerciseResults)
+
+                        textViewWeeklyExerciseDistanceValue.text = "${getHomeData?.weeklyTotalExerciseTime}"
+                        textViewWeeklyExerciseDaysValue.text = "${getHomeData?.weeklyExerciseCount}일"
+                    }
+
+                    // 내 그룹 layout
+                    textViewGroupCount.text = getHomeData?.numOfGroups.toString()
+                    groupPagerAdapter.updateList(getHomeData?.groupsInfo)
+                }
+            }
+        }
+    }
 
     fun initView() {
+        viewModel.getHomeData(mainActivity)
 
         binding.run {
             Log.d("##", "user info : ${MyApplication.userInfo}")
