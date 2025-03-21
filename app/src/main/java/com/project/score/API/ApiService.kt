@@ -1,7 +1,6 @@
 package com.project.score.API
 
-import com.project.score.API.request.signUp.OauthRequest
-import com.project.score.API.response.EmptyResponse
+import com.project.score.API.request.signUp.FcmRequest
 import com.project.score.API.response.login.LoginResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -29,4 +28,12 @@ interface ApiService {
     fun checkNickName(
         @Path("nickname") nickname: String
     ): Call<Int>
+
+    // FCM 토큰 저장
+    @POST("{userId}/token")
+    fun setFcmToken(
+        @Path("id") id: Int,
+        @Header("Authorization") token: String,
+        @Body body: FcmRequest
+    ): Call<String>
 }

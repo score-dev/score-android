@@ -117,6 +117,7 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
     }
 
     fun moveToNextFragment() {
+        viewModel.setFcmToken(onboardingActivity)
 
         fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         val mainIntent = Intent(activity, MainActivity::class.java)
