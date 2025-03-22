@@ -12,13 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.score.API.response.home.HomeGroupInfo
+import com.project.score.Group.CreateGroupFragment
 import com.project.score.Home.viewModel.HomeViewModel
+import com.project.score.MainActivity
+import com.project.score.R
+import com.project.score.SignUp.SignUpProfileFragment
 import com.project.score.Utils.DynamicSpacingItemDecoration
 import com.project.score.Utils.MyApplication
 import com.project.score.databinding.RowHomeGroupBinding
 
 class GroupRelayAdapter(
-    private var activity: Activity,
+    private var activity: MainActivity,
     private var groupInfos: List<HomeGroupInfo>?,
     private val viewModel: HomeViewModel
 ) :
@@ -133,5 +137,14 @@ class GroupRelayAdapter(
         // 참여 전 그룹 멤버
         val recyclerViewUnexercisedMember = binding.recyclerviewTodayRelayUnexercisedMember
 
+
+        init {
+            binding.layoutCreateGroup.setOnClickListener {
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, CreateGroupFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
     }
 }

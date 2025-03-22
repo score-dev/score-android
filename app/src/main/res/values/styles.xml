@@ -88,6 +88,15 @@
         <item name="android:background">@drawable/background_edittext</item>
     </style>
 
+    <style name="MultiLineEditText">
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:textColor">#2A3038</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">@color/text_color3</item>
+        <item name="android:background">@drawable/background_edittext</item>
+    </style>
+
     <!-- 이미지 round style-->
     <style name="RoundSector50">
         <item name="cornerSizeTopLeft">50dp</item>
@@ -102,6 +111,14 @@
         <item name="cornerSizeTopRight">20dp</item>
         <item name="cornerSizeBottomRight">20dp</item>
         <item name="cornerSizeBottomLeft">20dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="RoundSector15">
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
         <item name="cornerFamily">rounded</item>
     </style>
 
