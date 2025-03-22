@@ -86,6 +86,15 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
     implementation("com.squareup.okhttp3:okhttp-urlconnection:4.9.0")
 
+    // glide
+    implementation("com.github.bumptech.glide:glide:4.13.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.13.0")
+    // circle Image
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    // dot indicator
+    implementation("com.tbuonomo:dotsindicator:5.1.0")
+
     // 카카오 로그인
     implementation("com.kakao.sdk:v2-user:2.20.6")
 

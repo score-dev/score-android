@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/divider_relay"
+        android:layout_width="0dp"
+        android:layout_height="1.5dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/main"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_exercised_member_profile"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView_exercised_member_profile"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView_exercised_member_profile"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView_exercised_member_profile" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_exercised_member_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.project.score.API
 
 import com.project.score.API.request.signUp.FcmRequest
+import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
 import okhttp3.MultipartBody
@@ -53,4 +54,19 @@ interface ApiService {
         @Query("id") id: Int,
         @Header("Authorization") token: String
     ): Call<UserInfoResponse>
+
+    // 홈 정보
+    @POST("score/home")
+    fun getHomeData(
+        @Query("id") id: Int,
+        @Header("Authorization") token: String
+    ): Call<HomeResponse>
+
+    // 바통 찌르기
+    @POST("score/groups/mates/baton")
+    fun batonGroupMember(
+        @Query("senderId") senderId: Int,
+        @Query("receiverId") receiverId: Int,
+        @Header("Authorization") token: String
+    ): Call<Boolean>
 }
