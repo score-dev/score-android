@@ -69,4 +69,13 @@ interface ApiService {
         @Query("receiverId") receiverId: Int,
         @Header("Authorization") token: String
     ): Call<Boolean>
+
+    // 그룹 생성
+    @Multipart
+    @POST("score/groups/create")
+    fun createGroup(
+        @Header("Authorization") token: String,
+        @Part("groupCreateDto") groupCreateDto: RequestBody,
+        @Part file: MultipartBody.Part
+    ): Call<Int>
 }

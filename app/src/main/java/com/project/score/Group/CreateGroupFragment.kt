@@ -14,6 +14,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.project.score.Group.viewModel.GroupViewModel
 import com.project.score.MainActivity
 import com.project.score.R
 import com.project.score.Utils.MyApplication
@@ -30,9 +32,11 @@ class CreateGroupFragment : Fragment() {
 
     lateinit var binding: FragmentCreateGroupBinding
     lateinit var mainActivity: MainActivity
+    lateinit var viewModel: GroupViewModel
 
     var isImageUpload = false
     var isPublish = true
+    var groupMemberNum = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +45,7 @@ class CreateGroupFragment : Fragment() {
 
         binding = FragmentCreateGroupBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
+        viewModel = ViewModelProvider(mainActivity)[GroupViewModel::class.java]
 
         // Registers a photo picker activity launcher in single-select mode.
         val pickMedia =
@@ -114,6 +119,7 @@ class CreateGroupFragment : Fragment() {
 
                     val input = s.toString().replace("명", "") // 기존 "명" 제거
                     if (input.isNotEmpty()) {
+                        groupMemberNum = input.toInt()
                         editTextGroupMemberNum.setText("${input}명")
                         editTextGroupMemberNum.setSelection(editTextGroupMemberNum.text.length - 1) // 커서를 "명" 앞에 위치
                     }
@@ -142,6 +148,10 @@ class CreateGroupFragment : Fragment() {
                     Log.d("##", "비공개 클릭")
                 }
                 checkEnable()
+            }
+
+            buttonCreate.setOnClickListener {
+                viewModel.createGroup(mainActivity, editTextGroupName.text.toString(), editTextGroupDescription.text.toString(), groupMemberNum, editTextGroupPassword.text.toString(), !isPublish)
             }
         }
 
