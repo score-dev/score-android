@@ -62,21 +62,24 @@ class WeeklyCalendarAdapter(
             if(exerciseResults[position] != null) { // 오늘 운동 기록이 있는 경우
                 holder.graph.run {
                     visibility = View.VISIBLE
-                    val layoutParams = holder.graph.layoutParams
-                    val calculatedHeight = (exerciseResults[position]?.div(60.0))?.times(130) ?: 0.0
+                    val maxHeight = 130f
+                    val exerciseSeconds = exerciseResults[position] ?: 0
+                    val heightDp = if (exerciseSeconds >= 3600) {
+                        maxHeight
+                    } else {
+                        (exerciseSeconds / 3600f) * maxHeight
+                    }
 
-                    // 소수점 첫째 자리까지 반올림 후 정수로 변환
-                    val roundedHeight = (Math.round(calculatedHeight * 10) / 10.0).toInt()
-
-                    layoutParams.height = minOf(roundedHeight, 130) // 최대값 130 제한
-                    holder.graph.layoutParams = layoutParams
+                    val layoutParams = layoutParams
+                    layoutParams.height = heightDp.toInt()
+                    this.layoutParams = layoutParams
                     setBackgroundResource(R.drawable.background_main_graph)
                 }
                 holder.totalHour.run {
                     visibility = View.VISIBLE
-                    text = "${exerciseResults[position]?.div(60.0)}H"
+                    text = String.format("%.1fH", (exerciseResults[position] ?: 0) / 3600f)
                 }
-                if(exerciseResults[position]!! > 60) {
+                if(exerciseResults[position]!! > 3600) {
                     holder.overTime.visibility = View.VISIBLE
                 } else {
                     holder.overTime.visibility = View.INVISIBLE
@@ -97,13 +100,22 @@ class WeeklyCalendarAdapter(
 
                 holder.graph.run {
                     visibility = View.VISIBLE
-                    val layoutParams = holder.graph.layoutParams
-                    layoutParams.height = minOf((exerciseResults[position]?.div(60))?.times(130) ?: 0, 130)
-                    holder.graph.layoutParams = layoutParams
+                    val maxHeight = 130f
+                    val exerciseSeconds = exerciseResults[position] ?: 0
+                    val heightDp = if (exerciseSeconds >= 3600) {
+                        maxHeight
+                    } else {
+                        (exerciseSeconds / 3600f) * maxHeight
+                    }
+
+                    val layoutParams = layoutParams
+                    layoutParams.height = heightDp.toInt()
+                    this.layoutParams = layoutParams
                     setBackgroundResource(R.drawable.background_sub2_graph)
                 }
 
-                if(exerciseResults[position]!! > 60) {
+
+                if(exerciseResults[position]!! > 3600) {
                     holder.overTime.visibility = View.VISIBLE
                 } else {
                     holder.overTime.visibility = View.INVISIBLE

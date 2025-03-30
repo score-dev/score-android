@@ -65,7 +65,7 @@ class GroupRelayAdapter(
             holder.groupName.text = groupInfos?.get(position)?.groupName.toString()
 
             // 그룹 프로필 이미지 설정 (최대 3개 표시)
-            val profileImages = groupInfos?.get(position)?.todayExercisedMatesImgUrl ?: emptyList()
+            val profileImages = groupInfos?.get(position)?.wholeMatesImgUrl ?: emptyList()
             val profileViews = listOf(holder.groupProfile1, holder.groupProfile2, holder.groupProfile3)
 
             profileViews.forEachIndexed { index, imageView ->
@@ -103,9 +103,15 @@ class GroupRelayAdapter(
             holder.recyclerViewUnexercisedMember.run {
                 adapter = GroupRelayTodayUnexercisedMemberAdapter(activity, groupInfos?.get(position)?.notExercisedUsers ?: emptyList()).apply {
                     itemClickListener = object : GroupRelayTodayUnexercisedMemberAdapter.OnItemClickListener {
-                        override fun onItemClick(adapterPosition: Int) {
-                            viewModel.batonGroupMember(activity, groupInfos?.get(position)?.notExercisedUsers?.get(adapterPosition)?.userId ?: 0)
-                            updateList(groupInfos?.get(position)?.notExercisedUsers, adapterPosition)
+                        override fun onItemClick(unexerciseMemberPosition: Int) {
+                            val currentAdapterPosition = holder.adapterPosition
+                            if (currentAdapterPosition != RecyclerView.NO_POSITION) {
+                                val currentGroup = groupInfos?.get(currentAdapterPosition)
+                                val userId = currentGroup?.notExercisedUsers?.get(unexerciseMemberPosition)?.userId ?: 0
+
+                                viewModel.batonGroupMember(activity, userId)
+                                updateList(currentGroup?.notExercisedUsers, unexerciseMemberPosition)
+                            }
                         }
                     }
                 }

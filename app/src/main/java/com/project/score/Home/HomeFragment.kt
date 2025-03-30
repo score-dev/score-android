@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kakao.sdk.user.model.User
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.Home.adapter.GroupRelayAdapter
 import com.project.score.Home.adapter.WeeklyCalendarAdapter
@@ -23,14 +24,17 @@ import com.project.score.R
 import com.project.score.Utils.DynamicSpacingItemDecoration
 import com.project.score.Utils.EqualSpacingItemDecoration
 import com.project.score.Utils.MyApplication
+import com.project.score.Utils.TimeUtil.formatExerciseTime
 import com.project.score.Utils.VerticalSpacingItemDecoration
 import com.project.score.databinding.FragmentHomeBinding
+import okhttp3.internal.concurrent.formatDuration
 
 class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var mainActivity: MainActivity
     lateinit var viewModel: HomeViewModel
+    lateinit var userViewModel: UserViewModel
 
     lateinit var weeklyGraphAdapter : WeeklyCalendarAdapter
     private lateinit var groupPagerAdapter: GroupRelayAdapter
@@ -46,6 +50,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
         viewModel = ViewModelProvider(mainActivity)[HomeViewModel::class.java]
+        userViewModel = ViewModelProvider(mainActivity)[UserViewModel::class.java]
 
         initAdapter()
         observeViewModel()
@@ -106,8 +111,6 @@ class HomeFragment : Fragment() {
                 dotsIndicator.attachTo(this)
             }
         }
-
-
     }
 
 
@@ -125,11 +128,13 @@ class HomeFragment : Fragment() {
                         Glide.with(mainActivity).load(getHomeData?.profileImgUrl).into(imageViewLevelProfile)
                         textViewLevel.text = "Lv.${getHomeData?.level}"
                         textViewLevelPoint.text = "${500 - (getHomeData?.point ?: 0)} 포인트"
+
+                        val pointRatio = (getHomeData?.point ?: 0) / 500f
                         val params = graphLevelMyStatus.layoutParams as ConstraintLayout.LayoutParams
-                        params.matchConstraintPercentWidth =
-                            (getHomeData?.point?.div(500))?.toFloat() ?: 0f
+                        params.matchConstraintPercentWidth = pointRatio
                         graphLevelMyStatus.layoutParams = params
                     }
+
 
                     // 주간 운동 기록 layout
                     layoutWeeklyResult.run {
@@ -137,13 +142,20 @@ class HomeFragment : Fragment() {
                         val exerciseResults = getHomeData?.weeklyExerciseTimeByDay ?: List(7) { 0 } // 운동 결과 데이터
                         weeklyGraphAdapter.updateList(weekDates, exerciseResults)
 
-                        textViewWeeklyExerciseDistanceValue.text = "${getHomeData?.weeklyTotalExerciseTime}"
+                        textViewWeeklyExerciseDistanceValue.text = formatExerciseTime(getHomeData?.weeklyTotalExerciseTime ?: 0)
                         textViewWeeklyExerciseDaysValue.text = "${getHomeData?.weeklyExerciseCount}일"
                     }
 
                     // 내 그룹 layout
                     textViewGroupCount.text = getHomeData?.numOfGroups.toString()
-                    groupPagerAdapter.updateList(getHomeData?.groupsInfo)
+
+                    groupPagerAdapter = GroupRelayAdapter(
+                        mainActivity,
+                        getHomeData?.groupsInfo,
+                        viewModel
+                    )
+                    viewPagerGroupList.adapter = groupPagerAdapter
+                    dotsIndicator.attachTo(viewPagerGroupList)
                 }
             }
         }
@@ -151,6 +163,7 @@ class HomeFragment : Fragment() {
 
     fun initView() {
         viewModel.getHomeData(mainActivity)
+        userViewModel.getUserInfo(mainActivity)
 
         binding.run {
             Log.d("##", "user info : ${MyApplication.userInfo}")

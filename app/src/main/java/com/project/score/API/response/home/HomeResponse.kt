@@ -18,6 +18,7 @@ data class HomeGroupInfo(
     val groupId: Int,
     val groupName: String,
     val numOfMembers: Int,
+    val wholeMatesImgUrl: List<String>,
     val todayExercisedMatesImgUrl: List<String>,
     val notExercisedUsers: List<HomeGroupUnexercisedMemebrInfo>
 )

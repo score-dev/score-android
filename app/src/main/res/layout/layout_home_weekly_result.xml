@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendard_semi_bold"
                 android:gravity="center"
-                android:text="주간 운동 거리"
+                android:text="주간 운동 누적 시간"
                 android:textAlignment="center"
                 android:textColor="@color/text_color2"
                 android:textSize="14sp" />
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="00km"
+                android:text="00분"
                 android:textAlignment="center"
                 android:textColor="@color/text_color1" />
 

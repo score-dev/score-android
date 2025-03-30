@@ -2,7 +2,9 @@ package com.project.score.Home.adapter
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -25,11 +27,11 @@ class GroupExercisedMemberProfileAdapter(
         onItemClickListener = listener
     }
 
-    fun updateList(newMemberProfiles: List<String>?) {
+    fun updateList(newMemberNum: Int, newMemberProfiles: List<String>?) {
+        memberNum = newMemberNum
         exercisedMemberProfiles = newMemberProfiles
         notifyDataSetChanged()
     }
-
 
     interface OnItemClickListener {
         fun onItemClick(memberId: Int) {}
@@ -46,17 +48,16 @@ class GroupExercisedMemberProfileAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        holder.profile.visibility = View.VISIBLE
+
         if (position < (exercisedMemberProfiles?.size ?: 0)) {
-            // 운동한 멤버의 프로필 적용
             Glide.with(activity)
                 .load(exercisedMemberProfiles?.get(position))
                 .into(holder.profile)
             holder.profileBackground.setBackgroundResource(R.drawable.background_main_circle)
         } else {
-            // 기본 이미지 적용
-            Glide.with(activity)
-                .load(R.drawable.img_profile_null) // 기본 이미지로 설정
-                .into(holder.profile)
+            holder.profile.setImageResource(R.drawable.img_profile_null)
             holder.profileBackground.setBackgroundResource(0)
         }
     }
