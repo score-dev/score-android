@@ -71,6 +71,13 @@ class GroupFragment : Fragment() {
                 val convertedDate = weekInfo.startDate.replace(".", "-")
                 viewModel.getGroupRanking(mainActivity, convertedDate)
             }
+
+            buttonCreateGroup.setOnClickListener {
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, CreateGroupFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
 
         return binding.root
