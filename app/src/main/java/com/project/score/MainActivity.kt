@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.project.score.Group.GroupFragment
 import com.project.score.Home.HomeFragment
 import com.project.score.Record.RecordFragment
 import com.project.score.SignUp.SignUpProfileFragment
@@ -58,7 +59,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_group -> {
-
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, GroupFragment())
+                        .addToBackStack(null)
+                        .commit()
                     true
                 }
 
@@ -79,7 +83,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideBottomNavigation(state: Boolean) {
-        if (state) binding.bottomNavigationView.visibility =
-            View.GONE else binding.bottomNavigationView.visibility = View.VISIBLE
+        if (state) {
+            binding.run {
+                bottomNavigationView.visibility = View.GONE
+                fabRecord.visibility = View.GONE
+            }
+        } else  {
+            binding.run {
+                bottomNavigationView.visibility = View.VISIBLE
+                fabRecord.visibility = View.VISIBLE
+            }
+        }
     }
 }
