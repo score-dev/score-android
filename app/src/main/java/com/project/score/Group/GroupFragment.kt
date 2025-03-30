@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.score.API.response.group.GroupRankingResponse
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.Group.adapter.GroupOthersRankingAdapter
@@ -106,8 +107,9 @@ class GroupFragment : Fragment() {
 
     fun observeViewModel() {
         viewModel.run {
-            groupRanking.observe(viewLifecycleOwner) {
+            groupRanking.observe(viewLifecycleOwner) { it ->
                 getGroupData = it
+                getGroupData?.allRankers = getGroupData?.allRankers?.sortedBy { it.rank } ?: emptyList()
 
                 myGroupAdapter.updateList(getGroupData?.myGroupRanking)
 
@@ -119,6 +121,32 @@ class GroupFragment : Fragment() {
                         layoutEmptyGroup.visibility = View.GONE
                         layoutWeekRanking.visibility = View.VISIBLE
                         otherGroupsAdapter.updateList(getGroupData?.allRankers?.drop(3))
+
+                        val top3 = getGroupData?.allRankers?.take(3)
+
+                        top3?.getOrNull(0)?.let { top1 ->
+                            Glide.with(requireContext())
+                                .load(top1.groupImg)
+                                .into(layoutGroupRanking1.imageViewGroupProfile)
+                            layoutGroupRanking1.textViewGroupName.text = top1.groupName
+                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "${top1.participateRatio}%"
+                        }
+
+                        top3?.getOrNull(1)?.let { top2 ->
+                            Glide.with(requireContext())
+                                .load(top2.groupImg)
+                                .into(layoutGroupRanking1.imageViewGroupProfile)
+                            layoutGroupRanking1.textViewGroupName.text = top2.groupName
+                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "${top2.participateRatio}%"
+                        }
+
+                        top3?.getOrNull(2)?.let { top3 ->
+                            Glide.with(requireContext())
+                                .load(top3.groupImg)
+                                .into(layoutGroupRanking1.imageViewGroupProfile)
+                            layoutGroupRanking1.textViewGroupName.text = top3.groupName
+                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "${top3.participateRatio}%"
+                        }
                     }
                 }
             }

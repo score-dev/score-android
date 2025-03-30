@@ -3,7 +3,7 @@ package com.project.score.API.response.group
 data class GroupRankingResponse(
     val schoolName: String,
     val schoolId: Int,
-    val allRankers: List<GroupRanking>,
+    var allRankers: List<GroupRanking>,
     val myGroupRanking: List<GroupRanking>
 )
 
