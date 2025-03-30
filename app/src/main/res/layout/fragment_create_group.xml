@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Group.CreateGroupFragment" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="21dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView_group"
+                android:layout_width="0dp"
+                android:layout_height="213dp"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/RoundSector20"
+                android:src="@drawable/background_grey2_radius15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_group_image_title"
+                style="@style/body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingVertical="87.5dp"
+                android:text="우리 그룹을\n표현할 이미지를 올려주세요"
+                android:textAlignment="center"
+                android:textColor="@color/text_color2"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_group"
+                app:layout_constraintStart_toStartOf="@+id/imageView_group"
+                app:layout_constraintTop_toTopOf="@+id/imageView_group"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_group"/>
+
+            <TextView
+                android:id="@+id/textView_group_name_title"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="그룹명"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_group" />
+
+            <TextView
+                android:id="@+id/textView_group_name_essential"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/red"
+                app:layout_constraintStart_toEndOf="@+id/textView_group_name_title"
+                app:layout_constraintTop_toTopOf="@+id/textView_group_name_title"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_group_name_title"/>
+
+            <TextView
+                android:id="@+id/textView_group_name_regular_expression"
+                style="@style/caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="0/15"
+                android:textColor="@color/text_color3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_group_name_title" />
+
+            <EditText
+                android:id="@+id/editText_group_name"
+                style="@style/OneLineEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="17dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="우리 그룹 이름은 무엇으로 해볼까요?"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_group_name_title" />
+
+            <TextView
+                android:id="@+id/textView_group_description_title"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="그룹 소개"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_group_name" />
+
+            <TextView
+                android:id="@+id/textView_group_description_regular_expression"
+                style="@style/caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="0/200"
+                android:textColor="@color/text_color3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_group_description_title" />
+
+            <EditText
+                android:id="@+id/editText_group_description"
+                style="@style/MultiLineEditText"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:gravity="start"
+                android:hint="우리 그룹을 자유롭게 소개해보세요!"
+                android:maxLength="200"
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="17dp"
+                android:textAlignment="textStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_group_description_title" />
+
+            <TextView
+                android:id="@+id/textView_group_member_num_title"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="최대 인원 제한"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_group_description" />
+
+            <TextView
+                android:id="@+id/textView_group_member_num_essential"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/red"
+                app:layout_constraintStart_toEndOf="@+id/textView_group_member_num_title"
+                app:layout_constraintTop_toTopOf="@+id/textView_group_member_num_title"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_group_member_num_title"/>
+
+            <EditText
+                android:id="@+id/editText_group_member_num"
+                style="@style/body3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/background_edittext"
+                android:ems="10"
+                android:hint="2명"
+                android:textColorHint="@color/text_color3"
+                android:textColor="#2A3038"
+                android:inputType="number"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="17dp"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_group_member_num_title" />
+
+            <TextView
+                android:id="@+id/textView_group_isPublish_title"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="공개 여부 설정"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_group_member_num" />
+
+            <TextView
+                android:id="@+id/textView_group_isPublish_essential"
+                style="@style/body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*"
+                android:textColor="@color/red"
+                app:layout_constraintStart_toEndOf="@+id/textView_group_isPublish_title"
+                app:layout_constraintTop_toTopOf="@+id/textView_group_isPublish_title"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_group_isPublish_title"/>
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                tools:layout_editor_absoluteY="44dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_group_isPublish_essential">
+
+                <RadioButton
+                    android:id="@+id/radioButton_publish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="전체 공개"
+                    android:layoutDirection="rtl"
+                    android:textAlignment="textStart"
+                    android:layout_gravity="start"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/text_color2"
+                    android:buttonTint="@color/grey1"
+                    android:checked="true" />
+
+                <RadioButton
+                    android:id="@+id/radioButton_private"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="비공개"
+                    android:layoutDirection="rtl"
+                    android:textAlignment="textStart"
+                    android:layout_gravity="start"
+                    android:textAppearance="@style/body2"
+                    android:textColor="@color/text_color2"
+                    android:buttonTint="@color/grey1" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/editText_group_password"
+                style="@style/OneLineEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:hint="그룹 비밀번호 4자리를 입력해주세요."
+                android:inputType="number"
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="17dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+            <Button
+                android:id="@+id/button_create"
+                style="@style/Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="29dp"
+                android:enabled="false"
+                android:text="생성하기"
+                app:cornerRadius="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_group_password"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_title_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.project.score.API
 
 import com.project.score.API.request.signUp.FcmRequest
+import com.project.score.API.response.group.GroupRankingResponse
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
@@ -69,4 +70,21 @@ interface ApiService {
         @Query("receiverId") receiverId: Int,
         @Header("Authorization") token: String
     ): Call<Boolean>
+
+    // 그룹 생성
+    @Multipart
+    @POST("score/groups/create")
+    fun createGroup(
+        @Header("Authorization") token: String,
+        @Part("groupCreateDto") groupCreateDto: RequestBody,
+        @Part file: MultipartBody.Part
+    ): Call<Int>
+
+    // 학교 그룹 랭킹
+    @GET("score/ranking/school")
+    fun getSchoolGroupRanking(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("localDate") localDateId: String?,
+    ): Call<GroupRankingResponse>
 }

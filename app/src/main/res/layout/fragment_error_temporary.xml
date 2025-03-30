@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_error_temporary" />
+            android:src="@drawable/img_error_temporary_character" />
 
         <TextView
             android:id="@+id/textView2"

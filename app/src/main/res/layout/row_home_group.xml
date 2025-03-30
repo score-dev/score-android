@@ -83,7 +83,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_group_member_profile1"
+            android:id="@+id/layout_group_member_profile3"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginEnd="16dp"
@@ -93,7 +93,7 @@
             app:layout_constraintTop_toTopOf="@+id/layout_group_member_profile2">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_group_member_profile1"
+                android:id="@+id/imageView_group_member_profile3"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/img_profile_null"
@@ -109,9 +109,9 @@
             android:layout_height="28dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/background_white_circle"
-            app:layout_constraintBottom_toBottomOf="@+id/layout_group_member_profile3"
-            app:layout_constraintEnd_toEndOf="@+id/layout_group_member_profile3"
-            app:layout_constraintTop_toTopOf="@+id/layout_group_member_profile3">
+            app:layout_constraintBottom_toBottomOf="@+id/layout_group_member_profile1"
+            app:layout_constraintEnd_toEndOf="@+id/layout_group_member_profile1"
+            app:layout_constraintTop_toTopOf="@+id/layout_group_member_profile1">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView_group_member_profile2"
@@ -125,7 +125,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_group_member_profile3"
+            android:id="@+id/layout_group_member_profile1"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginEnd="4dp"
@@ -135,7 +135,7 @@
             app:layout_constraintTop_toTopOf="@+id/textView_group_member_num">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_group_member_profile3"
+                android:id="@+id/imageView_group_member_profile1"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:scaleType="centerCrop"

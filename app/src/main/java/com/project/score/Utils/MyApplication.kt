@@ -36,5 +36,8 @@ class MyApplication : Application() {
         var userInfo: UserInfoResponse? = null
         var userNickname = ""
 
+        // group
+        var groupImage: MultipartBody.Part? = null
+
     }
 }

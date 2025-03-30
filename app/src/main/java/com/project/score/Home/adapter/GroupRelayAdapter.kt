@@ -12,13 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.score.API.response.home.HomeGroupInfo
+import com.project.score.Group.CreateGroupFragment
 import com.project.score.Home.viewModel.HomeViewModel
+import com.project.score.MainActivity
+import com.project.score.R
+import com.project.score.SignUp.SignUpProfileFragment
 import com.project.score.Utils.DynamicSpacingItemDecoration
 import com.project.score.Utils.MyApplication
 import com.project.score.databinding.RowHomeGroupBinding
 
 class GroupRelayAdapter(
-    private var activity: Activity,
+    private var activity: MainActivity,
     private var groupInfos: List<HomeGroupInfo>?,
     private val viewModel: HomeViewModel
 ) :
@@ -61,7 +65,7 @@ class GroupRelayAdapter(
             holder.groupName.text = groupInfos?.get(position)?.groupName.toString()
 
             // 그룹 프로필 이미지 설정 (최대 3개 표시)
-            val profileImages = groupInfos?.get(position)?.todayExercisedMatesImgUrl ?: emptyList()
+            val profileImages = groupInfos?.get(position)?.wholeMatesImgUrl ?: emptyList()
             val profileViews = listOf(holder.groupProfile1, holder.groupProfile2, holder.groupProfile3)
 
             profileViews.forEachIndexed { index, imageView ->
@@ -99,9 +103,15 @@ class GroupRelayAdapter(
             holder.recyclerViewUnexercisedMember.run {
                 adapter = GroupRelayTodayUnexercisedMemberAdapter(activity, groupInfos?.get(position)?.notExercisedUsers ?: emptyList()).apply {
                     itemClickListener = object : GroupRelayTodayUnexercisedMemberAdapter.OnItemClickListener {
-                        override fun onItemClick(adapterPosition: Int) {
-                            viewModel.batonGroupMember(activity, groupInfos?.get(position)?.notExercisedUsers?.get(adapterPosition)?.userId ?: 0)
-                            updateList(groupInfos?.get(position)?.notExercisedUsers, adapterPosition)
+                        override fun onItemClick(unexerciseMemberPosition: Int) {
+                            val currentAdapterPosition = holder.adapterPosition
+                            if (currentAdapterPosition != RecyclerView.NO_POSITION) {
+                                val currentGroup = groupInfos?.get(currentAdapterPosition)
+                                val userId = currentGroup?.notExercisedUsers?.get(unexerciseMemberPosition)?.userId ?: 0
+
+                                viewModel.batonGroupMember(activity, userId)
+                                updateList(currentGroup?.notExercisedUsers, unexerciseMemberPosition)
+                            }
                         }
                     }
                 }
@@ -133,5 +143,14 @@ class GroupRelayAdapter(
         // 참여 전 그룹 멤버
         val recyclerViewUnexercisedMember = binding.recyclerviewTodayRelayUnexercisedMember
 
+
+        init {
+            binding.layoutCreateGroup.setOnClickListener {
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, CreateGroupFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
     }
 }

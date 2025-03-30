@@ -59,22 +59,25 @@ class SignUpSchoolBottomSheetFragment(var activity: OnboardingActivity) : Bottom
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             }
 
-            editTextSearch.addTextChangedListener {
-                if(editTextSearch.text.isNotEmpty()) {
-                    buttonClear.visibility = View.VISIBLE
-                } else {
-                    buttonClear.visibility = View.GONE
+            searchBar.run {
+                editTextSearch.run {
+                    addTextChangedListener {
+                        if(editTextSearch.text.isNotEmpty()) {
+                            buttonClear.visibility = View.VISIBLE
+                        } else {
+                            buttonClear.visibility = View.GONE
+                        }
+                    }
+                    setOnEditorActionListener { v, actionId, event ->
+                        viewModel.getSchoolList(activity, BuildConfig.school_api_key, editTextSearch.text.toString())
+
+                        true
+                    }
                 }
-            }
 
-            editTextSearch.setOnEditorActionListener { v, actionId, event ->
-                viewModel.getSchoolList(activity, BuildConfig.school_api_key, editTextSearch.text.toString())
-
-                true
-            }
-
-            buttonClear.setOnClickListener {
-                editTextSearch.setText("")
+                buttonClear.setOnClickListener {
+                    editTextSearch.setText("")
+                }
             }
         }
 
