@@ -59,12 +59,16 @@ class GroupFragment : Fragment() {
                 textViewWeekMonth.text = "${weekInfo.month}월 ${weekInfo.weekOfMonth}주차"
                 textViewWeekDays.text = "${weekInfo.startDate} ~ ${weekInfo.endDate}"
 
+                val convertedDate = weekInfo.startDate.replace(".", "-")
+                viewModel.getGroupRanking(mainActivity, convertedDate)
             }
             buttonRight.setOnClickListener {
                 val weekInfo = moveToNextWeek()
                 textViewWeekMonth.text = "${weekInfo.month}월 ${weekInfo.weekOfMonth}주차"
                 textViewWeekDays.text = "${weekInfo.startDate} ~ ${weekInfo.endDate}"
 
+                val convertedDate = weekInfo.startDate.replace(".", "-")
+                viewModel.getGroupRanking(mainActivity, convertedDate)
             }
         }
 
@@ -101,9 +105,28 @@ class GroupFragment : Fragment() {
     }
 
     fun observeViewModel() {
+        viewModel.run {
+            groupRanking.observe(viewLifecycleOwner) {
+                getGroupData = it
+
+                myGroupAdapter.updateList(getGroupData?.myGroupRanking)
+
+                binding.run {
+                    if (getGroupData == null) {
+                        layoutEmptyGroup.visibility = View.VISIBLE
+                        layoutWeekRanking.visibility = View.GONE
+                    } else {
+                        layoutEmptyGroup.visibility = View.GONE
+                        layoutWeekRanking.visibility = View.VISIBLE
+                        otherGroupsAdapter.updateList(getGroupData?.allRankers?.drop(3))
+                    }
+                }
+            }
+        }
     }
 
     fun initView() {
+        viewModel.getGroupRanking(mainActivity, null)
 
         binding.run {
             toolbar.textViewHead.text = MyApplication.userInfo?.schoolName.toString()

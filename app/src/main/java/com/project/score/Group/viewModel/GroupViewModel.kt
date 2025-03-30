@@ -2,13 +2,17 @@ package com.project.score.Group.viewModel
 
 import android.app.Activity
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.project.score.API.ApiClient
 import com.project.score.API.TokenManager
 import com.project.score.API.request.group.CreateGroupRequest
+import com.project.score.API.response.group.GroupRankingResponse
+import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.Group.CreateGroupCompleteFragment
+import com.project.score.Group.adapter.MyGroupRankingAdapter
 import com.project.score.MainActivity
 import com.project.score.R
 import com.project.score.SignUp.SignUpNicknameFragment
@@ -20,7 +24,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GroupViewModel: ViewModel() {
-    // 회원가입
+
+    var groupRanking = MutableLiveData<GroupRankingResponse?>()
+
+    // 그룹 생성
     fun createGroup(activity: MainActivity,
                     groupName: String,
                     groupDescription: String?,
@@ -69,6 +76,44 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<Int>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 학교 그룹 랭킹 조회
+    fun getGroupRanking(activity: MainActivity, date: String?) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getSchoolGroupRanking(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), date).enqueue(object :
+            Callback<GroupRankingResponse> {
+            override fun onResponse(
+                call: Call<GroupRankingResponse>,
+                response: Response<GroupRankingResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: GroupRankingResponse? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    groupRanking.value = result
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: GroupRankingResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<GroupRankingResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
