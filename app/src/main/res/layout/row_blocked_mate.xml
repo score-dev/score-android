@@ -6,12 +6,16 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_gravity="center"
-        app:srcCompat="@drawable/ic_camera" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_profile_null"
+        app:layout_constraintBottom_toBottomOf="@+id/graph_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView_level" />
 
     <TextView
         android:id="@+id/textView_nickname"
@@ -19,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
+        android:layout_marginHorizontal="8dp"
         android:text="닉네임"
         android:layout_weight="1"
         android:textColor="@color/black" />

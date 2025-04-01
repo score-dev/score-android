@@ -5,6 +5,7 @@ import com.project.score.API.response.group.GroupRankingResponse
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
+import com.project.score.API.response.user.BlockedMateListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -87,4 +88,11 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("localDate") localDateId: String?,
     ): Call<GroupRankingResponse>
+
+    // 차단한 메이트 목록 조회
+    @GET("score/friends/blocked/list")
+    fun getBlockedMateList(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Call<List<BlockedMateListResponse>>
 }
