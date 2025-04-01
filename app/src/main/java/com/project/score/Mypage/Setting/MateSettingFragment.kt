@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.project.score.API.response.user.BlockedMateListResponse
 import com.project.score.Home.adapter.GroupRelayAdapter
+import com.project.score.Home.adapter.GroupRelayTodayUnexercisedMemberAdapter
 import com.project.score.Home.adapter.WeeklyCalendarAdapter
 import com.project.score.Login.viewModel.UserViewModel
 import com.project.score.MainActivity
@@ -80,7 +81,13 @@ class MateSettingFragment : Fragment() {
 
         binding.run {
             recyclerViewMate.apply {
-                adapter = blockedMateAdapter
+                adapter = blockedMateAdapter.apply {
+                    itemClickListener = object : BlockedMateAdapter.OnItemClickListener {
+                        override fun onItemClick(position: Int) {
+                           viewModel.cancelBlockedMate(mainActivity, (getBlockedMateList?.get(position)?.id ?: 0))
+                        }
+                    }
+                }
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             }
         }

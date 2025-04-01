@@ -14,6 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -95,4 +96,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id") id: Int
     ): Call<List<BlockedMateListResponse>>
+
+    // 차단한 메이트 차단 해제
+    @PUT("score/friends/blocked/list")
+    fun cancelBlockedMateList(
+        @Header("Authorization") token: String,
+        @Query("id1") id1: Int, //친구 차단 해제를 요청한 유저의 고유 번호
+        @Query("id2") id2: Int //차단에서 해제될 유저의 고유 번호
+    ): Call<String>
 }
