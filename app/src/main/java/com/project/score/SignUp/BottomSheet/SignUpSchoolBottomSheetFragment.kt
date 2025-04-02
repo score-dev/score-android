@@ -1,5 +1,6 @@
 package com.project.score.SignUp.BottomSheet
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.project.score.API.neis.response.SchoolDto
 import com.project.score.API.request.signUp.UserSchool
+import com.project.score.API.request.user.UserSchoolInfo
 import com.project.score.BuildConfig
 import com.project.score.Login.viewModel.UserViewModel
 import com.project.score.MainActivity
@@ -28,7 +30,7 @@ interface SignUpSchoolBottomSheetListener {
     fun onSchoolSelected(position: Int)
 }
 
-class SignUpSchoolBottomSheetFragment(var activity: OnboardingActivity) : BottomSheetDialogFragment() {
+class SignUpSchoolBottomSheetFragment(var activity: Activity) : BottomSheetDialogFragment() {
     private lateinit var listener: SignUpSchoolBottomSheetListener
     lateinit var binding: FragmentSignUpSchoolBottomSheetBinding
     private val viewModel: UserViewModel by lazy {
@@ -104,6 +106,9 @@ class SignUpSchoolBottomSheetFragment(var activity: OnboardingActivity) : Bottom
             itemClickListener = object : SchoolListAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     MyApplication.signUpInfo?.schoolDto = UserSchool(
+                        getSchoolList?.get(position)?.SCHUL_NM!!, getSchoolList?.get(position)?.ORG_RDNMA!!, getSchoolList?.get(position)?.SD_SCHUL_CODE!!
+                    )
+                    MyApplication.userUpdateInfo?.userUpdateDto?.school = UserSchoolInfo(
                         getSchoolList?.get(position)?.SCHUL_NM!!, getSchoolList?.get(position)?.ORG_RDNMA!!, getSchoolList?.get(position)?.SD_SCHUL_CODE!!
                     )
                     Log.d("##", "school : ${MyApplication.signUpInfo?.schoolDto}")

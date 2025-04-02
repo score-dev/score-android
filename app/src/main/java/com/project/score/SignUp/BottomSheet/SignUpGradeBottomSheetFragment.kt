@@ -35,14 +35,17 @@ class SignUpGradeBottomSheetFragment : BottomSheetDialogFragment() {
         binding.run {
             textViewGrade1.setOnClickListener {
                 MyApplication.signUpInfo?.userDto?.grade = 1
+                MyApplication.userUpdateInfo?.userUpdateDto?.grade = 1
                 onItemClicked(textViewGrade1.text.toString())
             }
             textViewGrade2.setOnClickListener {
                 MyApplication.signUpInfo?.userDto?.grade = 2
+                MyApplication.userUpdateInfo?.userUpdateDto?.grade = 2
                 onItemClicked(textViewGrade2.text.toString())
             }
             textViewGrade3.setOnClickListener {
                 MyApplication.signUpInfo?.userDto?.grade = 3
+                MyApplication.userUpdateInfo?.userUpdateDto?.grade = 3
                 onItemClicked(textViewGrade3.text.toString())
             }
         }

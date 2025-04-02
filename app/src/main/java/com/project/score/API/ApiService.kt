@@ -91,6 +91,16 @@ interface ApiService {
         @Query("localDate") localDateId: String?,
     ): Call<GroupRankingResponse>
 
+    // 회원 정보 수정
+    @Multipart
+    @PUT("score/user/update/{userId}")
+    fun updateUserInfo(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Int,
+        @Part("userUpdateDto") userUpdateDto: RequestBody,
+        @Part file: MultipartBody.Part?
+    ): Call<String>
+
     // 차단한 메이트 목록 조회
     @GET("score/friends/blocked/list")
     fun getBlockedMateList(

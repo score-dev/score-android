@@ -20,10 +20,12 @@ import com.project.score.BasicDialogInterface
 import com.project.score.Home.HomeFragment
 import com.project.score.Login.viewModel.UserViewModel
 import com.project.score.MainActivity
+import com.project.score.Mypage.viewModel.MypageViewModel
 import com.project.score.OnBoarding.OnboardingActivity
 import com.project.score.R
 import com.project.score.SignUp.BottomSheet.SignUpGoalTimeBottomSheetFragment
 import com.project.score.SignUp.BottomSheet.SignUpGoalTimeBottomSheetListener
+import com.project.score.Utils.MyApplication
 import com.project.score.databinding.FragmentSignUpGoalTimeBinding
 
 class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeBottomSheetListener {
@@ -51,6 +53,7 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
             }
 
             buttonNext.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.exercisingTime = true
                 viewModel.signUp(onboardingActivity)
             }
         }
@@ -112,7 +115,7 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
                 // FCM 토큰 전송
                 moveToNextFragment()
             } else {
-                moveToNextFragment()
+                onClickLeftButton()
             }
         }
     }

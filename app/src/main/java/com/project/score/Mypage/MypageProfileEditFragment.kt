@@ -78,14 +78,14 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
                             compressedFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
 
                         // MultipartBody.Part로 이미지 파일 준비
-                        val signUpProfile = MultipartBody.Part.createFormData(
+                        val userUpdateProfile = MultipartBody.Part.createFormData(
                             "file",  // 서버에서 기대하는 필드 이름
                             compressedFile.name, // 파일 이름
                             requestFile
                         )
 
                         // 이미지 파일 저장
-                        MyApplication.signUpImage = signUpProfile
+                        MyApplication.userUpdateImage = userUpdateProfile
                         checkEnabled()
                     } else {
                         Log.e("ImageCompression", "압축된 파일이 존재하지 않거나 비어 있습니다.")
@@ -117,56 +117,74 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
 
             editTextPhysicalHeight.addTextChangedListener(object : TextWatcher {
                 private var isEditing = false
+                private val unit = "cm"
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable?) {
                     if (isEditing) return
-
                     isEditing = true
 
-                    val input = s.toString().replace("cm", "")
-                    if (input.isNotEmpty()) {
-                        height = input.toInt()
-                        editTextPhysicalHeight.setText("${input}cm")
-                        editTextPhysicalHeight.setSelection(editTextPhysicalHeight.text.length - 2)
+                    val text = s.toString()
+
+                    // 숫자만 추출
+                    val numeric = text.replace(unit, "").trim()
+                    val cleanNumeric = numeric.filter { it.isDigit() }
+
+                    // 새로운 텍스트 + cm
+                    val newText = "$cleanNumeric$unit"
+                    editTextPhysicalHeight.setText(newText)
+
+                    // 커서 위치를 숫자 끝으로 이동 (단위 앞)
+                    editTextPhysicalHeight.setSelection(cleanNumeric.length)
+
+                    // 실제 숫자 저장
+                    if (cleanNumeric.isNotEmpty()) {
+                        height = cleanNumeric.toInt()
                     }
 
                     isEditing = false
-
                     checkEnabled()
                 }
             })
+
 
             editTextPhysicalWeight.addTextChangedListener(object : TextWatcher {
                 private var isEditing = false
+                private val unit = "kg"
 
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable?) {
                     if (isEditing) return
-
                     isEditing = true
 
-                    val input = s.toString().replace("kg", "")
-                    if (input.isNotEmpty()) {
-                        weight = input.toInt()
-                        editTextPhysicalWeight.setText("${input}kg")
-                        editTextPhysicalWeight.setSelection(editTextPhysicalWeight.text.length - 2)
+                    val text = s.toString()
+                    val numeric = text.replace(unit, "").trim()
+                    val cleanNumeric = numeric.filter { it.isDigit() }
+
+                    val newText = "$cleanNumeric$unit"
+                    editTextPhysicalWeight.setText(newText)
+                    editTextPhysicalWeight.setSelection(cleanNumeric.length)
+
+                    if (cleanNumeric.isNotEmpty()) {
+                        weight = cleanNumeric.toInt()
                     }
 
                     isEditing = false
-
                     checkEnabled()
                 }
             })
 
-            buttonEdit.setOnClickListener {
 
+
+            buttonEdit.setOnClickListener {
+                MyApplication.userUpdateInfo?.userUpdateDto?.height = height
+                MyApplication.userUpdateInfo?.userUpdateDto?.weight = weight
+
+                viewModel.updateUserInfo(mainActivity)
             }
 
         }
@@ -193,6 +211,8 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
                     fragmentManager?.popBackStack()
                 }
             }
+
+            buttonEdit.isEnabled = false
 
             Glide.with(mainActivity).load(MyApplication.userInfo?.profileImgUrl).into(imageViewProfile)
             editTextNickname.setText(MyApplication.userInfo?.nickname)
@@ -227,7 +247,7 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
     override fun onTimeSelected(time: String) {
         checkEnabled()
         binding.run {
-            buttonGoalTime.text = time
+            buttonGoalTime.text = "매일 $time"
         }
     }
 
@@ -244,7 +264,7 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
     override fun onGradeSelected(grade: String) {
         checkEnabled()
         binding.run {
-            buttonGrade.text = "${grade}학년"
+            buttonGrade.text = "${grade.substring(5)}"
         }
     }
 

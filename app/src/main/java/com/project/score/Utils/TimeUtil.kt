@@ -21,7 +21,7 @@ object TimeUtil {
                 else "${minutes}분"
             }
             remainingSeconds > 0 -> "${remainingSeconds}초"
-            else -> ""
+            else -> "0분"
         }
     }
 

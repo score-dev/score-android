@@ -15,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kakao.sdk.user.model.User
 import com.project.score.API.response.home.HomeResponse
+import com.project.score.Group.CreateGroupFragment
 import com.project.score.Home.adapter.GroupRelayAdapter
 import com.project.score.Home.adapter.WeeklyCalendarAdapter
 import com.project.score.Home.viewModel.HomeViewModel
 import com.project.score.Login.viewModel.UserViewModel
 import com.project.score.MainActivity
+import com.project.score.Mypage.MypageMainFragment
+import com.project.score.Mypage.viewModel.MypageViewModel
 import com.project.score.R
 import com.project.score.Utils.DynamicSpacingItemDecoration
 import com.project.score.Utils.EqualSpacingItemDecoration
@@ -34,7 +37,9 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     lateinit var mainActivity: MainActivity
     lateinit var viewModel: HomeViewModel
-    lateinit var userViewModel: UserViewModel
+    private val mypageViewModel: MypageViewModel by lazy {
+        ViewModelProvider(requireActivity())[MypageViewModel::class.java]
+    }
 
     lateinit var weeklyGraphAdapter : WeeklyCalendarAdapter
     private lateinit var groupPagerAdapter: GroupRelayAdapter
@@ -50,7 +55,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
         viewModel = ViewModelProvider(mainActivity)[HomeViewModel::class.java]
-        userViewModel = ViewModelProvider(mainActivity)[UserViewModel::class.java]
+
 
         initAdapter()
         observeViewModel()
@@ -163,7 +168,7 @@ class HomeFragment : Fragment() {
 
     fun initView() {
         viewModel.getHomeData(mainActivity)
-        userViewModel.getUserInfo(mainActivity)
+        mypageViewModel.getUserInfo(mainActivity)
 
         binding.run {
             Log.d("##", "user info : ${MyApplication.userInfo}")
