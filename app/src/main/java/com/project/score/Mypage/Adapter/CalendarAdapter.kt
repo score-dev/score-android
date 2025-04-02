@@ -14,6 +14,7 @@ import java.time.LocalDate
 class CalendarAdapter(
     private val days: List<LocalDate>,
     private val exerciseDays: Set<LocalDate>,  // 운동한 날들의 집합
+    private val selectedDate: LocalDate,
     private val today: LocalDate
 ) : RecyclerView.Adapter<CalendarAdapter.DayViewHolder>() {
 
@@ -30,36 +31,30 @@ class CalendarAdapter(
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         val day = days[position]
 
-        // 날짜가 현재 달이 아니면 회색으로 표시
-        if (day.month != today.month) {
-            holder.binding.textViewDay.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.text_gray))
-        } else {
-            holder.binding.textViewDay.setTextColor(Color.BLACK)
-        }
-
-        holder.binding.textViewDay.text = day.dayOfMonth.toString()
-
-
         // 오늘 날짜라면 검은색 배경 설정
-        if (day == today) {
+        if (day == today && day.month == selectedDate.month) {
             holder.binding.layoutDay.setBackgroundResource(R.drawable.background_calendar_today)
             holder.binding.textViewDay.run {
                 setTextColor(Color.WHITE)
             }
         }
         // 운동한 날이라면 주황색 배경 설정
-        else if (exerciseDays.contains(day)) {
+        else if (exerciseDays.contains(day) && day.month == selectedDate.month) {
             holder.binding.layoutDay.setBackgroundResource(R.drawable.background_calendar_exercise)
             holder.binding.textViewDay.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.main))
         }
         // 지난달/다음달 날이라면 회색 배경 설정
-        else if (day.month != today.month) {
+        else if (day.month != selectedDate.month) {
             holder.binding.layoutDay.setBackgroundResource(R.drawable.background_calendar_previous)
+            holder.binding.textViewDay.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.text_gray))
         }
         // 그 외 날짜는 기본 테두리만 표시
         else {
             holder.binding.layoutDay.setBackgroundResource(R.drawable.background_calendar_default)
+            holder.binding.textViewDay.setTextColor(Color.BLACK)
         }
+
+        holder.binding.textViewDay.text = day.dayOfMonth.toString()
     }
 
     override fun getItemCount(): Int = days.size
