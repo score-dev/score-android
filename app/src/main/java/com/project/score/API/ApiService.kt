@@ -6,7 +6,9 @@ import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.user.BlockedMateListResponse
+import com.project.score.API.response.user.FeedListResponse
 import com.project.score.API.response.user.NotificationInfoResponse
+import com.project.score.API.response.user.PaginatedResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -91,6 +93,15 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("localDate") localDateId: String?,
     ): Call<GroupRankingResponse>
+
+    // 피드 리스트
+    @GET("score/exercise/list")
+    fun getFeedList(
+        @Header("Authorization") token: String,
+        @Query("id1") id1: Int,
+        @Query("id2") id2: Int,
+        @Query("page") page: Int
+    ): Call<PaginatedResponse<FeedListResponse>>
 
     // 회원 정보 수정
     @Multipart

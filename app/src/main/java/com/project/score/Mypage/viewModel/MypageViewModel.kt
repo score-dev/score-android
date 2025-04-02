@@ -11,7 +11,9 @@ import com.project.score.API.neis.response.SchoolDto
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.user.BlockedMateListResponse
+import com.project.score.API.response.user.FeedListResponse
 import com.project.score.API.response.user.NotificationInfoResponse
+import com.project.score.API.response.user.PaginatedResponse
 import com.project.score.MainActivity
 import com.project.score.Utils.MyApplication
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -19,12 +21,16 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.URLEncoder
 
 class MypageViewModel: ViewModel() {
 
     var userInfo: MutableLiveData<UserInfoResponse> = MutableLiveData()
     var notificationInfo: MutableLiveData<NotificationInfoResponse?> = MutableLiveData()
     var blockedMateList = MutableLiveData<MutableList<BlockedMateListResponse>>()
+    var feedList = MutableLiveData<MutableList<FeedListResponse>>()
+    var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
+    var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
 
     // 유저 정보
     fun getUserInfo(activity: Activity) {
@@ -105,6 +111,71 @@ class MypageViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 리스트 정보
+    fun getFeedList(activity: Activity, currentPage: Int) {
+
+        val tempFeedList = mutableListOf<FeedListResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getFeedList(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), tokenManager.getUserId(), currentPage).enqueue(object :
+            Callback<PaginatedResponse<FeedListResponse>> {
+            override fun onResponse(
+                call: Call<PaginatedResponse<FeedListResponse>>,
+                response: Response<PaginatedResponse<FeedListResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: PaginatedResponse<FeedListResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    lastFeed.value = (result?.last == true)
+                    firstFeed.value = (result?.first == true)
+
+                    val resultFeedList = result?.content ?: emptyList()
+
+                    for (feed in resultFeedList) {
+                        val feedItem = FeedListResponse(
+                            feedId = feed.feedId,
+                            uploaderNickname = feed.uploaderNickname ?: "",
+                            uploaderProfileImgUrl = feed.uploaderProfileImgUrl ?: "",
+                            feedImg = feed.feedImg ?: "",
+                            startedAt = feed.startedAt ?: "",
+                            completedAt = feed.completedAt ?: "",
+                            location = feed.location ?: "",
+                            weather = feed.weather ?: "",
+                            temperature = feed.temperature ?: 0,
+                            fineDust = feed.fineDust ?: "",
+                            feeling = feed.feeling ?: "",
+                            taggedNicknames = feed.taggedNicknames ?: emptyList(),
+                            taggedProfileImgUrls = feed.taggedProfileImgUrls ?: emptyList()
+                        )
+
+                        tempFeedList.add(feedItem)
+                    }
+
+                    feedList.value = tempFeedList
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: PaginatedResponse<FeedListResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<PaginatedResponse<FeedListResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
