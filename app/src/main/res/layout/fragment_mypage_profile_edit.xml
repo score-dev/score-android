@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Mypage.MypageProfileEditFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_back_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageView_profile"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/background_image_circle"
+                android:clipToOutline="true"
+                android:outlineProvider="background"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/button_edit_profile"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:background="@drawable/background_grey2_circle"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_profile"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_profile">
+
+                <ImageView
+                    android:id="@+id/imageView_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_edit" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textView_nickname_title"
+                style="@style/body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="48dp"
+                android:text="닉네임"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_profile" />
+
+            <EditText
+                android:id="@+id/editText_nickname"
+                style="@style/body3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/grey3"
+                android:ems="10"
+                android:hint="현재 닉네임"
+                android:inputType="text"
+                android:textColorHint="@color/text_color3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_nickname_title" />
+
+            <TextView
+                android:id="@+id/textView_goal_time_title"
+                style="@style/body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="28dp"
+                android:text="운동 알림 시간"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_nickname" />
+
+            <Button
+                android:id="@+id/button_goal_time"
+                style="@style/body1"
+                android:layout_width="0dp"
+                android:layout_height="57dp"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/grey2"
+                android:text="매일 오전 00:00"
+                android:textColor="@color/text_color1"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_goal_time_title" />
+
+            <TextView
+                android:id="@+id/textView_school_title"
+                style="@style/body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="28dp"
+                android:text="학교"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_goal_time" />
+
+            <Button
+                android:id="@+id/button_school"
+                style="@style/body3"
+                android:layout_width="0dp"
+                android:layout_height="57dp"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/grey2"
+                android:text="학교"
+                android:textColor="@color/text_color1"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_school_title" />
+
+            <TextView
+                android:id="@+id/textView_grade_title"
+                style="@style/body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="28dp"
+                android:text="학년"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_school" />
+
+            <Button
+                android:id="@+id/button_grade"
+                style="@style/body3"
+                android:layout_width="0dp"
+                android:layout_height="57dp"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/grey2"
+                android:text="학년"
+                android:textColor="@color/text_color1"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_grade_title" />
+
+            <TextView
+                android:id="@+id/textView_gender_title"
+                style="@style/body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="28dp"
+                android:text="성별"
+                android:textColor="@color/text_color1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_grade" />
+
+            <LinearLayout
+                android:id="@+id/layout_gender"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_gender_title">
+
+                <TextView
+                    android:id="@+id/button_gender_male"
+                    style="@style/body3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="11.5dp"
+                    android:background="@drawable/background_white_circle_stroke"
+                    android:text="남"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color2" />
+
+                <Space
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/button_gender_female"
+                    style="@style/body3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingVertical="11.5dp"
+                    android:background="@drawable/background_white_circle_stroke"
+                    android:text="여"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_color2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_physical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="22dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_gender"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_physical_height_title"
+                        style="@style/body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:text="키"
+                        android:textColor="@color/text_color1" />
+
+                    <EditText
+                        android:id="@+id/editText_physical_height"
+                        style="@style/body3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="@color/grey3"
+                        android:ems="10"
+                        android:hint="000cm"
+                        android:inputType="number"
+                        android:textColorHint="@color/text_color3" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_physical_weight_title"
+                        style="@style/body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="28dp"
+                        android:text="몸무게"
+                        android:textColor="@color/text_color1" />
+
+                    <EditText
+                        android:id="@+id/editText_physical_weight"
+                        style="@style/body3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="@color/grey3"
+                        android:ems="10"
+                        android:hint="00kg"
+                        android:inputType="number"
+                        android:textColorHint="@color/text_color3" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_edit"
+                style="@style/Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="54dp"
+                android:enabled="false"
+                android:text="저장하기"
+                app:cornerRadius="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_physical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
