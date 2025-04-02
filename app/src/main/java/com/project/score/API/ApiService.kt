@@ -10,6 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -103,5 +104,13 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id1") id1: Int, //친구 차단 해제를 요청한 유저의 고유 번호
         @Query("id2") id2: Int //차단에서 해제될 유저의 고유 번호
+    ): Call<String>
+
+    // 회원탈퇴
+    @DELETE("score/user/withdrawal")
+    fun withdrawal(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("reason") reason: String
     ): Call<String>
 }

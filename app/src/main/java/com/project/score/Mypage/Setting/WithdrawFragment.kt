@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.project.score.MainActivity
+import com.project.score.Mypage.viewModel.MypageViewModel
 import com.project.score.R
 import com.project.score.databinding.FragmentWithdrawBinding
 
@@ -16,6 +18,9 @@ class WithdrawFragment : Fragment() {
 
     lateinit var binding: FragmentWithdrawBinding
     lateinit var mainActivity: MainActivity
+    private val viewModel: MypageViewModel by lazy {
+        ViewModelProvider(requireActivity())[MypageViewModel::class.java]
+    }
 
     var isCause1Checked = false
     var isCause2Checked = false
@@ -38,6 +43,20 @@ class WithdrawFragment : Fragment() {
             buttonClear.setOnClickListener {
                 editTextCause.setText("")
             }
+
+            buttonWithdraw.setOnClickListener {
+                val reasons = mutableListOf<String>()
+
+                if (isCause1Checked) reasons.add(buttonCause1.text.toString())
+                if (isCause2Checked) reasons.add(buttonCause2.text.toString())
+                if (isCause3Checked) reasons.add(buttonCause3.text.toString())
+                if (isCause4Checked) reasons.add(buttonCause4.text.toString())
+                if (editTextCause.text.isNotEmpty()) reasons.add(editTextCause.text.toString())
+
+                val result = reasons.joinToString(separator = ", ")
+
+                viewModel.withdrawal(mainActivity, result)
+            }
         }
 
         return binding.root
@@ -46,7 +65,7 @@ class WithdrawFragment : Fragment() {
     fun textChangeListener() {
         binding.run {
             editTextCause.addTextChangedListener {
-                checkCause()
+                checkEnabled()
                 if(editTextCause.text.isNotEmpty()){
                     buttonClear.visibility = View.VISIBLE
                 }
@@ -71,7 +90,7 @@ class WithdrawFragment : Fragment() {
                         setTextColor(ContextCompat.getColor(mainActivity, R.color.text_color2))
                     }
 
-                    checkCause()
+                    checkEnabled()
                 }
             }
             buttonCause2.run {
@@ -86,7 +105,7 @@ class WithdrawFragment : Fragment() {
                         setTextColor(ContextCompat.getColor(mainActivity, R.color.text_color2))
                     }
 
-                    checkCause()
+                    checkEnabled()
                 }
             }
             buttonCause3.run {
@@ -101,7 +120,7 @@ class WithdrawFragment : Fragment() {
                         setTextColor(ContextCompat.getColor(mainActivity, R.color.text_color2))
                     }
 
-                    checkCause()
+                    checkEnabled()
                 }
             }
             buttonCause4.run {
@@ -116,13 +135,13 @@ class WithdrawFragment : Fragment() {
                         setTextColor(ContextCompat.getColor(mainActivity, R.color.text_color2))
                     }
 
-                    checkCause()
+                    checkEnabled()
                 }
             }
         }
     }
 
-    fun checkCause() {
+    fun checkEnabled() {
         binding.run {
             if(isCause1Checked || isCause2Checked || isCause3Checked || isCause4Checked || editTextCause.text.isNotEmpty()) {
                 buttonWithdraw.isEnabled = true
@@ -133,10 +152,13 @@ class WithdrawFragment : Fragment() {
     }
 
     fun initView() {
+
+        mainActivity.hideBottomNavigation(true)
+
         binding.run {
             toolbar.run {
                 buttonBack.setOnClickListener {
-
+                    fragmentManager?.popBackStack()
                 }
                 textViewHead.text = "탈퇴하기"
             }

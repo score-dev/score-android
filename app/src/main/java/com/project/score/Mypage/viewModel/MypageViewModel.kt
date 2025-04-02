@@ -9,6 +9,7 @@ import com.project.score.API.TokenManager
 import com.project.score.API.neis.response.SchoolDto
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.user.BlockedMateListResponse
+import com.project.score.MainActivity
 import com.project.score.Utils.MyApplication
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,6 +85,43 @@ class MypageViewModel: ViewModel() {
                     val result: String? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 회원탈퇴
+    fun withdrawal(activity: MainActivity, result: String) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.withdrawal(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), result).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    activity.finish()
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     var result: String? = response.body()
