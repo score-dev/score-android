@@ -2,6 +2,8 @@ package com.project.score.Utils
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.time.Duration
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -38,5 +40,44 @@ object TimeUtil {
 
         return "매일 $amPm ${hour12}:${minute.toString().padStart(2, '0')}"
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateExerciseDuration(startedAt: String, completedAt: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+
+        val start = LocalDateTime.parse(startedAt, formatter)
+        val end = LocalDateTime.parse(completedAt, formatter)
+
+        val duration = Duration.between(start, end)
+        val hours = duration.toHours()
+        val minutes = duration.toMinutes() % 60
+
+        return when {
+            hours > 0 && minutes > 0 -> "${hours}시간 ${minutes}분"
+            hours > 0 -> "${hours}시간"
+            else -> "${minutes}분"
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getTimeAgo(timeString: String): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        val time = LocalDateTime.parse(timeString, formatter)
+        val now = LocalDateTime.now()
+
+        val duration = Duration.between(time, now)
+        val days = duration.toDays()
+        val hours = duration.toHours()
+        val minutes = duration.toMinutes() % 60
+
+        return when {
+            days > 0 -> "${days}일 전"
+            hours > 0 && minutes > 0 -> "${hours}시간 ${minutes}분 전"
+            hours > 0 -> "${hours}시간 전"
+            minutes > 0 -> "${minutes}분 전"
+            else -> "방금 전"
+        }
+    }
+
 
 }

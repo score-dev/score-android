@@ -5,6 +5,7 @@ import com.project.score.API.response.group.GroupRankingResponse
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
+import com.project.score.API.response.record.FeedDetailResponse
 import com.project.score.API.response.user.BlockedMateListResponse
 import com.project.score.API.response.user.FeedListResponse
 import com.project.score.API.response.user.NotificationInfoResponse
@@ -102,6 +103,13 @@ interface ApiService {
         @Query("id2") id2: Int,
         @Query("page") page: Int
     ): Call<PaginatedResponse<FeedListResponse>>
+
+    // 피드 상세정보 조회
+    @GET("score/exercise/read")
+    fun getFeedDetail(
+        @Header("Authorization") token: String,
+        @Query("feedId") feedId: Int,
+    ): Call<FeedDetailResponse>
 
     // 회원 정보 수정
     @Multipart

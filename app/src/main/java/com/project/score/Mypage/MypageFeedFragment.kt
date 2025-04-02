@@ -2,18 +2,21 @@ package com.project.score.Mypage
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.score.API.response.user.FeedListResponse
 import com.project.score.MainActivity
 import com.project.score.Mypage.Adapter.FeedAdapter
 import com.project.score.Mypage.viewModel.MypageViewModel
 import com.project.score.R
+import com.project.score.Record.FeedDetailFragment
 import com.project.score.Record.RecordFragment
+import com.project.score.Record.viewModel.RecordViewModel
 import com.project.score.Utils.MyApplication
 import com.project.score.databinding.FragmentMypageFeedBinding
 
@@ -21,8 +24,8 @@ class MypageFeedFragment : Fragment() {
 
     lateinit var binding: FragmentMypageFeedBinding
     lateinit var mainActivity: MainActivity
-    private val viewModel: MypageViewModel by lazy {
-        ViewModelProvider(requireActivity())[MypageViewModel::class.java]
+    private val viewModel: RecordViewModel by lazy {
+        ViewModelProvider(requireActivity())[RecordViewModel::class.java]
     }
 
     lateinit var feedAdapter: FeedAdapter
@@ -33,6 +36,8 @@ class MypageFeedFragment : Fragment() {
     var currentPage = 0
     val pageSize = 20
 
+    var getFeedList: MutableList<FeedListResponse> = mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +45,27 @@ class MypageFeedFragment : Fragment() {
 
         binding = FragmentMypageFeedBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        feedAdapter = FeedAdapter(requireContext())
+        feedAdapter = FeedAdapter(requireContext()).apply {
+            itemClickListener = object : FeedAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    var registerNoticeFragment = FeedDetailFragment()
+
+                    val bundle = Bundle().apply {
+                        putInt("position", position)
+                        putInt("feedId", getFeedList[position].feedId)
+                    }
+                    // 전달할 Fragment 생성
+                    registerNoticeFragment = FeedDetailFragment().apply {
+                        arguments = bundle
+                    }
+
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, registerNoticeFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+        }
 
         observeViewModel(feedAdapter)
 
@@ -80,6 +105,9 @@ class MypageFeedFragment : Fragment() {
     fun observeViewModel(feedAdapter: FeedAdapter) {
         viewModel.run {
             feedList.observe(viewLifecycleOwner) { feedResponse ->
+                for(feed in feedResponse) {
+                    getFeedList.add(feed)
+                }
 
                 binding.recyclerViewFeed.apply {
                     layoutManager = GridLayoutManager(context, 3) // 3열 구성

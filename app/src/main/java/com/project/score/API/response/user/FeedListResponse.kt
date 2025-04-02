@@ -30,7 +30,7 @@ data class PageableInfo(
 )
 
 data class FeedListResponse(
-    val feedId: Long,
+    val feedId: Int,
     val uploaderNickname: String,
     val uploaderProfileImgUrl: String,
     val feedImg: String,
