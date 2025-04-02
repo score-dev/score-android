@@ -144,8 +144,10 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
                         height = cleanNumeric.toInt()
                     }
 
+                    if(height != MyApplication.userInfo?.height) {
+                        checkEnabled()
+                    }
                     isEditing = false
-                    checkEnabled()
                 }
             })
 
@@ -173,8 +175,10 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
                         weight = cleanNumeric.toInt()
                     }
 
+                    if(weight != MyApplication.userInfo?.weight) {
+                        checkEnabled()
+                    }
                     isEditing = false
-                    checkEnabled()
                 }
             })
 
@@ -264,7 +268,7 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
     override fun onGradeSelected(grade: String) {
         checkEnabled()
         binding.run {
-            buttonGrade.text = "${grade.substring(5)}"
+            buttonGrade.text = "${grade}"
         }
     }
 
