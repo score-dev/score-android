@@ -47,7 +47,7 @@ interface ApiService {
     // FCM 토큰 저장
     @POST("{userId}/token")
     fun setFcmToken(
-        @Path("id") id: Int,
+        @Path("userId") id: Int,
         @Header("Authorization") token: String,
         @Body body: FcmRequest
     ): Call<String>
