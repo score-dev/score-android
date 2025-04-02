@@ -8,6 +8,7 @@ import com.project.score.API.ApiClient
 import com.project.score.API.TokenManager
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.record.FeedDetailResponse
+import com.project.score.API.response.record.FeedEmotionResponse
 import com.project.score.API.response.user.FeedListResponse
 import com.project.score.API.response.user.PaginatedResponse
 import com.project.score.MainActivity
@@ -21,6 +22,7 @@ class RecordViewModel: ViewModel() {
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
 
     var feedDetail: MutableLiveData<FeedDetailResponse?> = MutableLiveData()
+    var feedEmotion: MutableLiveData<MutableList<FeedEmotionResponse>?> = MutableLiveData()
 
     // 피드 리스트 정보
     fun getFeedList(activity: Activity, currentPage: Int) {
@@ -118,6 +120,97 @@ class RecordViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<FeedDetailResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 감정 표현 정보
+    fun getFeedEmotion(activity: MainActivity, feedId: Int) {
+
+        val tempFeedEmotion = mutableListOf<FeedEmotionResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getFeedEmotion(tokenManager.getAccessToken().toString(), feedId).enqueue(object :
+            Callback<List<FeedEmotionResponse>> {
+            override fun onResponse(
+                call: Call<List<FeedEmotionResponse>>,
+                response: Response<List<FeedEmotionResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: List<FeedEmotionResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    val resultFeedEmotionList = result ?: emptyList()
+
+                    for (feed in resultFeedEmotionList) {
+                        val feedEmotionList = FeedEmotionResponse(
+                            feed.agentId,
+                            feed.agentProfileImgUrl,
+                            feed.agentNickname,
+                            feed.emotionType,
+                            feed.reactedAt
+                        )
+
+                        tempFeedEmotion.add(feedEmotionList)
+                    }
+
+                    feedEmotion.value = tempFeedEmotion
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: List<FeedEmotionResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<FeedEmotionResponse>>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 상세 정보
+    fun setFeedEmotion(activity: MainActivity, feedId: Int, type: String) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.setFeedEmotion(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), feedId, type).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    getFeedEmotion(activity, feedId)
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

@@ -6,6 +6,7 @@ import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.record.FeedDetailResponse
+import com.project.score.API.response.record.FeedEmotionResponse
 import com.project.score.API.response.user.BlockedMateListResponse
 import com.project.score.API.response.user.FeedListResponse
 import com.project.score.API.response.user.NotificationInfoResponse
@@ -110,6 +111,22 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("feedId") feedId: Int,
     ): Call<FeedDetailResponse>
+
+    // 피드 감정 표현 조회
+    @GET("score/exercise/emotion/list/all")
+    fun getFeedEmotion(
+        @Header("Authorization") token: String,
+        @Query("feedId") feedId: Int,
+    ): Call<List<FeedEmotionResponse>>
+
+    // 피드 감정 표현 추가
+    @POST("score/exercise/emotion")
+    fun setFeedEmotion(
+        @Header("Authorization") token: String,
+        @Query("agentId") agentId: Int,
+        @Query("feedId") feedId: Int,
+        @Query("type") type: String,
+    ): Call<String>
 
     // 회원 정보 수정
     @Multipart

@@ -1,7 +1,7 @@
 package com.project.score.API.response.record
 
 data class FeedDetailResponse(
-    val feedId: Long,
+    val feedId: Int,
     val uploaderNickname: String,
     val uploaderProfileImgUrl: String,
     val feedImg: String,
