@@ -171,8 +171,12 @@ class HomeFragment : Fragment() {
         mypageViewModel.getUserInfo(mainActivity)
 
         binding.run {
-            Log.d("##", "user info : ${MyApplication.userInfo}")
-            textViewNickname.text = "${MyApplication.userInfo?.nickname}님,"
+            toolbar.layoutMypage.setOnClickListener {
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, MypageMainFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
     }
 }
