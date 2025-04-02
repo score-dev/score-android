@@ -27,14 +27,16 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="이용약관"
+            android:text="서비스 이용약관"
             android:textColor="@color/text_color1" />
 
         <ImageView
             android:id="@+id/imageView_agreement1_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 
@@ -53,14 +55,72 @@
             style="@style/body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="개인정보처리방침"
+            android:text="위치기반서비스 이용약관"
             android:textColor="@color/text_color1" />
 
         <ImageView
             android:id="@+id/imageView_agreement2_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_agreement3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_agreement2">
+
+        <TextView
+            android:id="@+id/textView_agreement3"
+            style="@style/body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="개인정보처리방침"
+            android:textColor="@color/text_color1" />
+
+        <ImageView
+            android:id="@+id/imageView_agreement3_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_next_textcolor1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_agreement4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_agreement3">
+
+        <TextView
+            android:id="@+id/textView_agreement4"
+            style="@style/body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="마케팅 정보 수신 동의"
+            android:textColor="@color/text_color1" />
+
+        <ImageView
+            android:id="@+id/imageView_agreement4_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:src="@drawable/ic_next_textcolor1" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
