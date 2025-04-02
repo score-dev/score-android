@@ -6,6 +6,7 @@ import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.user.BlockedMateListResponse
+import com.project.score.API.response.user.NotificationInfoResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -100,6 +101,13 @@ interface ApiService {
         @Part("userUpdateDto") userUpdateDto: RequestBody,
         @Part file: MultipartBody.Part?
     ): Call<String>
+
+    // 알림 수신 여부 설정 현황
+    @GET("score/user/info/notification")
+    fun getNotificationInfo(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Call<NotificationInfoResponse>
 
     // 차단한 메이트 목록 조회
     @GET("score/friends/blocked/list")

@@ -11,6 +11,7 @@ import com.project.score.API.neis.response.SchoolDto
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
 import com.project.score.API.response.user.BlockedMateListResponse
+import com.project.score.API.response.user.NotificationInfoResponse
 import com.project.score.MainActivity
 import com.project.score.Utils.MyApplication
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -22,6 +23,7 @@ import retrofit2.Response
 class MypageViewModel: ViewModel() {
 
     var userInfo: MutableLiveData<UserInfoResponse> = MutableLiveData()
+    var notificationInfo: MutableLiveData<NotificationInfoResponse?> = MutableLiveData()
     var blockedMateList = MutableLiveData<MutableList<BlockedMateListResponse>>()
 
     // 유저 정보
@@ -103,6 +105,43 @@ class MypageViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 알림 수신 여부 설정 현황
+    fun getNotificationInfo(activity: Activity) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getNotificationInfo(tokenManager.getAccessToken().toString(), tokenManager.getUserId()).enqueue(object :
+            Callback<NotificationInfoResponse> {
+            override fun onResponse(
+                call: Call<NotificationInfoResponse>,
+                response: Response<NotificationInfoResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: NotificationInfoResponse? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    notificationInfo.value = result
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: NotificationInfoResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<NotificationInfoResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
