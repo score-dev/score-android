@@ -71,6 +71,12 @@ class RecordFragment : Fragment() {
 //                CallCamera()
             }
             buttonMap.setOnClickListener {
+                if(TimerManager.startedAtIso != null) {
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, RecordMapFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
             buttonRecord.setOnClickListener {
                 isStart = !isStart
@@ -101,8 +107,9 @@ class RecordFragment : Fragment() {
     }
 
     private fun startTimer() {
-        val baseTime = TimerManager.startedAtMillis ?: System.currentTimeMillis()
-        elapsedSeconds = if(TimerManager.startedAtMillis != null) { MyApplication.recordTimer } else { ((System.currentTimeMillis() - baseTime) / 1000).toInt() }
+        binding.buttonStop.isEnabled = TimerManager.startedAtIso != null
+        
+        elapsedSeconds = if(TimerManager.startedAtMillis != null) { MyApplication.recordTimer } else { 0 }
 
         timerRunnable = object : Runnable {
             override fun run() {
@@ -134,6 +141,11 @@ class RecordFragment : Fragment() {
             toolbar.run {
                 textViewHead.text = "기록하기"
                 buttonBack.setOnClickListener {
+                    MyApplication.recordTimer = 0
+                    TimerManager.reset()
+                    if (::timerRunnable.isInitialized) {
+                        handler.removeCallbacks(timerRunnable)
+                    }
                     fragmentManager?.popBackStack()
                 }
             }
@@ -147,6 +159,8 @@ class RecordFragment : Fragment() {
             textViewTimer.text = TimeUtil.formatRecordTime(elapsedSeconds)
 
             checkLocationPermission()
+
+            buttonStop.isEnabled = TimerManager.startedAtIso != null
         }
     }
 

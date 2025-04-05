@@ -26,6 +26,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "MAP_API_KEY", "\"${properties["map_client_id"]}\"")
         buildConfigField("String","server_url",getApiKey("server_url"))
         buildConfigField("String","google_key",getApiKey("google_key"))
         buildConfigField("String", "KAKAO_APP_KEY", "\"${properties["kakao_key"]}\"")
@@ -106,6 +107,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    // 네이버 지도
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.naver.maps:map-sdk:3.21.0")
 
     // dot indicator
     implementation("com.tbuonomo:dotsindicator:5.0")

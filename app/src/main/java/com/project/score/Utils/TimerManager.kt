@@ -8,6 +8,15 @@ object TimerManager {
     var completedAtIso: String? = null
 
     var isRunning: Boolean = false
+
+    fun reset() {
+        startedAtMillis = null
+        startedAtIso = null
+        completedAtMillis = null
+        completedAtIso = null
+        isRunning = false
+    }
 }
+
 
 
