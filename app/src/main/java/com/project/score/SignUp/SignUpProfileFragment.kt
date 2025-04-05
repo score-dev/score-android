@@ -1,5 +1,6 @@
 package com.project.score.SignUp
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -92,6 +93,20 @@ class SignUpProfileFragment : Fragment() {
             }
 
             buttonNext.setOnClickListener {
+                if(profileImage != 0) {
+                    val image =
+                        when(profileImage) {
+                            1 -> {"img_profile1.png"}
+                            2 -> {"img_profile2.png"}
+                            3 -> {"img_profile3.png"}
+                            4 -> {"img_profile4.png"}
+                            5 -> {"img_profile5.png"}
+                            else -> {"img_profile1.png"}
+                        }
+                    val imagePart = getMultipartFromAssets(onboardingActivity, image)
+                    MyApplication.signUpImage = imagePart
+                }
+
                 onboardingActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_onboarding, SignUpSchoolFragment())
                     .addToBackStack(null)
@@ -130,6 +145,22 @@ class SignUpProfileFragment : Fragment() {
                 imageViewProfileBackground.setImageResource(R.drawable.background_profile5)
             }
         }
+    }
+
+    fun getMultipartFromAssets(context: Context, assetFileName: String, partKey: String = "file"): MultipartBody.Part {
+        // 1. assets에서 이미지 읽기
+        val inputStream = context.assets.open(assetFileName)
+        val tempFile = File(context.cacheDir, assetFileName)
+
+        // 2. 임시 파일로 복사
+        FileOutputStream(tempFile).use { outputStream ->
+            inputStream.copyTo(outputStream)
+        }
+        inputStream.close()
+
+        // 3. File → MultipartBody.Part 변환
+        val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(partKey, tempFile.name, requestFile)
     }
 
     private fun convertResizeImage(imageUri: Uri): Uri {
