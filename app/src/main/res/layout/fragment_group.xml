@@ -190,7 +190,7 @@
                         style="@style/body3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3sp"
+                        android:layout_marginTop="3dp"
                         android:text="함께 운동할 그룹을 만들어볼까요?"
                         android:textColor="@color/text_color2"
                         app:layout_constraintEnd_toEndOf="@+id/textView_empty_title"
