@@ -5,14 +5,22 @@ import com.project.score.API.response.group.GroupRankingResponse
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
+import com.project.score.API.response.record.FeedDetailResponse
+import com.project.score.API.response.record.FeedEmotionResponse
+import com.project.score.API.response.user.BlockedMateListResponse
+import com.project.score.API.response.user.FeedListResponse
+import com.project.score.API.response.user.NotificationInfoResponse
+import com.project.score.API.response.user.PaginatedResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -44,7 +52,7 @@ interface ApiService {
     // FCM 토큰 저장
     @POST("{userId}/token")
     fun setFcmToken(
-        @Path("id") id: Int,
+        @Path("userId") id: Int,
         @Header("Authorization") token: String,
         @Body body: FcmRequest
     ): Call<String>
@@ -87,4 +95,76 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("localDate") localDateId: String?,
     ): Call<GroupRankingResponse>
+
+    // 피드 리스트
+    @GET("score/exercise/list")
+    fun getFeedList(
+        @Header("Authorization") token: String,
+        @Query("id1") id1: Int,
+        @Query("id2") id2: Int,
+        @Query("page") page: Int
+    ): Call<PaginatedResponse<FeedListResponse>>
+
+    // 피드 상세정보 조회
+    @GET("score/exercise/read")
+    fun getFeedDetail(
+        @Header("Authorization") token: String,
+        @Query("feedId") feedId: Int,
+    ): Call<FeedDetailResponse>
+
+    // 피드 감정 표현 조회
+    @GET("score/exercise/emotion/list/all")
+    fun getFeedEmotion(
+        @Header("Authorization") token: String,
+        @Query("feedId") feedId: Int,
+    ): Call<List<FeedEmotionResponse>>
+
+    // 피드 감정 표현 추가
+    @POST("score/exercise/emotion")
+    fun setFeedEmotion(
+        @Header("Authorization") token: String,
+        @Query("agentId") agentId: Int,
+        @Query("feedId") feedId: Int,
+        @Query("type") type: String,
+    ): Call<String>
+
+    // 회원 정보 수정
+    @Multipart
+    @PUT("score/user/update/{userId}")
+    fun updateUserInfo(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Int,
+        @Part("userUpdateDto") userUpdateDto: RequestBody,
+        @Part file: MultipartBody.Part?
+    ): Call<String>
+
+    // 알림 수신 여부 설정 현황
+    @GET("score/user/info/notification")
+    fun getNotificationInfo(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Call<NotificationInfoResponse>
+
+    // 차단한 메이트 목록 조회
+    @GET("score/friends/blocked/list")
+    fun getBlockedMateList(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Call<List<BlockedMateListResponse>>
+
+    // 차단한 메이트 차단 해제
+    @PUT("score/friends/blocked/list")
+    fun cancelBlockedMateList(
+        @Header("Authorization") token: String,
+        @Query("id1") id1: Int, //친구 차단 해제를 요청한 유저의 고유 번호
+        @Query("id2") id2: Int //차단에서 해제될 유저의 고유 번호
+    ): Call<String>
+
+    // 회원탈퇴
+    @DELETE("score/user/withdrawal")
+    fun withdrawal(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("reason") reason: String
+    ): Call<String>
 }

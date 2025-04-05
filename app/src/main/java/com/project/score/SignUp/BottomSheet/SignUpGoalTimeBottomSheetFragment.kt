@@ -43,14 +43,18 @@ class SignUpGoalTimeBottomSheetFragment : BottomSheetDialogFragment() {
                if(amPm == "오후") {
                    if(minute < 10) {
                        MyApplication.signUpInfo?.userDto?.goal = "${hour+12}:0$minute:00"
+                       MyApplication.userUpdateInfo?.userUpdateDto?.goal = "${hour+12}:0$minute:00"
                    } else {
                        MyApplication.signUpInfo?.userDto?.goal = "${hour+12}:$minute:00"
+                       MyApplication.userUpdateInfo?.userUpdateDto?.goal = "${hour+12}:$minute:00"
                    }
                } else {
                    if(minute < 10) {
                        MyApplication.signUpInfo?.userDto?.goal = "${hour}:0$minute:00"
+                       MyApplication.userUpdateInfo?.userUpdateDto?.goal = "${hour}:0$minute:00"
                    } else {
                        MyApplication.signUpInfo?.userDto?.goal = "${hour}:$minute:00"
+                       MyApplication.userUpdateInfo?.userUpdateDto?.goal = "${hour}:$minute:00"
                    }
                }
                onItemClicked(selectedTime)

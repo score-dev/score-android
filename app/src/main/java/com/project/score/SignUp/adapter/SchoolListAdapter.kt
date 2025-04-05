@@ -1,5 +1,6 @@
 package com.project.score.SignUp.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import com.project.score.OnBoarding.OnboardingActivity
 import com.project.score.databinding.RowSchoolBinding
 
 class SchoolListAdapter(
-    private var activity: OnboardingActivity,
+    private var activity: Activity,
     private var schools: List<SchoolDto>?
 ) :
     RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {

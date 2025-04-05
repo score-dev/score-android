@@ -146,7 +146,7 @@
             <FrameLayout
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@drawable/background_function"
+                android:background="@drawable/background_grey3_radius300"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView_profile"
                 app:layout_constraintEnd_toEndOf="@+id/imageView_profile">
 

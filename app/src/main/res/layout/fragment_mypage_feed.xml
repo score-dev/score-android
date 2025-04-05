@@ -8,11 +8,75 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_feed"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="-2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_empty_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="94dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/imageView_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_smile_character"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_empty_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="닉네임님만의 운동기록을\n채워보세요!"
+            android:textAlignment="center"
+            android:textColor="@color/text_color3"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_empty"
+            app:layout_constraintStart_toStartOf="@+id/imageView_empty"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_empty" />
+
+        <LinearLayout
+            android:id="@+id/button_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/textView_empty_title"
+            app:layout_constraintStart_toStartOf="@+id/textView_empty_title"
+            app:layout_constraintTop_toBottomOf="@+id/textView_empty_title">
+
+            <TextView
+                android:id="@+id/textView_empty_record"
+                style="@style/body3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="운동 기록하러 가기"
+                android:textColor="@color/text_color3" />
+
+            <ImageView
+                android:id="@+id/imageView_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_next_textcolor3" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,30 +25,37 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <ImageView
-        android:id="@+id/imageView_empty"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_empty_mate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_empty_mate"
-        android:layout_marginTop="272dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_mate">
 
-    <TextView
-        android:id="@+id/textView_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/pretendard_bold"
-        android:text="차단한\n메이트가 없어요"
-        android:textAlignment="center"
-        android:textColor="@color/text_color3"
-        android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView_empty"
-        app:layout_constraintStart_toStartOf="@+id/imageView_empty"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_empty" />
+        <ImageView
+            android:id="@+id/imageView_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_empty_mate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="차단한\n메이트가 없어요"
+            android:textAlignment="center"
+            android:textColor="@color/text_color3"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_empty"
+            app:layout_constraintStart_toStartOf="@+id/imageView_empty"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_empty" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

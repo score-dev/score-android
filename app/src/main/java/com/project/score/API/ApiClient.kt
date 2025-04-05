@@ -3,11 +3,13 @@ package com.project.score.API
 import android.content.Context
 import com.project.score.BuildConfig
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.CookieManager
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -18,7 +20,9 @@ import javax.net.ssl.X509TrustManager
 
 class ApiClient(val context: Context) {
 
-    val gson = Gson()
+    val gson : Gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     val logger = HttpLoggingInterceptor().apply {
         level =
@@ -39,6 +43,7 @@ class ApiClient(val context: Context) {
         Retrofit.Builder()
             .baseUrl(BuildConfig.server_url)
             .client(getUnsafeOkHttpClient().build()) //SSL 우회
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
