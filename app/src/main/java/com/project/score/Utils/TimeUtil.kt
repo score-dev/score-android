@@ -8,6 +8,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 object TimeUtil {
+    // 목표 시간 설정 포맷
     fun formatExerciseTime(seconds: Int): String {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
@@ -27,8 +28,9 @@ object TimeUtil {
         }
     }
 
+    // 목표 시간 표시 포맷
     @RequiresApi(Build.VERSION_CODES.O)
-    fun formatTimeToKoreanDisplay(time: String): String {
+    fun formatExerciseTimeToKorean(time: String): String {
         val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         val localTime = LocalTime.parse(time, formatter)
 
@@ -41,6 +43,7 @@ object TimeUtil {
         return "매일 $amPm ${hour12}:${minute.toString().padStart(2, '0')}"
     }
 
+    // 운동 시간 계산
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateExerciseDuration(startedAt: String, completedAt: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
@@ -59,6 +62,7 @@ object TimeUtil {
         }
     }
 
+    // 기간 계산 (00분 전)
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeAgo(timeString: String): String {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")

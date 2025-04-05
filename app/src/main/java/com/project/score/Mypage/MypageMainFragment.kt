@@ -22,7 +22,7 @@ import com.project.score.Mypage.Setting.SettingFragment
 import com.project.score.Mypage.Setting.WithdrawFragment
 import com.project.score.Mypage.viewModel.MypageViewModel
 import com.project.score.R
-import com.project.score.Utils.TimeUtil.formatTimeToKoreanDisplay
+import com.project.score.Utils.TimeUtil.formatExerciseTimeToKorean
 import com.project.score.databinding.FragmentMypageMainBinding
 
 class MypageMainFragment : Fragment() {
@@ -84,7 +84,7 @@ class MypageMainFragment : Fragment() {
                    Glide.with(this@MypageMainFragment)
                        .load(getUserInfo?.profileImgUrl)
                        .into(imageViewProfile)
-                   textViewNotificationTime.text = "${formatTimeToKoreanDisplay(getUserInfo?.goal ?: "00:00:00")}"
+                   textViewNotificationTime.text = "${formatExerciseTimeToKorean(getUserInfo?.goal ?: "00:00:00")}"
 
                    // 레벨 layout
                    layoutLevel.run {

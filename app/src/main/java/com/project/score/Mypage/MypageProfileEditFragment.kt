@@ -220,7 +220,7 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
 
             Glide.with(mainActivity).load(MyApplication.userInfo?.profileImgUrl).into(imageViewProfile)
             editTextNickname.setText(MyApplication.userInfo?.nickname)
-            buttonGoalTime.text = TimeUtil.formatTimeToKoreanDisplay(MyApplication.userInfo?.goal.toString())
+            buttonGoalTime.text = TimeUtil.formatExerciseTimeToKorean(MyApplication.userInfo?.goal.toString())
             buttonSchool.text = MyApplication.userInfo?.schoolName
             buttonGrade.text = "${MyApplication.userInfo?.grade}학년"
             if(MyApplication.userInfo?.gender == "FEMALE") {
