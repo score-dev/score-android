@@ -105,7 +105,7 @@ class HomeFragment : Fragment() {
             layoutWeeklyResult.recyclerViewGraph.apply {
                 adapter = weeklyGraphAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                val spacingRatio = 0.3f // 전체 아이템 넓이 대비 20% 간격
+                val spacingRatio = 0.15f
                 addItemDecoration(
                     DynamicSpacingItemDecoration(spacingRatio)
                 )
