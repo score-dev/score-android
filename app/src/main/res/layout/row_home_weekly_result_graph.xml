@@ -16,11 +16,12 @@
 
     <TextView
         android:id="@+id/textView_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         app:layout_constraintDimensionRatio="1:1"
         android:background="@drawable/background_grey2_circle"
         android:layout_marginTop="7dp"
+        android:textAlignment="center"
         android:text="00"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="@+id/textView_day"

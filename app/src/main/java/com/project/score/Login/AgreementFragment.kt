@@ -1,5 +1,7 @@
 package com.project.score.Login
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,6 +23,7 @@ class AgreementFragment : Fragment() {
     var agreement1 = false
     var agreement2 = false
     var agreement3 = false
+    var agreement4 = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +50,29 @@ class AgreementFragment : Fragment() {
                 agreement3 = !agreement3
                 changeAgreement(agreement3, imageViewCheckAgreement3)
             }
+            layoutAgreement4.setOnClickListener {
+                agreement4 = !agreement4
+                changeAgreement(agreement4, imageViewCheckAgreement4)
+            }
+
+            imageViewNextAgreement1.setOnClickListener {
+                // 서비스 이용약관
+                var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://frequent-pasta-701.notion.site/154a57104d07473b8b1fa3607e834363?pvs=4"))
+                startActivity(intent)
+            }
+            imageViewNextAgreement2.setOnClickListener {
+                // 위치기반 서비스 이용약관
+                var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://frequent-pasta-701.notion.site/5fdb224e08c8425ba47fb405d4ce5a5b?pvs=4"))
+                startActivity(intent)
+            }
+            imageViewNextAgreement3.setOnClickListener {
+                // 개인정보처리방침
+                var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://frequent-pasta-701.notion.site/ce34930d101343deb722ec25f7419617?pvs=4"))
+                startActivity(intent)
+            }
+            imageViewNextAgreement4.setOnClickListener {
+                // 마케팅 정보 수신 동의
+            }
 
             buttonNext.setOnClickListener {
                 MyApplication.signUpInfo?.userDto?.marketing = agreement3
@@ -71,7 +97,7 @@ class AgreementFragment : Fragment() {
         } else {
             view.setImageResource(R.drawable.ic_unchecked)
         }
-        binding.buttonNext.isEnabled = agreement1 && agreement2
+        binding.buttonNext.isEnabled = agreement1 && agreement2 && agreement3
     }
 
     fun checkAgreementAll() {
@@ -81,20 +107,24 @@ class AgreementFragment : Fragment() {
                 imageViewCheckAgreement1.setImageResource(R.drawable.ic_checked)
                 imageViewCheckAgreement2.setImageResource(R.drawable.ic_checked)
                 imageViewCheckAgreement3.setImageResource(R.drawable.ic_checked)
+                imageViewCheckAgreement4.setImageResource(R.drawable.ic_checked)
                 agreement1 = true
                 agreement2 = true
                 agreement3 = true
+                agreement4 = true
             } else {
                 imageViewCheckAgreementAll.setImageResource(R.drawable.ic_unchecked)
                 imageViewCheckAgreement1.setImageResource(R.drawable.ic_unchecked)
                 imageViewCheckAgreement2.setImageResource(R.drawable.ic_unchecked)
                 imageViewCheckAgreement3.setImageResource(R.drawable.ic_unchecked)
+                imageViewCheckAgreement4.setImageResource(R.drawable.ic_unchecked)
                 agreement1 = false
                 agreement2 = false
                 agreement3 = false
+                agreement4 = false
             }
         }
-        binding.buttonNext.isEnabled = agreement1 && agreement2
+        binding.buttonNext.isEnabled = agreement1 && agreement2 && agreement4
     }
 
     fun initView() {

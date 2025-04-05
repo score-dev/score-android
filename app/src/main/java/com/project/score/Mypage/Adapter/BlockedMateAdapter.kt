@@ -47,7 +47,7 @@ class BlockedMateAdapter(
         holder.nickName.text = blockedMateList?.get(position)?.nickname
     }
 
-    override fun getItemCount() = (blockedMateList?.size ?: 0) + 1
+    override fun getItemCount() = (blockedMateList?.size ?: 0)
 
     inner class ViewHolder(val binding: RowBlockedMateBinding) : RecyclerView.ViewHolder(binding.root) {
         val profile = binding.imageViewProfile
