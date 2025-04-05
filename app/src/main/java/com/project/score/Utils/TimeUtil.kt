@@ -83,5 +83,23 @@ object TimeUtil {
         }
     }
 
+    // 기록하기 시간 포맷: 00:00 ~ 59:59 → 1:00:00 ~
+    fun formatRecordTime(seconds: Int): String {
+        val hrs = seconds / 3600
+        val mins = (seconds % 3600) / 60
+        val secs = seconds % 60
+
+        return if (hrs > 0) {
+            String.format("%d:%02d:%02d", hrs, mins, secs)
+        } else {
+            String.format("%02d:%02d", mins, secs)
+        }
+    }
+
+    fun convertMillisToIso(millis: Long): String {
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        sdf.timeZone = java.util.TimeZone.getTimeZone("UTC")
+        return sdf.format(java.util.Date(millis))
+    }
 
 }

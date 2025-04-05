@@ -58,5 +58,7 @@ class MyApplication : Application() {
         // group
         var groupImage: MultipartBody.Part? = null
 
+        // record
+        var recordTimer = 0
     }
 }
