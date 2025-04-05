@@ -19,7 +19,9 @@ import com.project.score.API.response.user.FeedListResponse
 import com.project.score.MainActivity
 import com.project.score.Mypage.viewModel.MypageViewModel
 import com.project.score.R
+import com.project.score.Record.BottomSheet.FeedEmotionBottomSheetFragment
 import com.project.score.Record.viewModel.RecordViewModel
+import com.project.score.SignUp.BottomSheet.SignUpSchoolBottomSheetFragment
 import com.project.score.Utils.TimeUtil
 import com.project.score.databinding.FragmentFeedDetailBinding
 
@@ -46,6 +48,11 @@ class FeedDetailFragment : Fragment() {
         observeViewModel()
 
         binding.run {
+            textViewEmotionPeople.setOnClickListener {
+                // 바텀시트
+                val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(mainActivity, getFeedEmotionList)
+                emotionMateBottomSheet.show(childFragmentManager, emotionMateBottomSheet.tag)
+            }
             layoutEmotionAdd.setOnClickListener {
                 val popupView =
                     LayoutInflater.from(context).inflate(R.layout.layout_pop_menu_emotion, null)
@@ -199,10 +206,10 @@ class FeedDetailFragment : Fragment() {
                 layoutEmotionAdd.visibility = View.VISIBLE
             }
 
-            if(emotions.size > count) {
+            if(emotions.size > 1) {
                 textViewEmotionPeople.run {
                     visibility = View.VISIBLE
-                    text = "외 ${emotions.size - count}명"
+                    text = "${emotions[0].agentNickname}님 외 ${emotions.size - 1}명"
                 }
             } else {
                 textViewEmotionPeople.visibility = View.GONE
