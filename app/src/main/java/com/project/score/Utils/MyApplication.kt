@@ -38,6 +38,7 @@ class MyApplication : Application() {
 
         var userInfo: UserInfoResponse? = null
         var userNickname = ""
+        var consecutiveDate = 0
         var userUpdateImage: MultipartBody.Part? = null
         var userUpdateInfo: UserInfoUpdateRequest? = UserInfoUpdateRequest(
             userUpdateDto = UserInfo(

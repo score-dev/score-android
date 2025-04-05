@@ -101,6 +101,14 @@ class RecordFragment : Fragment() {
                     stopTimer()
                 }
             }
+            buttonStop.setOnClickListener {
+                if(TimerManager.startedAtIso != null) {
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, RecordTodayExerciseFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
         }
 
         return binding.root
