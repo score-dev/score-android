@@ -165,5 +165,38 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
             naverMap.moveCamera(cameraUpdate)
         }
 
+        if (MyApplication.locationList.size >= 2) {
+            // 경로
+            val path = PathOverlay().apply {
+                coords = MyApplication.locationList
+                color = "#FF6C3E".toColorInt()
+                width = 8
+                outlineWidth = 0
+                zIndex = 0
+            }
+            path.map = naverMap
+
+            // 시작점 마커
+            val startMarker = Marker().apply {
+                position = MyApplication.locationList.first()
+                icon = OverlayImage.fromResource(R.drawable.ic_map_start)
+                width = Marker.SIZE_AUTO
+                height = Marker.SIZE_AUTO
+                anchor = android.graphics.PointF(0.5f, 0.5f) // 중심 정렬
+                zIndex = 1
+            }
+            startMarker.map = naverMap
+
+            // 끝점 마커
+            val finishMarker = Marker().apply {
+                position = MyApplication.locationList.last()
+                icon = OverlayImage.fromResource(R.drawable.ic_map_finish)
+                width = Marker.SIZE_AUTO
+                height = Marker.SIZE_AUTO
+                anchor = android.graphics.PointF(0.5f, 0.5f) // 중심 정렬
+                zIndex = 1
+            }
+            finishMarker.map = naverMap
+        }
     }
 }
