@@ -111,6 +111,8 @@ dependencies {
     // 네이버 지도
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.naver.maps:map-sdk:3.21.0")
+    implementation("com.google.maps.android:android-maps-utils:2.2.3")
+
 
     // dot indicator
     implementation("com.tbuonomo:dotsindicator:5.0")

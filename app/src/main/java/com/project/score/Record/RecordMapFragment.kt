@@ -35,6 +35,7 @@ import com.project.score.Utils.MyApplication
 import com.project.score.databinding.FragmentRecordMapBinding
 import androidx.core.graphics.createBitmap
 import com.bumptech.glide.request.RequestOptions
+import com.project.score.Utils.DistanceUtil
 import com.project.score.Utils.TimeUtil
 import com.project.score.Utils.TimerManager
 
@@ -55,6 +56,10 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var marker: Marker
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var markerTimerRunnable: Runnable
+
+    private val uiUpdateHandler = Handler(Looper.getMainLooper())
+    private lateinit var uiUpdateRunnable: Runnable
+
 
 
     override fun onCreateView(
@@ -84,6 +89,9 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
         mainActivity.hideBottomNavigation(true)
 
         binding.run {
+            textViewDistance.text = "${MyApplication.totalDistance.toString()}m"
+            textViewKcal.text = "${DistanceUtil.calculateKcal(MyApplication.userInfo?.weight ?: 0, MyApplication.recordTimer / 3600.0)}kcal"
+
             toolbar.run {
                 textViewHead.text = "지도"
                 buttonBack.setOnClickListener {
@@ -106,33 +114,27 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        if (::markerTimerRunnable.isInitialized) {
-            handler.removeCallbacks(markerTimerRunnable)
-        }
+        stopUiUpdater()
         mapView.onPause()
     }
 
+    override fun onStop() {
+        super.onStop()
+        stopUiUpdater()
+        mapView.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopUiUpdater()
+        mapView.onDestroy()
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView.onSaveInstanceState(outState)
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (::markerTimerRunnable.isInitialized) {
-            handler.removeCallbacks(markerTimerRunnable)
-        }
-        mapView.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (::markerTimerRunnable.isInitialized) {
-            handler.removeCallbacks(markerTimerRunnable)
-        }
-        mapView.onDestroy()
-    }
 
     override fun onLowMemory() {
         super.onLowMemory()
@@ -148,6 +150,7 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
             setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true)
             isIndoorEnabled = true
             isNightModeEnabled = true
+            locationOverlay.isVisible = false
             uiSettings.run {
                 isScaleBarEnabled = false
                 isZoomControlEnabled = false
@@ -155,82 +158,70 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        // 위치 소스 연결
-        naverMap.locationSource = locationSource
 
         // 확대 축소 범위 설정
         naverMap.maxZoom = 20.0
         naverMap.minZoom = 10.0
 
-        // 마커 위치 설정
-        val latitude = 37.2103
-        val longitude = 127.2314
-
         marker = Marker()
 
+        // 위치 소스 및 추적 모드 설정
+        naverMap.locationSource = locationSource
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
-        val timerText = TimeUtil.formatRecordTime(MyApplication.recordTimer)
+        naverMap.addOnLocationChangeListener { location ->
+            val currentLocation = LatLng(location.latitude, location.longitude)
 
-        createCustomMarkerBitmap(mainActivity, timerText, MyApplication.userInfo?.profileImgUrl ?: "") { bitmap ->
-            marker = Marker()
-            marker.icon = OverlayImage.fromBitmap(bitmap)
-            marker.position =  LatLng(latitude, longitude)
-            marker.width = Marker.SIZE_AUTO
-            marker.height = Marker.SIZE_AUTO
-            marker.map = naverMap
-        }
+            val cameraUpdate = CameraUpdate.scrollAndZoomTo(currentLocation, 17.0).animate(CameraAnimation.Fly)
+            naverMap.moveCamera(cameraUpdate)
 
-        // 초기 위치 및 줌 레벨 설정
-        val cameraUpdate = CameraUpdate.scrollAndZoomTo(
-            LatLng(latitude, longitude),
-            12.0 // 초기 줌 레벨
-        ).animate(CameraAnimation.Easing)
-        naverMap.moveCamera(cameraUpdate)
-
-        // 지도 옵션 설정
-        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true)
-        naverMap.isIndoorEnabled = true
-
-        // 위치 추적 모드 설정
-        naverMap.locationTrackingMode = LocationTrackingMode.None
-
-
-        if(TimerManager.isRunning) {
-            // 마커 타이머 시작
-            markerTimerRunnable = object : Runnable {
-                override fun run() {
-                    val timerText = TimerManager.startedAtMillis?.let {
-                        TimeUtil.formatRecordTime(MyApplication.recordTimer)
-                    } ?: "00:00"
-
-                    createCustomMarkerBitmap(mainActivity, timerText, MyApplication.userInfo?.profileImgUrl ?: "") { bitmap ->
-                        marker = Marker()
-                        marker.icon = OverlayImage.fromBitmap(bitmap)
-                        marker.position =  LatLng(latitude, longitude)
-                        marker.width = Marker.SIZE_AUTO
-                        marker.height = Marker.SIZE_AUTO
-                        marker.map = naverMap
-                    }
-                    handler.postDelayed(this, 1000)
-                    MyApplication.recordTimer = MyApplication.recordTimer++
-                }
-            }
-            handler.post(markerTimerRunnable)
-        } else {
-            val timerText = TimerManager.startedAtMillis?.let {
-                TimeUtil.formatRecordTime(MyApplication.recordTimer)
-            } ?: "00:00"
-
+            val timerText = TimeUtil.formatRecordTime(MyApplication.recordTimer)
             createCustomMarkerBitmap(mainActivity, timerText, MyApplication.userInfo?.profileImgUrl ?: "") { bitmap ->
-                marker = Marker()
                 marker.icon = OverlayImage.fromBitmap(bitmap)
-                marker.position =  LatLng(latitude, longitude)
+                marker.position = currentLocation
                 marker.width = Marker.SIZE_AUTO
                 marker.height = Marker.SIZE_AUTO
                 marker.map = naverMap
             }
+
+            // UI 자동 갱신 루프 시작
+            startUiUpdater(currentLocation)
+        }
+
+        // 지도 옵션 설정
+        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true)
+        naverMap.isIndoorEnabled = true
+    }
+
+    private fun startUiUpdater(currentLocation: LatLng) {
+        uiUpdateRunnable = object : Runnable {
+            override fun run() {
+                // 마커 갱신
+                val timerText = TimeUtil.formatRecordTime(MyApplication.recordTimer)
+                createCustomMarkerBitmap(mainActivity, timerText, MyApplication.userInfo?.profileImgUrl ?: "") { bitmap ->
+                    marker.icon = OverlayImage.fromBitmap(bitmap)
+                    marker.position = currentLocation
+                    marker.map = naverMap
+                }
+
+                // UI 갱신
+                binding.textViewDistance.text = "${MyApplication.totalDistance}m"
+                val hourTime = MyApplication.recordTimer / 3600.0
+                binding.textViewKcal.text = "${DistanceUtil.calculateKcal(MyApplication.userInfo?.weight ?: 0, hourTime)}kcal"
+
+                uiUpdateHandler.postDelayed(this, 1000)
+            }
+        }
+
+        uiUpdateHandler.post(uiUpdateRunnable)
+    }
+
+    private fun stopUiUpdater() {
+        if (::uiUpdateRunnable.isInitialized) {
+            uiUpdateHandler.removeCallbacks(uiUpdateRunnable)
         }
     }
+
 
 
     fun createCustomMarkerBitmap(

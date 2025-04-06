@@ -1,6 +1,7 @@
 package com.project.score.Utils
 
 import android.app.Application
+import com.naver.maps.geometry.LatLng
 import com.project.score.API.request.signUp.SignUpRequest
 import com.project.score.API.request.signUp.UserSchool
 import com.project.score.API.request.signUp.Users
@@ -61,5 +62,7 @@ class MyApplication : Application() {
 
         // record
         var recordTimer = 0
+        var locationList = mutableListOf<LatLng>()
+        var totalDistance = 0 // 미터 단위로 저장
     }
 }
