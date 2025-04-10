@@ -1,16 +1,17 @@
 package com.project.score.API
 
 import com.project.score.API.request.signUp.FcmRequest
+import com.project.score.API.response.PagingResponse
 import com.project.score.API.response.group.GroupRankingResponse
 import com.project.score.API.response.home.HomeResponse
 import com.project.score.API.response.login.LoginResponse
 import com.project.score.API.response.login.UserInfoResponse
+import com.project.score.API.response.record.FriendResponse
 import com.project.score.API.response.record.FeedDetailResponse
 import com.project.score.API.response.record.FeedEmotionResponse
 import com.project.score.API.response.user.BlockedMateListResponse
 import com.project.score.API.response.user.FeedListResponse
 import com.project.score.API.response.user.NotificationInfoResponse
-import com.project.score.API.response.user.PaginatedResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -103,7 +104,7 @@ interface ApiService {
         @Query("id1") id1: Int,
         @Query("id2") id2: Int,
         @Query("page") page: Int
-    ): Call<PaginatedResponse<FeedListResponse>>
+    ): Call<PagingResponse<FeedListResponse>>
 
     // 피드 상세정보 조회
     @GET("score/exercise/read")
@@ -145,6 +146,14 @@ interface ApiService {
         @Query("id") id: Int
     ): Call<NotificationInfoResponse>
 
+
+    // 친구 목록 조회
+    @GET("score/friends/list")
+    fun getFriendList(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("page") page: Int
+    ): Call<PagingResponse<FriendResponse>>
     // 차단한 메이트 목록 조회
     @GET("score/friends/blocked/list")
     fun getBlockedMateList(

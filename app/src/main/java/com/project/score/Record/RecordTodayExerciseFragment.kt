@@ -57,6 +57,12 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
             NaverMapSdk.getInstance(mainActivity).client =
                 NaverMapSdk.NaverCloudPlatformClient("${com.project.score.BuildConfig.MAP_API_KEY}")
 
+            buttonFeed.setOnClickListener {
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, RecordFeedUploadFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSTION_REQUEST_CODE)

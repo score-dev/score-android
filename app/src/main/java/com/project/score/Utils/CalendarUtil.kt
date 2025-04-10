@@ -56,6 +56,12 @@ object CalendarUtil {
         }
     }
 
+    fun getTodayFormatted(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREAN)
+        return dateFormat.format(calendar.time)
+    }
+
     fun getCurrentWeekInfo(): WeekInfo {
         val current = calendar.clone() as Calendar
 
