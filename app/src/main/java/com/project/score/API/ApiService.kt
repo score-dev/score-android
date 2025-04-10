@@ -146,6 +146,13 @@ interface ApiService {
         @Query("id") id: Int
     ): Call<NotificationInfoResponse>
 
+    // 함께 운동한 친구 검색
+    @GET("score/exercise/friends")
+    fun getSearchExerciseFriend(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("nickname") nickname: String
+    ): Call<List<FriendResponse>>
 
     // 친구 목록 조회
     @GET("score/friends/list")

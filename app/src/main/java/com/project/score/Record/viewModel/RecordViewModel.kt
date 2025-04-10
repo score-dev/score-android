@@ -25,7 +25,7 @@ class RecordViewModel: ViewModel() {
     var feedDetail: MutableLiveData<FeedDetailResponse?> = MutableLiveData()
     var feedEmotion: MutableLiveData<MutableList<FeedEmotionResponse>?> = MutableLiveData()
 
-    var searchFriendList = MutableLiveData<MutableList<FriendResponse>>()
+    var searchFriendList = MutableLiveData<MutableList<FriendResponse>?>()
     var friendList = MutableLiveData<MutableList<FriendResponse>>()
     var lastFriend: MutableLiveData<Boolean> = MutableLiveData()
     var firstFriend: MutableLiveData<Boolean> = MutableLiveData()
@@ -222,6 +222,62 @@ class RecordViewModel: ViewModel() {
             }
         })
     }
+
+    // 함께 운동한 친구 검색
+    fun getSearchExerciseFriend(activity: Activity, nickname: String) {
+
+        val tempFriends = mutableListOf<FriendResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getSearchExerciseFriend(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), nickname).enqueue(object :
+            Callback<List<FriendResponse>> {
+            override fun onResponse(
+                call: Call<List<FriendResponse>>,
+                response: Response<List<FriendResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: List<FriendResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    val resultFriendList = result ?: emptyList()
+
+                    for (friends in resultFriendList) {
+                        val friendList = FriendResponse(
+                            friends.id,
+                            friends.nickname,
+                            friends.profileImgUrl
+                        )
+
+                        tempFriends.add(friendList)
+                    }
+
+                    searchFriendList.value = tempFriends
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: List<FriendResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                    if(response.code() == 500) {
+                        searchFriendList.value = null
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<FriendResponse>>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
     // 친구 리스트 조회
     fun getFriendList(activity: Activity, currentPage: Int) {
 

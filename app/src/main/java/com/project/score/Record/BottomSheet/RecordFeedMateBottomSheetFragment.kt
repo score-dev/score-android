@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +54,12 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
         observeViewModel()
 
         binding.run {
+            layoutSearch.editTextSearch.setOnEditorActionListener { v, actionId, event ->
+                viewModel.getSearchExerciseFriend(activity, layoutSearch.editTextSearch.text.toString())
+
+                true
+            }
+
             recyclerViewMate.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
@@ -80,7 +87,7 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
     fun observeViewModel() {
         viewModel.run {
             friendList.observe(viewLifecycleOwner) { friendsResponse ->
-                for(friends in friendsResponse) {
+                for (friends in friendsResponse) {
                     mates?.add(friends)
                 }
 
@@ -92,8 +99,14 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
                 if (currentPage == 0) exerciseMateAdapter.clearFriends()
 
                 val friendsList = mutableListOf<FriendResponse>()
-                for(i in 0..<(mates?.size ?: 0)) {
-                    friendsList.add(FriendResponse(mates?.get(i)?.id!!, mates?.get(i)?.nickname!!, mates?.get(i)?.profileImgUrl!!))
+                for (i in 0..<(mates?.size ?: 0)) {
+                    friendsList.add(
+                        FriendResponse(
+                            mates?.get(i)?.id!!,
+                            mates?.get(i)?.nickname!!,
+                            mates?.get(i)?.profileImgUrl!!
+                        )
+                    )
                 }
 
                 exerciseMateAdapter.addFriends(friendsList)
@@ -111,6 +124,34 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
             firstFriend.observe(viewLifecycleOwner) {
                 // 첫 페이지 확인
                 isFirstPage = it
+            }
+
+            searchFriendList.observe(viewLifecycleOwner) { friendsResponse ->
+                if (friendsResponse != null) {
+                    for (friends in friendsResponse) {
+                        mates?.add(friends)
+                    }
+                }
+
+                binding.recyclerViewMate.apply {
+                    adapter = exerciseMateAdapter
+                    layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                }
+
+                if (currentPage == 0) exerciseMateAdapter.clearFriends()
+
+                val friendsList = mutableListOf<FriendResponse>()
+                for (i in 0..<(mates?.size ?: 0)) {
+                    friendsList.add(
+                        FriendResponse(
+                            mates?.get(i)?.id!!,
+                            mates?.get(i)?.nickname!!,
+                            mates?.get(i)?.profileImgUrl!!
+                        )
+                    )
+                }
+
+                exerciseMateAdapter.addFriends(friendsList)
             }
         }
     }
