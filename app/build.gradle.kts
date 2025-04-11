@@ -14,11 +14,11 @@ val properties = Properties().apply {
 val kakaoNativeKey = properties.getProperty("kakao_app_key")
 
 android {
-    namespace = "com.project.score"
+    namespace = "com.team.score"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.project.score"
+        applicationId = "com.team.score"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
