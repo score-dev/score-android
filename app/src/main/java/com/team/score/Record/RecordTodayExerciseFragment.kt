@@ -74,8 +74,19 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
             textViewExerciseTime.text = TimeUtil.formatRecordTime(MyApplication.recordTimer)
             textViewExerciseDayValue.text = "${MyApplication.consecutiveDate}일째"
             textViewExerciseDistanceValue.text = MyApplication.totalDistance.toString()
+            var userWeight = if(MyApplication.userInfo?.weight != null) {
+                MyApplication.userInfo?.weight
+            } else {
+                if(MyApplication.userInfo?.gender == "FEMALE") {
+                    55
+                } else if(MyApplication.userInfo?.gender == "MALE") {
+                    74
+                } else {
+                    65
+                }
+            }
             textViewExerciseKcalValue.text =
-                DistanceUtil.calculateKcal((MyApplication.userInfo?.weight ?: 0), (MyApplication.recordTimer / 3600.0)).toString()
+                DistanceUtil.calculateKcal(userWeight!!, (MyApplication.recordTimer / 3600.0)).toString()
 
             val consecutiveDays = MyApplication.consecutiveDate.coerceIn(0, 7) // 0~7 사이로 제한
 

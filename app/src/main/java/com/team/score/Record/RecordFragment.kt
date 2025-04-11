@@ -75,14 +75,11 @@ class RecordFragment : Fragment() {
             }
             buttonStop.setOnClickListener {
                 if (TimerManager.startedAtIso != null) {
-                    // 1. 타이머와 위치 추적 종료만
+                    // 타이머와 위치 추적 종료
                     mainActivity.stopTracking()
-
-                    // 2. 기록 중단 UI 처리
                     isStart = false
                     buttonRecord.setImageResource(R.drawable.ic_start)
 
-                    // 3. 기록 데이터 유지한 채 다음 화면으로 이동
                     mainActivity.supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, RecordTodayExerciseFragment())
                         .addToBackStack(null)
