@@ -92,6 +92,10 @@ class RecordFeedImageFragment : Fragment() {
             }
 
             buttonUpload.setOnClickListener {
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, RecordFeedCompleteFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
         }
 
