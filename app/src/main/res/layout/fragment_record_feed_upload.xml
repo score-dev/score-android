@@ -135,7 +135,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/background_grey2_circle"
-                android:drawableLeft="@drawable/ic_location"
+                android:drawableLeft="@drawable/ic_location_grey"
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/pretendard_semi_bold"
                 android:paddingHorizontal="19dp"

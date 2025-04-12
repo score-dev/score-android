@@ -1,10 +1,15 @@
 package com.team.score.Utils
 
 import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import java.time.DayOfWeek
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -60,6 +65,25 @@ object CalendarUtil {
         val dateFormat = SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREAN)
         return dateFormat.format(calendar.time)
     }
+
+    fun getTodayDateFormatted(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.KOREAN)
+        return dateFormat.format(calendar.time)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getAmPmAndTime(time: String): Pair<String, String> {
+        // 오프셋 정보까지 포함된 포맷
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        val dateTime = OffsetDateTime.parse(time, formatter)
+
+        val amPm = if (dateTime.hour < 12) "AM" else "PM"
+        val timeText = dateTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+
+        return Pair(amPm, timeText)
+    }
+
 
     fun getCurrentWeekInfo(): WeekInfo {
         val current = calendar.clone() as Calendar

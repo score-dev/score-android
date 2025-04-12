@@ -49,6 +49,57 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageView_feed" />
 
+
+            <include
+                android:id="@+id/layout_frame1"
+                layout="@layout/layout_frame1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+
+            <include
+                android:id="@+id/layout_frame2"
+                layout="@layout/layout_frame2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+
+            <include
+                android:id="@+id/layout_frame3"
+                layout="@layout/layout_frame3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+
+            <include
+                android:id="@+id/layout_frame4"
+                layout="@layout/layout_frame4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+
+            <include
+                android:id="@+id/layout_frame5"
+                layout="@layout/layout_frame5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+
             <TextView
                 android:id="@+id/textView_frame_title"
                 android:layout_width="wrap_content"
@@ -83,19 +134,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <TextView
             android:id="@+id/button_share"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.5"
-            android:backgroundTint="@color/sub3"
+            android:background="@drawable/background_sub3_radius15"
             android:fontFamily="@font/pretendard_semi_bold"
             android:layout_marginBottom="20dp"
             android:paddingVertical="19dp"
             android:text="SNS 공유"
+            android:textAlignment="center"
             android:textColor="@color/main"
             android:textSize="16sp"
-            app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

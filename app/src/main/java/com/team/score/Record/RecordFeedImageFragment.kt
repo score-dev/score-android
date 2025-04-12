@@ -3,6 +3,7 @@ package com.team.score.Record
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -14,13 +15,18 @@ import android.widget.Adapter
 import android.widget.LinearLayout
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.team.score.Home.adapter.GroupRelayTodayUnexercisedMemberAdapter
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.adapter.FeedFrameAdpater
+import com.team.score.Utils.CalendarUtil.getAmPmAndTime
+import com.team.score.Utils.CalendarUtil.getTodayDateFormatted
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
 import com.team.score.Utils.MyApplication
+import com.team.score.Utils.TimeUtil.calculateExerciseDurationWithEnglish
 import com.team.score.databinding.FragmentRecordFeedImageBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -102,20 +108,73 @@ class RecordFeedImageFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         initView()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initView() {
         binding.run {
             val frames = listOf(R.drawable.img_frame1,R.drawable.img_frame2,R.drawable.img_frame3,R.drawable.img_frame4,R.drawable.img_frame5)
 
+            val frameAdapter = FeedFrameAdpater(mainActivity, frames).apply {
+                itemClickListener = object : FeedFrameAdpater.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        Log.d("##", "click")
+                        layoutFrame1.layoutFrame.visibility = View.GONE
+                        layoutFrame2.layoutFrame.visibility = View.GONE
+                        layoutFrame3.layoutFrame.visibility = View.GONE
+                        layoutFrame4.layoutFrame.visibility = View.GONE
+                        layoutFrame5.layoutFrame.visibility = View.GONE
+
+                        if (isImageUpload) {
+                            Log.d("##", "isImageUpload : $isImageUpload $position")
+                            when (position) {
+                                0 -> layoutFrame1.layoutFrame.visibility = View.VISIBLE
+                                1 -> layoutFrame2.layoutFrame.visibility = View.VISIBLE
+                                2 -> layoutFrame3.layoutFrame.visibility = View.VISIBLE
+                                3 -> layoutFrame4.layoutFrame.visibility = View.VISIBLE
+                                4 -> layoutFrame5.layoutFrame.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+            }
+
             binding.recyclerViewFrame.run {
-                adapter = FeedFrameAdpater(mainActivity, frames)
+                adapter = frameAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             }
 
+            layoutFrame1.run {
+                layoutFrame.visibility = View.GONE
+                textViewFrameToday.text = getTodayDateFormatted()
+                textViewFrameDistance.text = "${MyApplication.recordFeedInfo.distance}km"
+                textViewFrameTime.text = calculateExerciseDurationWithEnglish(MyApplication.recordFeedInfo.startedAt, MyApplication.recordFeedInfo.completedAt)
+                textViewFrameKcal.text = "${MyApplication.recordFeedInfo.reducedKcal}Kcal"
+            }
+            layoutFrame2.run {
+                layoutFrame.visibility = View.GONE
+                textViewFrameDistance.text = "${MyApplication.recordFeedInfo.distance}KM"
+                textViewFrameLocation.text = "${MyApplication.recordFeedInfo.location}"
+            }
+            layoutFrame3.run {
+                layoutFrame.visibility = View.GONE
+                textViewFrameTime.text = calculateExerciseDurationWithEnglish(MyApplication.recordFeedInfo.startedAt, MyApplication.recordFeedInfo.completedAt)
+            }
+            layoutFrame4.run {
+                layoutFrame.visibility = View.GONE
+                val (amPm, time) = getAmPmAndTime(MyApplication.recordFeedInfo.completedAt)
+                textViewFrameTimeAmpm.text = amPm
+                textViewFrameCurrentTime.text = time
+                textViewFrameLocation.text = MyApplication.recordFeedInfo.location
+            }
+            layoutFrame5.run {
+                layoutFrame.visibility = View.GONE
+                textViewFrameDays.text = "${MyApplication.consecutiveDate}일 연속 기록 중"
+            }
 
             toolbar.run {
                 textViewHead.text = "오늘의 앨범"
