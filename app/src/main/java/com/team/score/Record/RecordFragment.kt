@@ -71,7 +71,7 @@ class RecordFragment : Fragment() {
                 binding.buttonRecord.setImageResource(
                     if (isStart) R.drawable.ic_temporary_stop else R.drawable.ic_start
                 )
-                buttonStop.isEnabled = TimerManager.startedAtIso != null
+                buttonStop.isEnabled = (TimerManager.startedAtIso != null && (MyApplication.locationList.size > 0))
             }
             buttonStop.setOnClickListener {
                 if (TimerManager.startedAtIso != null) {

@@ -2,6 +2,7 @@ package com.team.score.Utils
 
 import android.app.Application
 import com.naver.maps.geometry.LatLng
+import com.team.score.API.request.record.FeedUploadRequest
 import com.team.score.API.request.signUp.SignUpRequest
 import com.team.score.API.request.signUp.UserSchool
 import com.team.score.API.request.signUp.Users
@@ -59,5 +60,27 @@ class MyApplication : Application() {
         var recordTimer = 0
         var locationList = mutableListOf<LatLng>()
         var totalDistance = 0 // 미터 단위로 저장
+        var recordFeedInfo: FeedUploadRequest = getEmptyFeed()
+
+        fun getEmptyFeed(): FeedUploadRequest {
+            return FeedUploadRequest(
+                startedAt = "",
+                completedAt = "",
+                agentId = 0,
+                othersId = null,
+                distance = 0,
+                reducedKcal = 0,
+                location = "",
+                weather = "",
+                temperature = 0,
+                fineDust = "",
+                feeling = null
+            )
+        }
+
+        fun resetRecordFeedInfo() {
+            recordFeedInfo = getEmptyFeed()
+        }
+
     }
 }

@@ -162,7 +162,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/background_grey2_radius15"
-                    android:paddingHorizontal="50dp"
                     android:paddingVertical="15dp">
 
                     <TextView
@@ -216,7 +215,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/background_grey2_radius15"
-                    android:paddingHorizontal="50dp"
                     android:paddingVertical="15dp">
 
                     <TextView
