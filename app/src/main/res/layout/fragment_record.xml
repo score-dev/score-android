@@ -13,9 +13,8 @@
         android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_record"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -23,52 +22,79 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/textView_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="166dp"
-            android:text="0:00"
-            android:textColor="@color/text_color1"
-            android:textSize="80sp"
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_record"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/button_record"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:src="@drawable/ic_temporary_stop"
-            app:layout_constraintEnd_toEndOf="@+id/textView_timer"
-            app:layout_constraintStart_toStartOf="@+id/textView_timer"
-            app:layout_constraintTop_toBottomOf="@+id/textView_timer" />
-
-        <Button
-            android:id="@+id/button_camera"
-            style="@style/ButtonFunction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="147dp"
-            android:drawableLeft="@drawable/ic_camera"
-            android:text="인증샷 촬영"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_record" />
-
-        <Button
-            android:id="@+id/button_map"
-            style="@style/ButtonFunction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="16dp"
-            android:drawableLeft="@drawable/ic_location"
-            android:text="인증샷 촬영"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/layout_record_action"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_camera"
-            app:layout_constraintTop_toTopOf="@+id/button_camera" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3">
+
+            <TextView
+                android:id="@+id/textView_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="00:00"
+                android:textColor="@color/text_color1"
+                android:textSize="80sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/button_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="22dp"
+                android:src="@drawable/ic_start"
+                app:layout_constraintEnd_toEndOf="@+id/textView_timer"
+                app:layout_constraintStart_toStartOf="@+id/textView_timer"
+                app:layout_constraintTop_toBottomOf="@+id/textView_timer" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_record_action"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/button_stop"
+            app:layout_constraintStart_toStartOf="@+id/button_stop"
+            app:layout_constraintBottom_toTopOf="@+id/button_stop">
+
+            <Button
+                android:id="@+id/button_camera"
+                style="@style/ButtonFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_camera"
+                android:text="인증샷 촬영" />
+
+            <Button
+                android:id="@+id/button_map"
+                style="@style/ButtonFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_location_grey"
+                android:text="지도 보기" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/button_stop"
@@ -79,11 +105,10 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="20dp"
-            android:text="다음으로"
+            android:text="기록 종료"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_camera"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

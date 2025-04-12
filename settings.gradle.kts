@@ -21,6 +21,7 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
         }
+        maven("https://repository.map.naver.com/archive/maven")
     }
 }
 

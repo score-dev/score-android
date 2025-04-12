@@ -10,7 +10,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView_onboarding"
-        android:name="com.project.score.OnBoarding.SplashFragment"
+        android:name="com.team.score.OnBoarding.SplashFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
