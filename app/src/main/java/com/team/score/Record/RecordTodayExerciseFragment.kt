@@ -77,6 +77,7 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
         mainActivity.hideBottomNavigation(true)
 
         viewModel.getWeather(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
+        viewModel.getAirPollution(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
 
         binding.run {
             textViewExerciseTime.text = TimeUtil.formatRecordTime(MyApplication.recordTimer)

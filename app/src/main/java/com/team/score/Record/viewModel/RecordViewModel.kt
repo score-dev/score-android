@@ -12,6 +12,7 @@ import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.weather.WeatherApiClient
+import com.team.score.API.weather.response.AirPollutionResponse
 import com.team.score.API.weather.response.WeatherResponse
 import com.team.score.MainActivity
 import com.team.score.Utils.MyApplication
@@ -365,6 +366,49 @@ class RecordViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 날씨 정보 API - 미세먼지
+    fun getAirPollution(activity: Activity, apiKey: String, lat: Double, lon: Double) {
+        val apiClient = WeatherApiClient(activity)
+
+        apiClient.apiService.getCurrentAirPollutioin(lat, lon, apiKey).enqueue(object :
+            Callback<AirPollutionResponse> {
+            override fun onResponse(
+                call: Call<AirPollutionResponse>,
+                response: Response<AirPollutionResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+
+                    val fineDust = when(response.body()?.list?.get(0)?.main?.aqi) {
+                        1 -> "매우 좋음"
+                        2 -> "좋음"
+                        3 -> "보통"
+                        4 -> "나쁨"
+                        5 -> "매우 나쁨"
+                        else -> "매우 좋음"
+                    }
+                    MyApplication.recordFeedInfo.fineDust = fineDust
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: AirPollutionResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<AirPollutionResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

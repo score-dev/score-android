@@ -174,6 +174,7 @@ class RecordFeedUploadFragment : Fragment() {
             textViewFeelingTitle.text = spannable
 
             textViewWeatherValue.text = "${MyApplication.recordFeedInfo.temperature}°"
+            textViewDustValue.text = MyApplication.recordFeedInfo.fineDust
 
             toolbar.run {
                 textViewHead.text = "오늘의 운동 기록"
