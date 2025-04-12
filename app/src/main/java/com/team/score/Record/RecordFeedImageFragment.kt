@@ -1,7 +1,9 @@
 package com.team.score.Record
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,6 +27,8 @@ import com.team.score.Record.adapter.FeedFrameAdpater
 import com.team.score.Utils.CalendarUtil.getAmPmAndTime
 import com.team.score.Utils.CalendarUtil.getTodayDateFormatted
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
+import com.team.score.Utils.ImageUtil.captureAndSaveToUri
+import com.team.score.Utils.ImageUtil.captureAndStoreImage
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil.calculateExerciseDurationWithEnglish
 import com.team.score.databinding.FragmentRecordFeedImageBinding
@@ -42,6 +46,9 @@ class RecordFeedImageFragment : Fragment() {
     lateinit var mainActivity: MainActivity
 
     var isImageUpload = false
+    var imageUri: Uri? = null
+
+    var selectedFrameIndex: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +64,7 @@ class RecordFeedImageFragment : Fragment() {
                 // Callback is invoked after the user selects a media item or closes the photo picker.
                 if (uri != null) {
                     isImageUpload = true
+                    imageUri = uri
                     Log.d("PhotoPicker", "Selected URI: $uri")
 
                     // 이미지 처리 및 압축
@@ -70,14 +78,14 @@ class RecordFeedImageFragment : Fragment() {
                             compressedFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
 
                         // MultipartBody.Part로 이미지 파일 준비
-                        val signUpProfile = MultipartBody.Part.createFormData(
+                        val feedImage = MultipartBody.Part.createFormData(
                             "file",  // 서버에서 기대하는 필드 이름
                             compressedFile.name, // 파일 이름
                             requestFile
                         )
 
                         // 이미지 파일 저장
-                        MyApplication.signUpImage = signUpProfile
+                        MyApplication.recordFeedImage = feedImage
                         binding.run {
                             imageViewFeed.setImageURI(uri)
                             buttonUpload.isEnabled = true
@@ -97,7 +105,21 @@ class RecordFeedImageFragment : Fragment() {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
+            buttonShare.setOnClickListener {
+                if(isImageUpload) {
+                    captureImage()
+
+                    val intent = Intent(Intent.ACTION_SEND)
+
+                    intent.type = ("image/*")
+                    intent.putExtra(Intent.EXTRA_STREAM, imageUri)
+                    startActivity(Intent.createChooser(intent, "Share img"))
+                }
+            }
+
             buttonUpload.setOnClickListener {
+                captureImage()
+
                 mainActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_main, RecordFeedCompleteFragment())
                     .addToBackStack(null)
@@ -112,6 +134,12 @@ class RecordFeedImageFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         initView()
+    }
+
+    fun captureImage() {
+        val captureView = binding.layoutCaptureTarget  // 프레임까지 포함된 최상단 뷰
+        captureAndStoreImage(captureView, requireContext())
+        imageUri = captureAndSaveToUri(captureView, requireContext())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -131,6 +159,8 @@ class RecordFeedImageFragment : Fragment() {
 
                         if (isImageUpload) {
                             Log.d("##", "isImageUpload : $isImageUpload $position")
+                            selectedFrameIndex = position
+
                             when (position) {
                                 0 -> layoutFrame1.layoutFrame.visibility = View.VISIBLE
                                 1 -> layoutFrame2.layoutFrame.visibility = View.VISIBLE
@@ -141,6 +171,11 @@ class RecordFeedImageFragment : Fragment() {
                         }
                     }
                 }
+
+                // selectedFrameIndex가 있다면 선택 반영
+                selectedFrameIndex?.let {
+                    setSelectedPosition(it)
+                }
             }
 
             binding.recyclerViewFrame.run {
@@ -149,30 +184,50 @@ class RecordFeedImageFragment : Fragment() {
             }
 
             layoutFrame1.run {
-                layoutFrame.visibility = View.GONE
+                if(selectedFrameIndex == 0) {
+                    layoutFrame.visibility = View.VISIBLE
+                } else {
+                    layoutFrame.visibility = View.GONE
+                }
                 textViewFrameToday.text = getTodayDateFormatted()
-                textViewFrameDistance.text = "${MyApplication.recordFeedInfo.distance}km"
+                textViewFrameDistance.text = "${(MyApplication.recordFeedInfo.distance / 1000.0).let { String.format("%.2f", it) }}km"
                 textViewFrameTime.text = calculateExerciseDurationWithEnglish(MyApplication.recordFeedInfo.startedAt, MyApplication.recordFeedInfo.completedAt)
                 textViewFrameKcal.text = "${MyApplication.recordFeedInfo.reducedKcal}Kcal"
             }
             layoutFrame2.run {
-                layoutFrame.visibility = View.GONE
-                textViewFrameDistance.text = "${MyApplication.recordFeedInfo.distance}KM"
+                if(selectedFrameIndex == 1) {
+                    layoutFrame.visibility = View.VISIBLE
+                } else {
+                    layoutFrame.visibility = View.GONE
+                }
+                textViewFrameDistance.text = "${(MyApplication.recordFeedInfo.distance / 1000.0).let { String.format("%.2f", it) }}KM"
                 textViewFrameLocation.text = "${MyApplication.recordFeedInfo.location}"
             }
             layoutFrame3.run {
-                layoutFrame.visibility = View.GONE
+                if(selectedFrameIndex == 2) {
+                    layoutFrame.visibility = View.VISIBLE
+                } else {
+                    layoutFrame.visibility = View.GONE
+                }
                 textViewFrameTime.text = calculateExerciseDurationWithEnglish(MyApplication.recordFeedInfo.startedAt, MyApplication.recordFeedInfo.completedAt)
             }
             layoutFrame4.run {
-                layoutFrame.visibility = View.GONE
+                if(selectedFrameIndex == 3) {
+                    layoutFrame.visibility = View.VISIBLE
+                } else {
+                    layoutFrame.visibility = View.GONE
+                }
                 val (amPm, time) = getAmPmAndTime(MyApplication.recordFeedInfo.completedAt)
                 textViewFrameTimeAmpm.text = amPm
                 textViewFrameCurrentTime.text = time
                 textViewFrameLocation.text = MyApplication.recordFeedInfo.location
             }
             layoutFrame5.run {
-                layoutFrame.visibility = View.GONE
+                if(selectedFrameIndex == 4) {
+                    layoutFrame.visibility = View.VISIBLE
+                } else {
+                    layoutFrame.visibility = View.GONE
+                }
                 textViewFrameDays.text = "${MyApplication.consecutiveDate}일 연속 기록 중"
             }
 
@@ -214,5 +269,18 @@ class RecordFeedImageFragment : Fragment() {
         }
 
         return Uri.fromFile(tempFile)
+    }
+
+    fun captureViewAsBitmap(view: View): Bitmap {
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(view.height, View.MeasureSpec.EXACTLY)
+        )
+        view.layout(view.left, view.top, view.right, view.bottom)
+
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
     }
 }

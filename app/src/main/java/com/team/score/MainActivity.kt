@@ -197,8 +197,11 @@ class MainActivity : AppCompatActivity() {
         elapsedSeconds = 0
 
         // 4. 기록 데이터 초기화
-        MyApplication.recordTimer = 0
-        MyApplication.totalDistance = 0
-        MyApplication.locationList.clear()
+        MyApplication.run {
+            recordTimer = 0
+            totalDistance = 0
+            locationList.clear()
+            resetRecordFeedInfo()
+        }
     }
 }

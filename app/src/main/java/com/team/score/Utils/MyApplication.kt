@@ -60,6 +60,7 @@ class MyApplication : Application() {
         var recordTimer = 0
         var locationList = mutableListOf<LatLng>()
         var totalDistance = 0 // 미터 단위로 저장
+        var recordFeedImage: MultipartBody.Part? = null
         var recordFeedInfo: FeedUploadRequest = getEmptyFeed()
 
         fun getEmptyFeed(): FeedUploadRequest {

@@ -22,6 +22,13 @@ class FeedFrameAdpater(
     private var selectedPosition: Int = -1
 
 
+    fun setSelectedPosition(position: Int) {
+        val previous = selectedPosition
+        selectedPosition = position
+        notifyItemChanged(previous)
+        notifyItemChanged(position)
+    }
+
     fun setOnItemClickListener(listener: (Int) -> Unit) {
         onItemClickListener = listener
     }

@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.team.score.API.TokenManager
@@ -70,34 +73,14 @@ class RecordFeedUploadFragment : Fragment() {
 
             buttonNoExerciseMate.setOnClickListener {
                 isAlone = !isAlone
-
-                if(isAlone) {
-                    MyApplication.recordFeedInfo?.othersId = null
-                    buttonNoExerciseMate.run {
-                        setBackgroundResource(R.drawable.background_main_circle)
-                        setTextColor(resources.getColor(R.color.white))
-                    }
-                } else {
-                    buttonNoExerciseMate.run {
-                        setBackgroundResource(R.drawable.background_sub3_circle)
-                        setTextColor(resources.getColor(R.color.main))
-                    }
-                }
-
-                checkEnabled()
+                checkExerciseMates()
             }
 
             for ((layout, textView, imageView) in feelingViews) {
                 layout.setOnClickListener {
-                    MyApplication.recordFeedInfo?.feeling = textView.text.toString()
+                    MyApplication.recordFeedInfo.feeling = textView.text.toString()
 
-                    // 모든 이미지 색상 초기화 후 선택한 것만 강조
-                    for ((_, _, iv) in feelingViews) {
-                        iv.setBackgroundResource(R.drawable.background_grey2_circle)
-                    }
-                    imageView.setBackgroundResource(R.drawable.background_sub3_circle)
-
-                    checkEnabled()
+                    highlightSelectedFeeling(MyApplication.recordFeedInfo.feeling)
                 }
             }
 
@@ -106,19 +89,6 @@ class RecordFeedUploadFragment : Fragment() {
                     startedAt = TimerManager.startedAtIso.toString()
                     completedAt = TimerManager.completedAtIso.toString()
                     agentId = TokenManager(mainActivity).getUserId()
-                    distance = MyApplication.totalDistance
-                    var userWeight = if(MyApplication.userInfo?.weight != null) {
-                        MyApplication.userInfo?.weight
-                    } else {
-                        if(MyApplication.userInfo?.gender == "FEMALE") {
-                            55
-                        } else if(MyApplication.userInfo?.gender == "MALE") {
-                            74
-                        } else {
-                            65
-                        }
-                    }
-                    reducedKcal = DistanceUtil.calculateKcal(userWeight!!, (MyApplication.recordTimer / 3600.0))
                     location = editTextPlace.text.toString()
                 }
 
@@ -136,6 +106,46 @@ class RecordFeedUploadFragment : Fragment() {
         super.onResume()
         initView()
     }
+
+    fun checkExerciseMates() {
+        binding.run {
+            if(isAlone) {
+                MyApplication.recordFeedInfo.othersId = null
+                buttonNoExerciseMate.run {
+                    setBackgroundResource(R.drawable.background_main_circle)
+                    setTextColor(resources.getColor(R.color.white))
+                }
+            } else {
+                buttonNoExerciseMate.run {
+                    setBackgroundResource(R.drawable.background_sub3_circle)
+                    setTextColor(resources.getColor(R.color.main))
+                }
+            }
+        }
+
+        checkEnabled()
+    }
+
+    fun highlightSelectedFeeling(selectedFeeling: String?) {
+        binding.run {
+            val feelingViews = listOf(
+                Triple(layoutFeeling1, textViewFeeling1, imageViewFeeling1),
+                Triple(layoutFeeling2, textViewFeeling2, imageViewFeeling2),
+                Triple(layoutFeeling3, textViewFeeling3, imageViewFeeling3),
+                Triple(layoutFeeling4, textViewFeeling4, imageViewFeeling4)
+            )
+
+            for ((layout, textView, imageView) in feelingViews) {
+                if (textView.text.toString() == selectedFeeling) {
+                    imageView.setBackgroundResource(R.drawable.background_sub3_circle)  // 선택된 감정
+                } else {
+                    imageView.setBackgroundResource(R.drawable.background_grey2_circle)  // 초기화
+                }
+            }
+        }
+        checkEnabled()
+    }
+
 
     fun checkEnabled() {
         binding.run {
@@ -175,6 +185,9 @@ class RecordFeedUploadFragment : Fragment() {
 
             textViewWeatherValue.text = "${MyApplication.recordFeedInfo.temperature}°"
             textViewDustValue.text = MyApplication.recordFeedInfo.fineDust
+
+            checkExerciseMates()
+            highlightSelectedFeeling(MyApplication.recordFeedInfo.feeling)
 
             toolbar.run {
                 textViewHead.text = "오늘의 운동 기록"

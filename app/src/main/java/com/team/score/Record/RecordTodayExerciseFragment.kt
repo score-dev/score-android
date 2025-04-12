@@ -79,23 +79,15 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
         viewModel.getWeather(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
         viewModel.getAirPollution(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
 
+        MyApplication.recordFeedInfo.distance = MyApplication.totalDistance
+        val hourTime = MyApplication.recordTimer / 3600.0
+        MyApplication.recordFeedInfo.reducedKcal = DistanceUtil.calculateKcal(hourTime)
+
         binding.run {
             textViewExerciseTime.text = TimeUtil.formatRecordTime(MyApplication.recordTimer)
             textViewExerciseDayValue.text = "${MyApplication.consecutiveDate}일째"
             textViewExerciseDistanceValue.text = MyApplication.totalDistance.toString()
-            var userWeight = if(MyApplication.userInfo?.weight != null) {
-                MyApplication.userInfo?.weight
-            } else {
-                if(MyApplication.userInfo?.gender == "FEMALE") {
-                    55
-                } else if(MyApplication.userInfo?.gender == "MALE") {
-                    74
-                } else {
-                    65
-                }
-            }
-            textViewExerciseKcalValue.text =
-                DistanceUtil.calculateKcal(userWeight!!, (MyApplication.recordTimer / 3600.0)).toString()
+            textViewExerciseKcalValue.text = "${MyApplication.recordFeedInfo.reducedKcal}"
 
             val consecutiveDays = MyApplication.consecutiveDate.coerceIn(0, 7) // 0~7 사이로 제한
 

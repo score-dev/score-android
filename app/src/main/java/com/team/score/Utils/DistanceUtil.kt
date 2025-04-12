@@ -4,6 +4,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.util.Log
 import com.naver.maps.geometry.LatLng
+import kotlin.time.times
 
 object DistanceUtil {
 
@@ -43,7 +44,7 @@ object DistanceUtil {
     }
  */
 
-    fun getDistance( lat1: Double, lng1:Double, lat2:Double, lng2:Double) : Float{
+    fun getDistance(lat1: Double, lng1:Double, lat2:Double, lng2:Double) : Float{
 
         val myLoc = Location(LocationManager.NETWORK_PROVIDER)
         val targetLoc = Location(LocationManager.NETWORK_PROVIDER)
@@ -56,7 +57,16 @@ object DistanceUtil {
         return myLoc.distanceTo(targetLoc)
     }
 
-    fun calculateKcal(weight: Int, hour: Double) : Int {
-        return (1.05 * 6 * weight * hour).toInt()
+    fun calculateKcal(hour: Double) : Int {
+        val weight = if(MyApplication.userInfo?.weight != null) {
+            MyApplication.userInfo?.weight
+        } else {
+            when (MyApplication.userInfo?.gender) {
+                "FEMALE" -> { 55 }
+                "MALE" -> { 74 }
+                else -> { 65 }
+            }
+        }
+        return (1.05 * 6 * weight!! * hour).toInt()
     }
 }

@@ -8,6 +8,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 object TimeUtil {
@@ -68,10 +69,11 @@ object TimeUtil {
     // 운동 시간 계산 - 영어
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateExerciseDurationWithEnglish(startedAt: String, completedAt: String): String {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX") // XXX: 오프셋(+09:00) 포함
+        val startInstant = Instant.parse(startedAt)
+        val endInstant = Instant.parse(completedAt)
 
-        val start = OffsetDateTime.parse(startedAt, formatter)
-        val end = OffsetDateTime.parse(completedAt, formatter)
+        val start = startInstant.atOffset(ZoneOffset.of("+09:00"))
+        val end = endInstant.atOffset(ZoneOffset.of("+09:00"))
 
         val duration = Duration.between(start, end)
         val hours = duration.toHours()
@@ -83,6 +85,7 @@ object TimeUtil {
             else -> "${minutes}M"
         }
     }
+
 
 
     // 기간 계산 (00분 전)

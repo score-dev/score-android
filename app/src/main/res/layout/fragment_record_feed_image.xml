@@ -25,80 +25,92 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/imageView_feed"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_capture_target"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/grey2"
-                android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/background_grey2_circle" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/layout_empty"
-                style="@style/body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="업로드할 사진을 선택해주세요"
-                android:textColor="@color/text_color3"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/imageView_feed" />
+                <ImageView
+                    android:id="@+id/imageView_feed"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/grey2"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/background_grey2_circle" />
+
+                <TextView
+                    android:id="@+id/layout_empty"
+                    style="@style/body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="업로드할 사진을 선택해주세요"
+                    android:textColor="@color/text_color3"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_feed" />
 
 
-            <include
-                android:id="@+id/layout_frame1"
-                layout="@layout/layout_frame1"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
-                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+                <include
+                    android:id="@+id/layout_frame1"
+                    layout="@layout/layout_frame1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
 
-            <include
-                android:id="@+id/layout_frame2"
-                layout="@layout/layout_frame2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
-                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+                <include
+                    android:id="@+id/layout_frame2"
+                    layout="@layout/layout_frame2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
 
-            <include
-                android:id="@+id/layout_frame3"
-                layout="@layout/layout_frame3"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
-                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+                <include
+                    android:id="@+id/layout_frame3"
+                    layout="@layout/layout_frame3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
 
-            <include
-                android:id="@+id/layout_frame4"
-                layout="@layout/layout_frame4"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
-                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+                <include
+                    android:id="@+id/layout_frame4"
+                    layout="@layout/layout_frame4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
 
-            <include
-                android:id="@+id/layout_frame5"
-                layout="@layout/layout_frame5"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="@+id/imageView_feed"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
-                app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
-                app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+                <include
+                    android:id="@+id/layout_frame5"
+                    layout="@layout/layout_frame5"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_feed"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_feed"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView_feed"
+                    app:layout_constraintStart_toStartOf="@+id/imageView_feed" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <TextView
                 android:id="@+id/textView_frame_title"
@@ -111,7 +123,7 @@
                 android:textColor="@color/sub"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView_feed" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_capture_target" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_frame"

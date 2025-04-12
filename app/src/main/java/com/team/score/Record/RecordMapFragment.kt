@@ -85,19 +85,8 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
 
         binding.run {
             textViewDistance.text = "${MyApplication.totalDistance.toString()}m"
-            var userWeight = if(MyApplication.userInfo?.weight != null) {
-                MyApplication.userInfo?.weight
-            } else {
-                if(MyApplication.userInfo?.gender == "FEMALE") {
-                    55
-                } else if(MyApplication.userInfo?.gender == "MALE") {
-                    74
-                } else {
-                    65
-                }
-            }
 
-            textViewKcal.text = "${DistanceUtil.calculateKcal(userWeight!!, MyApplication.recordTimer / 3600.0)}kcal"
+            textViewKcal.text = "${DistanceUtil.calculateKcal(MyApplication.recordTimer / 3600.0)}kcal"
 
             toolbar.run {
                 textViewHead.text = "지도"
@@ -213,19 +202,8 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
 
                 // UI 갱신
                 binding.textViewDistance.text = "${MyApplication.totalDistance}m"
-                var userWeight = if(MyApplication.userInfo?.weight != null) {
-                    MyApplication.userInfo?.weight
-                } else {
-                    if(MyApplication.userInfo?.gender == "FEMALE") {
-                        55
-                    } else if(MyApplication.userInfo?.gender == "MALE") {
-                        74
-                    } else {
-                        65
-                    }
-                }
                 val hourTime = MyApplication.recordTimer / 3600.0
-                binding.textViewKcal.text = "${DistanceUtil.calculateKcal(userWeight!!, hourTime)}kcal"
+                binding.textViewKcal.text = "${DistanceUtil.calculateKcal(hourTime)}kcal"
 
                 uiUpdateHandler.postDelayed(this, 1000)
             }
