@@ -71,7 +71,6 @@ class RecordFragment : Fragment() {
                 binding.buttonRecord.setImageResource(
                     if (isStart) R.drawable.ic_temporary_stop else R.drawable.ic_start
                 )
-                buttonStop.isEnabled = (TimerManager.startedAtIso != null && (MyApplication.locationList.size > 0))
             }
             buttonStop.setOnClickListener {
                 if (TimerManager.startedAtIso != null) {
@@ -163,6 +162,8 @@ class RecordFragment : Fragment() {
         timerUIRunnable = object : Runnable {
             override fun run() {
                 binding.textViewTimer.text = TimeUtil.formatRecordTime(MyApplication.recordTimer)
+                binding.buttonStop.isEnabled =
+                    TimerManager.startedAtIso != null && MyApplication.locationList.size > 0
                 timerUIHandler.postDelayed(this, 1000) // 1초마다 갱신
             }
         }

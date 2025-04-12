@@ -31,6 +31,7 @@ android {
         buildConfigField("String","google_key",getApiKey("google_key"))
         buildConfigField("String", "KAKAO_APP_KEY", "\"${properties["kakao_key"]}\"")
         buildConfigField("String","school_api_key",getApiKey("school_api_key"))
+        buildConfigField("String","weather_api_key",getApiKey("weather_api_key"))
 
         manifestPlaceholders["kakao_native_key"] = kakaoNativeKey
     }

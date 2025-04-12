@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,8 @@ class RecordFeedUploadFragment : Fragment() {
 
         binding = FragmentRecordFeedUploadBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
+
+        observeViewModel()
 
         binding.run {
             val feelingViews = listOf(
@@ -144,7 +147,6 @@ class RecordFeedUploadFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun observeViewModel() {
         viewModel.run {
             friendList.observe(viewLifecycleOwner) {
@@ -169,7 +171,9 @@ class RecordFeedUploadFragment : Fragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
 
-            binding.textViewFeelingTitle.text = spannable
+            textViewFeelingTitle.text = spannable
+
+            textViewWeatherValue.text = "${MyApplication.recordFeedInfo.temperature}°"
 
             toolbar.run {
                 textViewHead.text = "오늘의 운동 기록"

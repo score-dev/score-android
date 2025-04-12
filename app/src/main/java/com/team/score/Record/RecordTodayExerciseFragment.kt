@@ -24,12 +24,18 @@ import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
 import com.team.score.databinding.FragmentRecordTodayExerciseBinding
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.ViewModelProvider
+import com.team.score.BuildConfig
+import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.DistanceUtil
 
 class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var binding: FragmentRecordTodayExerciseBinding
     lateinit var mainActivity: MainActivity
+    private val viewModel: RecordViewModel by lazy {
+        ViewModelProvider(requireActivity())[RecordViewModel::class.java]
+    }
 
     private lateinit var mapView: MapView
     private lateinit var naverMap: NaverMap
@@ -69,6 +75,8 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
 
     fun initView() {
         mainActivity.hideBottomNavigation(true)
+
+        viewModel.getWeather(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
 
         binding.run {
             textViewExerciseTime.text = TimeUtil.formatRecordTime(MyApplication.recordTimer)
@@ -170,14 +178,32 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
 
         // 위치 소스 및 추적 모드 설정
         naverMap.locationSource = locationSource
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+//        naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
-        // 위치 받아올 때까지 기다렸다가 카메라 이동
-        naverMap.addOnLocationChangeListener { location ->
-            val latLng = LatLng(location.latitude, location.longitude)
-            val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, 18.0).animate(CameraAnimation.Fly)
+        // 📍 초기 위치를 locationList 기준으로 설정
+        if (MyApplication.locationList.isNotEmpty()) {
+            val lastLatLng = MyApplication.locationList.last()
+            val cameraUpdate = CameraUpdate.scrollAndZoomTo(lastLatLng, 15.0).animate(CameraAnimation.Fly)
             naverMap.moveCamera(cameraUpdate)
+        } else {
+            // 🔁 fallback: 위치 받아올 때까지 기다렸다가 카메라 이동
+            naverMap.addOnLocationChangeListener { location ->
+                val latLng = LatLng(location.latitude, location.longitude)
+                val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, 15.0).animate(CameraAnimation.Fly)
+                naverMap.moveCamera(cameraUpdate)
+            }
         }
+
+        // 시작점 마커
+        val startMarker = Marker().apply {
+            position = MyApplication.locationList.first()
+            icon = OverlayImage.fromResource(R.drawable.ic_map_start)
+            width = Marker.SIZE_AUTO
+            height = Marker.SIZE_AUTO
+            anchor = android.graphics.PointF(0.5f, 0.5f) // 중심 정렬
+            zIndex = 1
+        }
+        startMarker.map = naverMap
 
         if (MyApplication.locationList.size >= 2) {
             // 경로
@@ -189,17 +215,6 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
                 zIndex = 0
             }
             path.map = naverMap
-
-            // 시작점 마커
-            val startMarker = Marker().apply {
-                position = MyApplication.locationList.first()
-                icon = OverlayImage.fromResource(R.drawable.ic_map_start)
-                width = Marker.SIZE_AUTO
-                height = Marker.SIZE_AUTO
-                anchor = android.graphics.PointF(0.5f, 0.5f) // 중심 정렬
-                zIndex = 1
-            }
-            startMarker.map = naverMap
 
             // 끝점 마커
             val finishMarker = Marker().apply {
