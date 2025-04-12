@@ -20,14 +20,14 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView_group_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/img_profile_null"
-            android:outlineProvider="background"
+            android:background="@drawable/background_image_circle"
             android:clipToOutline="true"
-            android:background="@drawable/background_image_circle" />
+            android:outlineProvider="background"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/img_profile_null" />
 
         <TextView
             android:id="@+id/textView_group_name"

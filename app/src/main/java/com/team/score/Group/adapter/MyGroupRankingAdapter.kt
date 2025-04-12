@@ -52,13 +52,13 @@ class MyGroupRankingAdapter(
         } else {
             Glide.with(activity).load(groupInfos?.get(position)?.groupImg).into(holder.profile)
             holder.groupName.text = groupInfos?.get(position)?.groupName
-            holder.totalExerciseTime.text = "${groupInfos?.get(position)?.weeklyExerciseTime?.div(60)}"
+            holder.totalExerciseTime.text = "${groupInfos?.get(position)?.weeklyExerciseTime?.div(60)}시간"
             holder.participateRate.text = "${groupInfos?.get(position)?.participateRatio}%"
             holder.ranking.text = "${groupInfos?.get(position)?.rank}위"
         }
     }
 
-    override fun getItemCount() = (groupInfos?.size ?: 0) + 1
+    override fun getItemCount() = (groupInfos?.size ?: 1)
 
     inner class ViewHolder(val binding: RowMyGroupRankingBinding) : RecyclerView.ViewHolder(binding.root) {
         val profile = binding.imageViewGroupProfile
