@@ -18,12 +18,14 @@ import android.widget.LinearLayout
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.Home.adapter.GroupRelayTodayUnexercisedMemberAdapter
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.adapter.FeedFrameAdpater
+import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.CalendarUtil.getAmPmAndTime
 import com.team.score.Utils.CalendarUtil.getTodayDateFormatted
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
@@ -44,6 +46,9 @@ class RecordFeedImageFragment : Fragment() {
 
     lateinit var binding: FragmentRecordFeedImageBinding
     lateinit var mainActivity: MainActivity
+    private val viewModel: RecordViewModel by lazy {
+        ViewModelProvider(requireActivity())[RecordViewModel::class.java]
+    }
 
     var isImageUpload = false
     var imageUri: Uri? = null
@@ -120,10 +125,7 @@ class RecordFeedImageFragment : Fragment() {
             buttonUpload.setOnClickListener {
                 captureImage()
 
-                mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_main, RecordFeedCompleteFragment())
-                    .addToBackStack(null)
-                    .commit()
+                viewModel.uploadFeed(mainActivity)
             }
         }
 

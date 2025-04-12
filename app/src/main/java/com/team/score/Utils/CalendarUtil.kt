@@ -74,15 +74,21 @@ object CalendarUtil {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getAmPmAndTime(time: String): Pair<String, String> {
-        // 오프셋 정보까지 포함된 포맷
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-        val dateTime = OffsetDateTime.parse(time, formatter)
-
-        val amPm = if (dateTime.hour < 12) "AM" else "PM"
-        val timeText = dateTime.format(DateTimeFormatter.ofPattern("hh:mm"))
-
-        return Pair(amPm, timeText)
+        return try {
+            // 1. 오프셋이 있는 경우
+            val offsetDateTime = OffsetDateTime.parse(time, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            val amPm = if (offsetDateTime.hour < 12) "AM" else "PM"
+            val timeText = offsetDateTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+            Pair(amPm, timeText)
+        } catch (e: Exception) {
+            // 2. 오프셋이 없는 경우
+            val localDateTime = LocalDateTime.parse(time, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            val amPm = if (localDateTime.hour < 12) "AM" else "PM"
+            val timeText = localDateTime.format(DateTimeFormatter.ofPattern("hh:mm"))
+            Pair(amPm, timeText)
+        }
     }
+
 
 
     fun getCurrentWeekInfo(): WeekInfo {

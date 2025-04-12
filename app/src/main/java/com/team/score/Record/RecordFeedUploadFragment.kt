@@ -26,6 +26,7 @@ import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
 import com.team.score.Utils.DistanceUtil
 import com.team.score.Utils.MyApplication
+import com.team.score.Utils.TimeUtil.convertToSimpleIso
 import com.team.score.Utils.TimerManager
 import com.team.score.databinding.FragmentRecordFeedUploadBinding
 
@@ -41,6 +42,7 @@ class RecordFeedUploadFragment : Fragment() {
 
     var isAlone = false
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -86,8 +88,8 @@ class RecordFeedUploadFragment : Fragment() {
 
             buttonUpload.setOnClickListener {
                 MyApplication.recordFeedInfo.run {
-                    startedAt = TimerManager.startedAtIso.toString()
-                    completedAt = TimerManager.completedAtIso.toString()
+                    startedAt = convertToSimpleIso(TimerManager.startedAtIso.toString())
+                    completedAt = convertToSimpleIso(TimerManager.completedAtIso.toString())
                     agentId = TokenManager(mainActivity).getUserId()
                     location = editTextPlace.text.toString()
                 }

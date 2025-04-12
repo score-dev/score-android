@@ -4,18 +4,25 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
 import com.team.score.API.response.PagingResponse
+import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.weather.WeatherApiClient
 import com.team.score.API.weather.response.AirPollutionResponse
+import com.team.score.API.weather.response.Main
 import com.team.score.API.weather.response.WeatherResponse
 import com.team.score.MainActivity
+import com.team.score.R
+import com.team.score.Record.RecordFeedCompleteFragment
 import com.team.score.Utils.MyApplication
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -409,6 +416,54 @@ class RecordViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<AirPollutionResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 저장
+    fun uploadFeed(activity: MainActivity) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        val gson = Gson()
+
+        // JSON 변환 (Gson 사용)
+        val walkingDtoJson = gson.toJson(MyApplication.recordFeedInfo)
+
+        // RequestBody 변환 (application/json 설정)
+        val walkingDtoRequestBody = walkingDtoJson.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+
+        apiClient.apiService.uploadFeed(tokenManager.getAccessToken().toString(), walkingDtoRequestBody, MyApplication.recordFeedImage!!).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    activity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, RecordFeedCompleteFragment())
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

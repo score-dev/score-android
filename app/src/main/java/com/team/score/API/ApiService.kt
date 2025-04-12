@@ -163,11 +163,13 @@ interface ApiService {
         @Query("page") page: Int
     ): Call<PagingResponse<FriendResponse>>
 
-    // 알림 수신 여부 설정 수정
-    @PUT("score/user/setting/notification")
-    fun updateNotificationInfo(
+    // 피드 정보 저장
+    @Multipart
+    @POST("score/exercise/walking/save")
+    fun uploadFeed(
         @Header("Authorization") token: String,
-        @Body request: NotificationInfoResponse
+        @Part("walkingDto") walkingDto: RequestBody,
+        @Part file: MultipartBody.Part
     ): Call<String>
 
     // 차단한 메이트 목록 조회

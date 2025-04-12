@@ -69,11 +69,10 @@ object TimeUtil {
     // 운동 시간 계산 - 영어
     @RequiresApi(Build.VERSION_CODES.O)
     fun calculateExerciseDurationWithEnglish(startedAt: String, completedAt: String): String {
-        val startInstant = Instant.parse(startedAt)
-        val endInstant = Instant.parse(completedAt)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
-        val start = startInstant.atOffset(ZoneOffset.of("+09:00"))
-        val end = endInstant.atOffset(ZoneOffset.of("+09:00"))
+        val start = LocalDateTime.parse(startedAt, formatter).atOffset(ZoneOffset.of("+09:00"))
+        val end = LocalDateTime.parse(completedAt, formatter).atOffset(ZoneOffset.of("+09:00"))
 
         val duration = Duration.between(start, end)
         val hours = duration.toHours()
@@ -85,8 +84,6 @@ object TimeUtil {
             else -> "${minutes}M"
         }
     }
-
-
 
     // 기간 계산 (00분 전)
     @RequiresApi(Build.VERSION_CODES.O)
@@ -127,6 +124,15 @@ object TimeUtil {
         val zonedDateTime = Instant.ofEpochMilli(millis)
             .atZone(ZoneId.of("Asia/Seoul"))
         return zonedDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertToSimpleIso(iso: String): String {
+        val offsetDateTime = OffsetDateTime.parse(iso, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+        val localDateTime = offsetDateTime.toLocalDateTime()
+
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        return localDateTime.format(outputFormatter)
     }
 
 }
