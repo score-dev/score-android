@@ -65,10 +65,16 @@ class MyGroupListFragment : Fragment() {
 
     fun observeViewModel() {
         viewModel.run {
+            myGroupList.observe(viewLifecycleOwner) {
+                getGroupInfo = it
+
+                groupAdapter.updateList(getGroupInfo)
+            }
         }
     }
 
     fun initView() {
+        viewModel.getMyGroupList(mainActivity)
         mainActivity.hideBottomNavigation(true)
 
         binding.run {

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.HomeResponse
+import com.team.score.Group.MyGroupListFragment
 import com.team.score.Home.adapter.GroupRelayAdapter
 import com.team.score.Home.adapter.WeeklyCalendarAdapter
 import com.team.score.Home.viewModel.HomeViewModel
@@ -76,6 +77,13 @@ class HomeFragment : Fragment() {
         observeViewModel()
 
         binding.run {
+            layoutMore.setOnClickListener {
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, MyGroupListFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+
             layoutWeeklyResult.recyclerViewGraph.apply {
                 adapter = weeklyGraphAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
