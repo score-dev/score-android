@@ -52,6 +52,11 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
                 MyApplication.signUpInfo?.userDto?.exercisingTime = true
                 viewModel.signUp(onboardingActivity)
             }
+
+            buttonSkip.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.exercisingTime = false
+                viewModel.signUp(onboardingActivity)
+            }
         }
 
         return binding.root
@@ -78,44 +83,6 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
         }
     }
 
-    override fun onClickRightButton() {
-        // 알림 권한 설정
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(
-                onboardingActivity,
-                Manifest.permission.POST_NOTIFICATIONS
-            )
-        ) {
-            // 푸쉬 권한 없음 -> 권한 요청
-            ActivityCompat.requestPermissions(
-                onboardingActivity,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                123
-            )
-        } else {
-            // 이미 권한이 있는 경우 바로 화면 전환
-            moveToNextFragment()
-        }
-    }
-
-    // Fragment에서 권한 요청 결과 처리
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 123) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 권한이 허용되었을 때 화면 전환
-                // FCM 토큰 전송
-                moveToNextFragment()
-            } else {
-                onClickLeftButton()
-            }
-        }
-    }
-
     fun moveToNextFragment() {
         viewModel.setFcmToken(onboardingActivity)
 
@@ -125,11 +92,13 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
         onboardingActivity.startActivity(mainIntent)
     }
 
+    override fun onClickRightButton() {
+        moveToNextFragment()
+    }
+
     override fun onClickLeftButton() {
         // 알림 허용 안함
-        val mainIntent = Intent(activity, MainActivity::class.java)
-        mainIntent.putExtra("isLogin", true)
-        onboardingActivity.startActivity(mainIntent)
+        moveToNextFragment()
     }
 
     override fun onTimeSelected(time: String) {

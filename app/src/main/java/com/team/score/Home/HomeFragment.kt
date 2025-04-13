@@ -1,5 +1,8 @@
 package com.team.score.Home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import com.team.score.Utils.CalendarUtil
 
@@ -8,6 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +54,23 @@ class HomeFragment : Fragment() {
         mainActivity = activity as MainActivity
         viewModel = ViewModelProvider(mainActivity)[HomeViewModel::class.java]
 
+        // 알림 권한 설정
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(
+                mainActivity,
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        ) {
+            // 푸쉬 권한 없음 -> 권한 요청
+            ActivityCompat.requestPermissions(
+                mainActivity,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                123
+            )
+        } else {
+            // 이미 권한이 있는 경우 바로 화면 전환
+        }
+
 
         initAdapter()
         observeViewModel()
@@ -82,6 +104,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         initView()
     }
+
 
     fun initAdapter() {
         val weekDates = CalendarUtil.getCurrentWeekDates() // 이번 주 날짜 가져오기
@@ -175,5 +198,14 @@ class HomeFragment : Fragment() {
                     .commit()
             }
         }
+    }
+
+    // Fragment에서 권한 요청 결과 처리
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }

@@ -14,11 +14,12 @@ data class UserSchool(
 
 data class Users(
     var nickname: String,
+    var profileImgId: Int,
     var grade: Int,
-    var height: Int,
-    var weight: Int,
-    var gender: String,
-    var goal: String,
+    var height: Int?,
+    var weight: Int?,
+    var gender: String?,
+    var goal: String?,
     var marketing: Boolean,
     var exercisingTime: Boolean,
     var provider: String,

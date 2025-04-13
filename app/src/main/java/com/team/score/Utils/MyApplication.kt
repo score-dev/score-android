@@ -19,11 +19,12 @@ class MyApplication : Application() {
         var signUpInfo: SignUpRequest? = SignUpRequest(
             userDto = Users(
                 nickname = "",
+                profileImgId = 0,
                 grade = 0,
-                height = 0,
-                weight = 0,
-                gender = "",
-                goal = "00:00:00",
+                height = null,
+                weight = null,
+                gender = null,
+                goal = null,
                 marketing = false,
                 exercisingTime = false,
                 provider = "",

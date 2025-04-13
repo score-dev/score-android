@@ -2,6 +2,7 @@ package com.team.score.Mypage.viewModel
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
@@ -100,8 +101,10 @@ class MypageViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
-                    if(response.code() == 400) {
-                        isUpdateUserInfo.value = false
+                    when(response.code()) {
+                        400 -> {
+                            isUpdateUserInfo.value = false
+                        }
                     }
                 }
             }

@@ -12,12 +12,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.team.score.BasicDialog
+import com.team.score.BasicDialogInterface
 import com.team.score.MainActivity
+import com.team.score.Mypage.Dialog.ProfileEditDialog
+import com.team.score.Mypage.Dialog.ProfileEditDialogInterface
 import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
 import com.team.score.SignUp.BottomSheet.SignUpGoalTimeBottomSheetFragment
@@ -38,7 +43,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
-    SignUpGradeBottomSheetListener, SignUpSchoolBottomSheetListener {
+    SignUpGradeBottomSheetListener, SignUpSchoolBottomSheetListener, ProfileEditDialogInterface {
 
     lateinit var binding: FragmentMypageProfileEditBinding
     lateinit var mainActivity: MainActivity
@@ -217,6 +222,7 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
                     fragmentManager?.popBackStack()
                 } else if(it == false) {
                     // 학교 정보 수정 불가 toast message
+                    Toast.makeText(mainActivity, "마지막으로 학교 정보를 변경한 후 30일이 경과하지 않아 학교 정보를 수정할 수 없습니다.", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -238,18 +244,29 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
 
             Glide.with(mainActivity).load(MyApplication.userInfo?.profileImgUrl).into(imageViewProfile)
             editTextNickname.setText(MyApplication.userInfo?.nickname)
-            buttonGoalTime.text = TimeUtil.formatExerciseTimeToKorean(MyApplication.userInfo?.goal.toString())
+            buttonGoalTime.text =
+                if(MyApplication.userInfo?.goal != null) {
+                    TimeUtil.formatExerciseTimeToKorean(MyApplication.userInfo?.goal.toString())
+                } else {
+                    "없음"
+                }
             buttonSchool.text = MyApplication.userInfo?.schoolName
             buttonGrade.text = "${MyApplication.userInfo?.grade}학년"
-            if(MyApplication.userInfo?.gender == "FEMALE") {
-                buttonGenderFemale.run {
-                    setBackgroundResource(R.drawable.background_main_circle)
-                    setTextColor(resources.getColor(R.color.white))
+            when(MyApplication.userInfo?.gender) {
+                "FEMALE" -> {
+                    buttonGenderFemale.run {
+                        setBackgroundResource(R.drawable.background_main_circle)
+                        setTextColor(resources.getColor(R.color.white))
+                    }
                 }
-            } else {
-                buttonGenderMale.run {
-                    setBackgroundResource(R.drawable.background_main_circle)
-                    setTextColor(resources.getColor(R.color.white))
+                "MALE" -> {
+                    buttonGenderMale.run {
+                        setBackgroundResource(R.drawable.background_main_circle)
+                        setTextColor(resources.getColor(R.color.white))
+                    }
+                }
+                else -> {
+
                 }
             }
 
@@ -275,10 +292,11 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
 
     // 학교 선택
     override fun onSchoolSelected(position: Int) {
-        checkEnabled()
-        binding.run {
-            buttonSchool.text = MyApplication.signUpInfo?.schoolDto?.schoolName.toString()
-            mainActivity.hideKeyboard()
+        val dialog = ProfileEditDialog(this, MyApplication.userUpdateInfo?.userUpdateDto?.school?.schoolName.toString(), MyApplication.userUpdateInfo?.userUpdateDto?.school?.schoolAddress.toString())
+        // 알림창이 띄워져있는 동안 배경 클릭 막기
+        dialog.isCancelable = false
+        mainActivity.let {
+            dialog.show(it.supportFragmentManager, "ProfileEditDialog")
         }
     }
 
@@ -319,5 +337,19 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
         }
 
         return Uri.fromFile(tempFile)
+    }
+
+    override fun onClickRightButton() {
+        // 수정
+        checkEnabled()
+        binding.run {
+            buttonSchool.text = MyApplication.userUpdateInfo?.userUpdateDto?.school?.schoolName.toString()
+            mainActivity.hideKeyboard()
+        }
+    }
+
+    override fun onClickLeftButton() {
+        // 취소
+        MyApplication.userUpdateInfo?.userUpdateDto?.school = null
     }
 }

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="30dp"
+    android:paddingHorizontal="22dp"
+    android:background="@drawable/background_dialog">
+
+    <LinearLayout
+        android:id="@+id/layout_school"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView_school_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="학교 "
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView_school_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:minLines="1"
+            android:singleLine="true"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="(주소)"
+            android:textColor="#A4A4A5"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="로 학교를 변경할까요?"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/layout_school"
+        app:layout_constraintTop_toBottomOf="@+id/layout_school" />
+
+    <ImageView
+        android:id="@+id/imageView_alert"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
+        app:srcCompat="@drawable/ic_dialog_alert" />
+
+    <TextView
+        android:id="@+id/textView_description1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:text="학교 정보 수정은 30일에 한 번 가능해요"
+        android:textColor="@color/red"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_alert" />
+
+    <TextView
+        android:id="@+id/textView_description2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="신중하게 정보를 확인해주세요"
+        android:textColor="@color/text_color2"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_description1" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_description2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <Button
+            android:id="@+id/button_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/grey2"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:paddingVertical="13.5dp"
+            android:text="취소"
+            android:textColor="@color/text_color3"
+            android:textSize="16sp"
+            app:cornerRadius="7dp" />
+
+        <Space
+            android:layout_width="28dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/main"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:paddingVertical="13.5dp"
+            android:text="수정"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="7dp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

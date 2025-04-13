@@ -48,7 +48,7 @@ interface ApiService {
     fun signUp(
         @Part("userDto") userDto: RequestBody,
         @Part("schoolDto") schoolDto: RequestBody,
-        @Part file: MultipartBody.Part
+        @Part file: MultipartBody.Part?
     ): Call<LoginResponse>
 
     // FCM 토큰 저장
@@ -146,6 +146,13 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id") id: Int
     ): Call<NotificationInfoResponse>
+
+    // 알림 수신 여부 설정 수정
+    @PUT("score/user/setting/notification")
+    fun updateNotificationInfo(
+        @Header("Authorization") token: String,
+        @Body request: NotificationInfoResponse
+    ): Call<String>
 
     // 함께 운동한 친구 검색
     @GET("score/exercise/friends")
