@@ -147,6 +147,13 @@ interface ApiService {
         @Query("id") id: Int
     ): Call<NotificationInfoResponse>
 
+    // 알림 수신 여부 설정 수정
+    @PUT("score/user/setting/notification")
+    fun updateNotificationInfo(
+        @Header("Authorization") token: String,
+        @Body request: NotificationInfoResponse
+    ): Call<String>
+
     // 함께 운동한 친구 검색
     @GET("score/exercise/friends")
     fun getSearchExerciseFriend(
