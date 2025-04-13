@@ -61,17 +61,21 @@ class WeeklyCalendarAdapter(
             if(exerciseResults[position] != null) { // 오늘 운동 기록이 있는 경우
                 holder.graph.run {
                     visibility = View.VISIBLE
-                    val maxHeight = 130f
+                    val maxHeightDp = 130f
+                    val density = holder.itemView.context.resources.displayMetrics.density
+                    val maxHeightPx = maxHeightDp * density
+
                     val exerciseSeconds = exerciseResults[position] ?: 0
-                    val heightDp = if (exerciseSeconds >= 3600) {
-                        maxHeight
+                    val heightPx = if (exerciseSeconds >= 3600) {
+                        maxHeightPx
                     } else {
-                        (exerciseSeconds / 3600f) * maxHeight
+                        (exerciseSeconds / 3600f) * maxHeightPx
                     }
 
-                    val layoutParams = layoutParams
-                    layoutParams.height = heightDp.toInt()
-                    this.layoutParams = layoutParams
+                    val layoutParams = holder.graph.layoutParams
+                    layoutParams.height = heightPx.toInt()
+                    holder.graph.layoutParams = layoutParams
+
                     setBackgroundResource(R.drawable.background_main_graph)
                 }
                 holder.totalHour.run {
@@ -99,17 +103,21 @@ class WeeklyCalendarAdapter(
 
                 holder.graph.run {
                     visibility = View.VISIBLE
-                    val maxHeight = 130f
+                    val maxHeightDp = 130f
+                    val density = holder.itemView.context.resources.displayMetrics.density
+                    val maxHeightPx = maxHeightDp * density
+
                     val exerciseSeconds = exerciseResults[position] ?: 0
-                    val heightDp = if (exerciseSeconds >= 3600) {
-                        maxHeight
+                    val heightPx = if (exerciseSeconds >= 3600) {
+                        maxHeightPx
                     } else {
-                        (exerciseSeconds / 3600f) * maxHeight
+                        (exerciseSeconds / 3600f) * maxHeightPx
                     }
 
-                    val layoutParams = layoutParams
-                    layoutParams.height = heightDp.toInt()
-                    this.layoutParams = layoutParams
+                    val layoutParams = holder.graph.layoutParams
+                    layoutParams.height = heightPx.toInt()
+                    holder.graph.layoutParams = layoutParams
+
                     setBackgroundResource(R.drawable.background_sub2_graph)
                 }
 
