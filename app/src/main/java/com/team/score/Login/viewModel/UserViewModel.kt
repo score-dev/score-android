@@ -186,7 +186,7 @@ class UserViewModel  : ViewModel() {
         val userDtoRequestBody = userDtoJson.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         val schoolDtoRequestBody = schoolDtoJson.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
 
-        apiClient.apiService.signUp(userDtoRequestBody, schoolDtoRequestBody, MyApplication.signUpImage!!).enqueue(object :
+        apiClient.apiService.signUp(userDtoRequestBody, schoolDtoRequestBody, MyApplication.signUpImage).enqueue(object :
             Callback<LoginResponse> {
             override fun onResponse(
                 call: Call<LoginResponse>,

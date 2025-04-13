@@ -14,6 +14,7 @@ data class UserSchool(
 
 data class Users(
     var nickname: String,
+    var profileImgId: Int,
     var grade: Int,
     var height: Int,
     var weight: Int,

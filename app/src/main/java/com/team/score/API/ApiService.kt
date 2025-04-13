@@ -48,7 +48,7 @@ interface ApiService {
     fun signUp(
         @Part("userDto") userDto: RequestBody,
         @Part("schoolDto") schoolDto: RequestBody,
-        @Part file: MultipartBody.Part
+        @Part file: MultipartBody.Part?
     ): Call<LoginResponse>
 
     // FCM 토큰 저장
