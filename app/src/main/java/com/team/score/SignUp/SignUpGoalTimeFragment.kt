@@ -52,6 +52,11 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
                 MyApplication.signUpInfo?.userDto?.exercisingTime = true
                 viewModel.signUp(onboardingActivity)
             }
+
+            buttonSkip.setOnClickListener {
+                MyApplication.signUpInfo?.userDto?.exercisingTime = false
+                viewModel.signUp(onboardingActivity)
+            }
         }
 
         return binding.root
