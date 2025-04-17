@@ -32,6 +32,16 @@ class MyGroupFeedListFragment : Fragment() {
         ViewModelProvider(requireActivity())[GroupViewModel::class.java]
     }
 
+    lateinit var feedAdapter: MyGroupFeedAdapter
+
+    var isLoading = true
+    var isLastPage = false
+    var isFirstPage = false
+    var currentPage = 0
+    val pageSize = 20
+
+    var getFeedList: MutableList<GroupFeedListResponse> = mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,8 +49,25 @@ class MyGroupFeedListFragment : Fragment() {
 
         binding = FragmentMyGroupFeedListBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
+        feedAdapter = MyGroupFeedAdapter(requireContext())
+
+        observeViewModel(feedAdapter)
 
         binding.run {
+            recyclerViewGroupFeed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val totalItemCount = layoutManager.itemCount
+                    val lastVisible = layoutManager.findLastVisibleItemPosition()
+
+                    // 마지막 항목이 보이고, 로딩 중이 아니며, 마지막 페이지도 아닐 경우
+                    if (!isLoading && !isLastPage && lastVisible >= totalItemCount - 1 && !(isFirstPage == true && isLastPage == true)) {
+                        Log.d("##", "reload")
+                        isLoading = true
+                        viewModel.getGroupFeedList(mainActivity, arguments?.getInt("groupId") ?: 0, currentPage)
+                    }
+                }
+            })
         }
 
         return binding.root
@@ -51,7 +78,48 @@ class MyGroupFeedListFragment : Fragment() {
         initView()
     }
 
+    fun observeViewModel(feedAdapter: MyGroupFeedAdapter) {
+        viewModel.run {
+            groupFeedList.observe(viewLifecycleOwner) { feedResponse ->
+                for(feed in feedResponse) {
+                    getFeedList.add(feed)
+                }
+
+                binding.recyclerViewGroupFeed.apply {
+                    layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                    adapter = feedAdapter
+                }
+
+                if (currentPage == 0) feedAdapter.clearFeeds()
+
+                feedAdapter.addFeeds(getFeedList)
+
+                // 다음 페이지 준비
+                isLoading = false
+                currentPage++
+            }
+
+            lastFeed.observe(viewLifecycleOwner) {
+                // 마지막 페이지 확인
+                isLastPage = it
+            }
+
+            firstFeed.observe(viewLifecycleOwner) {
+                // 첫 페이지 확인
+                isFirstPage = it
+            }
+        }
+    }
+
     fun initView() {
+        // 기존 리스트 초기화
+        feedAdapter.clearFeeds()
+
+        currentPage = 0
+        isLastPage = false
+        isLoading = true
+
+        viewModel.getGroupFeedList(mainActivity, arguments?.getInt("groupId") ?: 0, currentPage)
     }
 
     companion object {

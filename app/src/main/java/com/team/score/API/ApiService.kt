@@ -10,6 +10,7 @@ import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
+import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.API.response.user.BlockedMateListResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
@@ -105,6 +106,15 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("localDate") localDateId: String?,
     ): Call<GroupRankingResponse>
+
+    // 그룹 피드 목록 조회
+    @GET("score/groups/exercise/list")
+    fun getGroupFeedList(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("groupId") groupId: Int,
+        @Query("page") page: Int
+    ): Call<PagingResponse<GroupFeedListResponse>>
 
     // 피드 리스트
     @GET("score/exercise/list")

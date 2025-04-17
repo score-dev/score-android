@@ -13,6 +13,7 @@ import com.team.score.API.weather.response.Main
 import com.team.score.Group.adapter.MyGroupListAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.Home.adapter.GroupRelayAdapter
+import com.team.score.Home.adapter.GroupRelayTodayUnexercisedMemberAdapter
 import com.team.score.Home.adapter.WeeklyCalendarAdapter
 import com.team.score.MainActivity
 import com.team.score.Mypage.viewModel.MypageViewModel
@@ -53,7 +54,24 @@ class MyGroupListFragment : Fragment() {
     }
 
     fun initAdapter() {
-        groupAdapter = MyGroupListAdapter(mainActivity, getGroupInfo)
+        groupAdapter = MyGroupListAdapter(mainActivity, getGroupInfo).apply {
+            itemClickListener = object : MyGroupListAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    val bundle = Bundle().apply {
+                        putInt("groupId", getGroupInfo?.get(position)?.id ?: 0)
+                    }
+
+                    // 전달할 Fragment 생성
+                    val  nextFragment = MyGroupDetailFragment().apply {
+                        arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                    }
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, nextFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+        }
 
         binding.run {
             recyclerViewMyGroup.apply {

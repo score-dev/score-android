@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.Group.CreateGroupFragment
 import com.team.score.MainActivity
+import com.team.score.R
 import com.team.score.databinding.RowMyGroupBinding
 
 class MyGroupListAdapter(
@@ -93,6 +95,13 @@ class MyGroupListAdapter(
     override fun getItemCount() = (groupInfos?.size ?: 0)
 
     inner class ViewHolder(val binding: RowMyGroupBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                itemClickListener?.onItemClick(adapterPosition)
 
+                // 클릭 리스너 호출
+                onItemClickListener?.invoke(position)
+            }
+        }
     }
 }

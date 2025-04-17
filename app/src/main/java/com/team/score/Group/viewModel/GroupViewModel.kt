@@ -8,8 +8,11 @@ import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
 import com.team.score.API.request.group.CreateGroupRequest
+import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.API.response.record.GroupFeedListResponse
+import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.CreateGroupCompleteFragment
 import com.team.score.MainActivity
 import com.team.score.R
@@ -26,6 +29,9 @@ class GroupViewModel: ViewModel() {
 
     var myGroupList = MutableLiveData<MutableList<MyGroupResponse>>()
 
+    var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
+    var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
+    var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
 
     // 내 그룹 리스트 정보
     fun getMyGroupList(activity: Activity) {
@@ -172,6 +178,71 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<GroupRankingResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 그룹 피드 리스트 정보
+    fun getGroupFeedList(activity: Activity, groupId: Int, currentPage: Int) {
+
+        val tempFeedList = mutableListOf<GroupFeedListResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getGroupFeedList(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), groupId, currentPage).enqueue(object :
+            Callback<PagingResponse<GroupFeedListResponse>> {
+            override fun onResponse(
+                call: Call<PagingResponse<GroupFeedListResponse>>,
+                response: Response<PagingResponse<GroupFeedListResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: PagingResponse<GroupFeedListResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    lastFeed.value = (result?.last == true)
+                    firstFeed.value = (result?.first == true)
+
+                    val resultFeedList = result?.content ?: emptyList()
+
+                    for (feed in resultFeedList) {
+                        val feedItem = GroupFeedListResponse(
+                            feedId = feed.feedId,
+                            uploaderNickname = feed.uploaderNickname ?: "",
+                            uploaderProfileImgUrl = feed.uploaderProfileImgUrl ?: "",
+                            feedImg = feed.feedImg ?: "",
+                            startedAt = feed.startedAt ?: "",
+                            completedAt = feed.completedAt ?: "",
+                            location = feed.location ?: "",
+                            weather = feed.weather ?: "",
+                            temperature = feed.temperature ?: 0,
+                            fineDust = feed.fineDust ?: "",
+                            feeling = feed.feeling ?: "",
+                            taggedNicknames = feed.taggedNicknames ?: emptyList(),
+                            taggedProfileImgUrls = feed.taggedProfileImgUrls ?: emptyList()
+                        )
+
+                        tempFeedList.add(feedItem)
+                    }
+
+                    groupFeedList.value = tempFeedList
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: PagingResponse<GroupFeedListResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<PagingResponse<GroupFeedListResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
