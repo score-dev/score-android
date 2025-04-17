@@ -43,7 +43,7 @@ class FeedDetailFragment : Fragment() {
 
         observeViewModel()
 
-        binding.run {
+        binding.layoutFeedDetail.run {
             textViewEmotionPeople.setOnClickListener {
                 // 바텀시트
                 val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(mainActivity, getFeedEmotionList)
@@ -105,11 +105,11 @@ class FeedDetailFragment : Fragment() {
             feedDetail.observe(viewLifecycleOwner) {
                 getFeedDetailInfo = it
 
-                binding.run {
+                binding.layoutFeedDetail.run {
                     Glide.with(mainActivity).load(getFeedDetailInfo?.uploaderProfileImgUrl).into(imageViewProfile)
                     textViewNickname.text = getFeedDetailInfo?.uploaderNickname
-                    Glide.with(mainActivity).load(getFeedDetailInfo?.uploaderProfileImgUrl).into(imageViewMyProfile)
-                    textViewMyNickname.text = getFeedDetailInfo?.uploaderNickname
+                    Glide.with(mainActivity).load(getFeedDetailInfo?.uploaderProfileImgUrl).into(imageViewUploaderProfile)
+                    textViewUploaderNickname.text = getFeedDetailInfo?.uploaderNickname
                     Glide.with(mainActivity).load(getFeedDetailInfo?.feedImg).into(imageViewFeed)
 
                     textViewLocation.text = getFeedDetailInfo?.location
@@ -146,7 +146,7 @@ class FeedDetailFragment : Fragment() {
         var count = 0
         var isAdd = false
 
-        binding.run {
+        binding.layoutFeedDetail.run {
             layoutEmotionLike.visibility =
                 if (emotions.any { it.emotionType == "LIKE" })  {
                     View.VISIBLE
