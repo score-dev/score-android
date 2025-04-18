@@ -9,6 +9,7 @@ import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
 import com.team.score.API.request.group.CreateGroupRequest
 import com.team.score.API.response.PagingResponse
+import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.API.response.record.GroupFeedListResponse
@@ -28,6 +29,8 @@ class GroupViewModel: ViewModel() {
     var groupRanking = MutableLiveData<GroupRankingResponse?>()
 
     var myGroupList = MutableLiveData<MutableList<MyGroupResponse>>()
+
+    var groupDetail = MutableLiveData<GroupDetailResponse?>()
 
     var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
     var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
@@ -178,6 +181,45 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<GroupRankingResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 그룹 상세 정보 조회
+    fun getGroupDetail(activity: Activity, groupId: Int) {
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getGroupDetail(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), groupId).enqueue(object :
+            Callback<GroupDetailResponse> {
+            override fun onResponse(
+                call: Call<GroupDetailResponse>,
+                response: Response<GroupDetailResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: GroupDetailResponse? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    groupDetail.value = result
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: GroupDetailResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<GroupDetailResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

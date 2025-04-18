@@ -2,6 +2,7 @@ package com.team.score.API
 
 import com.team.score.API.request.signUp.FcmRequest
 import com.team.score.API.response.PagingResponse
+import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.API.response.home.HomeResponse
@@ -89,6 +90,14 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id") id: Int
     ): Call<List<MyGroupResponse>>
+
+    // 그룹 상세 조회
+    @GET("score/groups/info")
+    fun getGroupDetail(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("groupId") groupId: Int
+    ): Call<GroupDetailResponse>
 
     // 그룹 생성
     @Multipart

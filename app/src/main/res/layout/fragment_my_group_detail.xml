@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/layout_my_group_ranking">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/background_grey2_radius15"
@@ -110,7 +110,7 @@
                     android:layout_height="match_parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/background_grey2_radius15"
