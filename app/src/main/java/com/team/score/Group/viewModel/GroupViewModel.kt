@@ -12,8 +12,8 @@ import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.record.GroupFeedListResponse
-import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.CreateGroupCompleteFragment
 import com.team.score.MainActivity
 import com.team.score.R
@@ -26,12 +26,12 @@ import retrofit2.Response
 
 class GroupViewModel: ViewModel() {
 
-    var groupRanking = MutableLiveData<GroupRankingResponse?>()
+    var schoolGroupRanking = MutableLiveData<SchoolGroupRankingResponse?>()
 
     var myGroupList = MutableLiveData<MutableList<MyGroupResponse>>()
 
     var groupDetail = MutableLiveData<GroupDetailResponse?>()
-
+    var groupRanking = MutableLiveData<GroupRankingResponse?>()
     var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
     var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
@@ -150,27 +150,27 @@ class GroupViewModel: ViewModel() {
     }
 
     // 학교 그룹 랭킹 조회
-    fun getGroupRanking(activity: MainActivity, date: String?) {
+    fun getSchoolGroupRanking(activity: MainActivity, date: String?) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
         apiClient.apiService.getSchoolGroupRanking(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), date).enqueue(object :
-            Callback<GroupRankingResponse> {
+            Callback<SchoolGroupRankingResponse> {
             override fun onResponse(
-                call: Call<GroupRankingResponse>,
-                response: Response<GroupRankingResponse>
+                call: Call<SchoolGroupRankingResponse>,
+                response: Response<SchoolGroupRankingResponse>
             ) {
                 Log.d("##", "onResponse 성공: " + response.body().toString())
                 if (response.isSuccessful) {
                     // 정상적으로 통신이 성공된 경우
-                    val result: GroupRankingResponse? = response.body()
+                    val result: SchoolGroupRankingResponse? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
-                    groupRanking.value = result
+                    schoolGroupRanking.value = result
 
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                    var result: GroupRankingResponse? = response.body()
+                    var result: SchoolGroupRankingResponse? = response.body()
                     Log.d("##", "onResponse 실패")
                     Log.d("##", "onResponse 실패: " + response.code())
                     Log.d("##", "onResponse 실패: " + response.body())
@@ -180,7 +180,7 @@ class GroupViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<GroupRankingResponse>, t: Throwable) {
+            override fun onFailure(call: Call<SchoolGroupRankingResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
@@ -220,6 +220,45 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<GroupDetailResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 그룹 내 랭킹 조회
+    fun getGroupRanking(activity: Activity, groupId: Int, date: String?) {
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getGroupRanking(tokenManager.getAccessToken().toString(), groupId, date).enqueue(object :
+            Callback<GroupRankingResponse> {
+            override fun onResponse(
+                call: Call<GroupRankingResponse>,
+                response: Response<GroupRankingResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: GroupRankingResponse? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    groupRanking.value = result
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: GroupRankingResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<GroupRankingResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

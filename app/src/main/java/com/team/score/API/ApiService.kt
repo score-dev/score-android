@@ -5,6 +5,7 @@ import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.home.HomeResponse
 import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.login.UserInfoResponse
@@ -114,7 +115,16 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("userId") userId: Int,
         @Query("localDate") localDateId: String?,
+    ): Call<SchoolGroupRankingResponse>
+
+    // 그룹 내 랭킹 조회
+    @GET("score/ranking/group")
+    fun getGroupRanking(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("localDate") localDate: String?,
     ): Call<GroupRankingResponse>
+
 
     // 그룹 피드 목록 조회
     @GET("score/groups/exercise/list")

@@ -83,6 +83,7 @@ class MyGroupDetailFragment : Fragment() {
     fun initView() {
 
         viewModel.getGroupDetail(mainActivity, arguments?.getInt("groupId") ?: 0)
+        viewModel.getGroupRanking(mainActivity, arguments?.getInt("groupId") ?: 0, null)
 
         binding.run {
             // ViewModel에서 그룹 리스트 중 해당 groupId에 해당하는 그룹 정보 가져오기

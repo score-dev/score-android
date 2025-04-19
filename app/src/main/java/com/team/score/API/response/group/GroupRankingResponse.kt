@@ -1,21 +1,19 @@
 package com.team.score.API.response.group
 
 data class GroupRankingResponse(
-    val schoolName: String,
-    val schoolId: Int,
-    var allRankers: List<GroupRanking>,
-    val myGroupRanking: List<GroupRanking>
+    val groupId: Int,
+    val startDate: String,
+    val endDate: String,
+    val rankersInfo: List<RankerInfo>
 )
 
-data class GroupRanking(
-    val groupId: Int,
-    val groupName: String,
-    val groupImg: String,
-    val maxMemberNum: Int,
-    val currentMemberNum: Int,
-    val rank: Int,
-    val rankChangeAmount: Int,
-    val participateRatio: Int,
-    val weeklyExerciseTime: Int,
-    val private: Boolean
+data class RankerInfo(
+    val userId: Int,
+    val nickname: String,
+    val profileImgUrl: String,
+    val rankNum: Int,
+    val changedAmount: Int,
+    val weeklyLevelIncrement: Int,
+    val weeklyExerciseTime: Int
 )
+
