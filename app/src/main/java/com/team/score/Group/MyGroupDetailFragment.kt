@@ -12,12 +12,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.team.score.API.response.group.GroupDetailResponse
-import com.team.score.API.weather.response.Main
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
-import com.team.score.Mypage.MypageCalendarFragment
-import com.team.score.Mypage.MypageFeedFragment
-import com.team.score.R
 import com.team.score.Utils.TimeUtil.formatExerciseTime
 import com.team.score.databinding.FragmentMyGroupDetailBinding
 
@@ -49,7 +45,7 @@ class MyGroupDetailFragment : Fragment() {
         fragmentList = listOf(
             MyGroupFeedListFragment.newInstance(groupId),
             MyGroupRankingFragment.newInstance(groupId),
-            MyGroupMateListFragment.newInstance(groupId)
+            GroupMateListFragment.newInstance(groupId)
         )
 
         return binding.root

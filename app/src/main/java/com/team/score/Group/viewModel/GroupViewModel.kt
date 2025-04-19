@@ -10,6 +10,7 @@ import com.team.score.API.TokenManager
 import com.team.score.API.request.group.CreateGroupRequest
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
+import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
@@ -33,6 +34,7 @@ class GroupViewModel: ViewModel() {
     var groupDetail = MutableLiveData<GroupDetailResponse?>()
     var groupRanking = MutableLiveData<GroupRankingResponse?>()
     var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
+    var groupMateList = MutableLiveData<MutableList<GroupMateResponse>>()
     var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -324,6 +326,59 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<PagingResponse<GroupFeedListResponse>>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 내 그룹 메이트 리스트 정보
+    fun getGroupMateList(activity: Activity, groupId: Int) {
+
+        val tempGroupMateList = mutableListOf<GroupMateResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getGroupMate(tokenManager.getAccessToken().toString(), groupId).enqueue(object :
+            Callback<List<GroupMateResponse>> {
+            override fun onResponse(
+                call: Call<List<GroupMateResponse>>,
+                response: Response<List<GroupMateResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: List<GroupMateResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    val resultGroupList = result ?: emptyList()
+
+                    for (group in resultGroupList) {
+
+                        val mate = GroupMateResponse(
+                            id = group.id,
+                            nickname = group.nickname,
+                            profileImgUrl = group.profileImgUrl
+                        )
+
+                        tempGroupMateList.add(mate)
+                    }
+
+                    groupMateList.value = tempGroupMateList
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: List<GroupMateResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<GroupMateResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

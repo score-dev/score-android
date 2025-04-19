@@ -1,0 +1,92 @@
+package com.team.score.Group
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.team.score.API.response.group.GroupMateResponse
+import com.team.score.Group.adapter.GroupMateAdapter
+import com.team.score.Group.viewModel.GroupViewModel
+import com.team.score.MainActivity
+import com.team.score.databinding.FragmentGroupMateListBinding
+
+class GroupMateListFragment : Fragment() {
+
+    lateinit var binding: FragmentGroupMateListBinding
+    lateinit var mainActivity: MainActivity
+    private val viewModel: GroupViewModel by lazy {
+        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+    }
+
+    lateinit var groupMateAdapter : GroupMateAdapter
+    var getGroupMateInfo: List<GroupMateResponse>? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding = FragmentGroupMateListBinding.inflate(layoutInflater)
+        mainActivity = activity as MainActivity
+
+        initAdapter()
+        observeViewModel()
+
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initView()
+    }
+
+    fun initView() {
+        viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
+
+        binding.run {
+            textViewGroupName.text = "${viewModel.myGroupList.value?.find { it.id == (arguments?.getInt("groupId") ?: 0) }?.name} 메이트"
+        }
+    }
+
+    fun initAdapter() {
+        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo).apply {
+            itemClickListener = object : GroupMateAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+
+                }
+            }
+        }
+
+        binding.run {
+            recyclerViewMate.apply {
+                adapter = groupMateAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+        }
+    }
+
+    fun observeViewModel() {
+        viewModel.run {
+            groupMateList.observe(viewLifecycleOwner) {
+                getGroupMateInfo = it
+
+                groupMateAdapter.updateList(getGroupMateInfo)
+            }
+        }
+    }
+
+    companion object {
+        fun newInstance(groupId: Int): GroupMateListFragment {
+            val fragment = GroupMateListFragment()
+            val bundle = Bundle()
+            bundle.putInt("groupId", groupId)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
+}

@@ -3,6 +3,7 @@ package com.team.score.API
 import com.team.score.API.request.signUp.FcmRequest
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
+import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
@@ -125,7 +126,6 @@ interface ApiService {
         @Query("localDate") localDate: String?,
     ): Call<GroupRankingResponse>
 
-
     // 그룹 피드 목록 조회
     @GET("score/groups/exercise/list")
     fun getGroupFeedList(
@@ -134,6 +134,13 @@ interface ApiService {
         @Query("groupId") groupId: Int,
         @Query("page") page: Int
     ): Call<PagingResponse<GroupFeedListResponse>>
+
+    // 그룹 내 메이트 조회
+    @GET("score/groups/mates/list")
+    fun getGroupMate(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int
+    ): Call<List<GroupMateResponse>>
 
     // 피드 리스트
     @GET("score/exercise/list")
