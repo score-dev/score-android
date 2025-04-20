@@ -2,13 +2,19 @@ package com.team.score.API
 
 import com.team.score.API.request.signUp.FcmRequest
 import com.team.score.API.response.PagingResponse
+import com.team.score.API.response.group.GroupDetailResponse
+import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupRankingResponse
+import com.team.score.API.response.group.GroupUnexercisedMateResponse
+import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.home.HomeResponse
 import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
+import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.API.response.user.BlockedMateListResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
@@ -81,6 +87,21 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<Boolean>
 
+    // 내 그룹 리스트 조회
+    @GET("score/groups/all")
+    fun getMyGroupList(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Call<List<MyGroupResponse>>
+
+    // 그룹 상세 조회
+    @GET("score/groups/info")
+    fun getGroupDetail(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("groupId") groupId: Int
+    ): Call<GroupDetailResponse>
+
     // 그룹 생성
     @Multipart
     @POST("score/groups/create")
@@ -96,7 +117,39 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("userId") userId: Int,
         @Query("localDate") localDateId: String?,
+    ): Call<SchoolGroupRankingResponse>
+
+    // 그룹 내 랭킹 조회
+    @GET("score/ranking/group")
+    fun getGroupRanking(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("localDate") localDate: String?,
     ): Call<GroupRankingResponse>
+
+    // 그룹 피드 목록 조회
+    @GET("score/groups/exercise/list")
+    fun getGroupFeedList(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("groupId") groupId: Int,
+        @Query("page") page: Int
+    ): Call<PagingResponse<GroupFeedListResponse>>
+
+    // 그룹 내 메이트 조회
+    @GET("score/groups/mates/list")
+    fun getGroupMate(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int
+    ): Call<List<GroupMateResponse>>
+
+    // 그룹 내 운동 쉰 메이트 조회
+    @GET("score/groups/mates/nonExercised")
+    fun getGroupUnexercisedMate(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("userId") userId: Int
+    ): Call<List<GroupUnexercisedMateResponse>>
 
     // 피드 리스트
     @GET("score/exercise/list")

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     android:background="@drawable/background_white_radius20">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +16,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:id="@+id/button_create_group"
@@ -31,9 +34,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
                 android:background="@drawable/background_black_circle"
                 android:padding="12dp"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ic_plus_white" />
 
             <TextView
@@ -41,8 +44,8 @@
                 style="@style/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="28dp"
                 android:text="내 친구들과 함께 운동하러 가볼까요?" />
         </LinearLayout>
 
@@ -50,13 +53,13 @@
             android:id="@+id/imageView_empty"
             android:layout_width="wrap_content"
             android:layout_height="250dp"
-            android:scaleType="fitEnd"
             android:layout_marginTop="40dp"
-            app:shapeAppearanceOverlay="@style/RoundSector20"
+            android:scaleType="fitEnd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_create_group"
+            app:shapeAppearanceOverlay="@style/RoundSector20"
             app:srcCompat="@drawable/img_group_relay" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -28,3 +28,8 @@ data class HomeGroupUnexercisedMemebrInfo(
     val nickname: String,
     val profileImgUrl: String
 )
+
+data class BatonStatus(
+    val isBaton: Boolean,
+    val receiverId: Int
+)

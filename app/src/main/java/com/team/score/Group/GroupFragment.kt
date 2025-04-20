@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.team.score.API.response.group.GroupRankingResponse
+import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.Group.adapter.GroupOthersRankingAdapter
 import com.team.score.Group.adapter.MyGroupRankingAdapter
 import com.team.score.Group.viewModel.GroupViewModel
@@ -30,7 +30,7 @@ class GroupFragment : Fragment() {
     lateinit var myGroupAdapter : MyGroupRankingAdapter
     lateinit var otherGroupsAdapter : GroupOthersRankingAdapter
 
-    var getGroupData: GroupRankingResponse? = null
+    var getGroupData: SchoolGroupRankingResponse? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +55,7 @@ class GroupFragment : Fragment() {
                 textViewWeekDays.text = "${weekInfo.startDate} ~ ${weekInfo.endDate}"
 
                 val convertedDate = weekInfo.startDate.replace(".", "-")
-                viewModel.getGroupRanking(mainActivity, convertedDate)
+                viewModel.getSchoolGroupRanking(mainActivity, convertedDate)
             }
             buttonRight.setOnClickListener {
                 val weekInfo = moveToNextWeek()
@@ -63,7 +63,7 @@ class GroupFragment : Fragment() {
                 textViewWeekDays.text = "${weekInfo.startDate} ~ ${weekInfo.endDate}"
 
                 val convertedDate = weekInfo.startDate.replace(".", "-")
-                viewModel.getGroupRanking(mainActivity, convertedDate)
+                viewModel.getSchoolGroupRanking(mainActivity, convertedDate)
             }
 
             buttonCreateGroup.setOnClickListener {
@@ -108,7 +108,7 @@ class GroupFragment : Fragment() {
 
     fun observeViewModel() {
         viewModel.run {
-            groupRanking.observe(viewLifecycleOwner) { it ->
+            schoolGroupRanking.observe(viewLifecycleOwner) { it ->
                 getGroupData = it
                 getGroupData?.allRankers = getGroupData?.allRankers?.sortedBy { it.rank } ?: emptyList()
 
@@ -155,7 +155,7 @@ class GroupFragment : Fragment() {
     }
 
     fun initView() {
-        viewModel.getGroupRanking(mainActivity, null)
+        viewModel.getSchoolGroupRanking(mainActivity, null)
         mainActivity.hideBottomNavigation(false)
 
         binding.run {
