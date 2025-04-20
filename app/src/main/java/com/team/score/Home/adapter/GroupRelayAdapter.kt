@@ -1,6 +1,7 @@
 package com.team.score.Home.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.HomeGroupInfo
 import com.team.score.Group.CreateGroupFragment
+import com.team.score.Group.MyGroupDetailFragment
 import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
 import com.team.score.R
@@ -111,6 +113,22 @@ class GroupRelayAdapter(
                     }
                 }
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+
+            holder.itemView.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putInt("groupId", groupInfos?.get(position)?.groupId ?: 0)
+                }
+
+                // 전달할 Fragment 생성
+                val  nextFragment = MyGroupDetailFragment().apply {
+                    arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                }
+
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, nextFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }

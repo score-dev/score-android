@@ -57,7 +57,7 @@ class GroupMateListFragment : Fragment() {
         viewModel.getGroupUnexercisedMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
 
         binding.run {
-            textViewGroupName.text = "${viewModel.myGroupList.value?.find { it.id == (arguments?.getInt("groupId") ?: 0) }?.name} 메이트"
+            textViewGroupName.text = "${viewModel.groupDetail.value?.groupName} 메이트"
         }
     }
 

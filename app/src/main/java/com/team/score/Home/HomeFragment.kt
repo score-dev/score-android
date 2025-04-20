@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.HomeResponse
+import com.team.score.Group.MyGroupDetailFragment
 import com.team.score.Group.MyGroupListFragment
+import com.team.score.Group.adapter.MyGroupListAdapter
 import com.team.score.Home.adapter.GroupRelayAdapter
 import com.team.score.Home.adapter.WeeklyCalendarAdapter
 import com.team.score.Home.viewModel.HomeViewModel
@@ -91,9 +93,10 @@ class HomeFragment : Fragment() {
             }
 
             viewPagerGroupList.apply {
+                isNestedScrollingEnabled = false
                 clipToPadding = false
                 clipChildren = false
-                offscreenPageLimit = 1  // 한 개의 추가 페이지를 미리 로드
+                offscreenPageLimit = 1
                 setPadding(24, 0, 24, 0) // 좌우 패딩 추가 (숫자는 조정 가능)
                 setPageTransformer { page, position ->
                     val scaleFactor = 0.85f + (1 - Math.abs(position)) * 0.15f
@@ -119,6 +122,7 @@ class HomeFragment : Fragment() {
         val exerciseResults = getHomeData?.weeklyExerciseTimeByDay ?: List(7) { 0 } // 운동 결과 데이터
 
         weeklyGraphAdapter = WeeklyCalendarAdapter(mainActivity, weekDates, exerciseResults)
+
         groupPagerAdapter = GroupRelayAdapter(
             mainActivity,
             getHomeData?.groupsInfo,
