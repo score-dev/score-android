@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.response.group.GroupMateResponse
+import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.Group.adapter.GroupMateAdapter
+import com.team.score.Group.adapter.GroupUnexercisedMateAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.databinding.FragmentGroupMateListBinding
@@ -23,7 +25,9 @@ class GroupMateListFragment : Fragment() {
     }
 
     lateinit var groupMateAdapter : GroupMateAdapter
+    lateinit var groupUnexercisedMateAdapter : GroupUnexercisedMateAdapter
     var getGroupMateInfo: List<GroupMateResponse>? = null
+    var getGroupUnexercisedMateInfo: List<GroupUnexercisedMateResponse>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,9 +65,22 @@ class GroupMateListFragment : Fragment() {
             }
         }
 
+        groupUnexercisedMateAdapter = GroupUnexercisedMateAdapter(mainActivity, getGroupUnexercisedMateInfo).apply {
+            itemClickListener = object : GroupUnexercisedMateAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    
+                }
+            }
+        }
+
         binding.run {
             recyclerViewMate.apply {
                 adapter = groupMateAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+
+            recyclerViewUnexercisedMember.apply {
+                adapter = groupUnexercisedMateAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             }
         }
