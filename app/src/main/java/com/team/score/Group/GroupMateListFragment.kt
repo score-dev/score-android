@@ -50,6 +50,7 @@ class GroupMateListFragment : Fragment() {
 
     fun initView() {
         viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
+        viewModel.getGroupUnexercisedMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
 
         binding.run {
             textViewGroupName.text = "${viewModel.myGroupList.value?.find { it.id == (arguments?.getInt("groupId") ?: 0) }?.name} 메이트"
@@ -68,7 +69,7 @@ class GroupMateListFragment : Fragment() {
         groupUnexercisedMateAdapter = GroupUnexercisedMateAdapter(mainActivity, getGroupUnexercisedMateInfo).apply {
             itemClickListener = object : GroupUnexercisedMateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
-                    
+
                 }
             }
         }
@@ -92,6 +93,12 @@ class GroupMateListFragment : Fragment() {
                 getGroupMateInfo = it
 
                 groupMateAdapter.updateList(getGroupMateInfo)
+            }
+
+            groupUnexercisedMateList.observe(viewLifecycleOwner) {
+                getGroupUnexercisedMateInfo = it
+
+                groupUnexercisedMateAdapter.updateList(getGroupUnexercisedMateInfo)
             }
         }
     }

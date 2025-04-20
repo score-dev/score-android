@@ -5,6 +5,7 @@ import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupRankingResponse
+import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.home.HomeResponse
@@ -141,6 +142,14 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("groupId") groupId: Int
     ): Call<List<GroupMateResponse>>
+
+    // 그룹 내 운동 쉰 메이트 조회
+    @GET("score/groups/mates/nonExercised")
+    fun getGroupUnexercisedMate(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("userId") userId: Int
+    ): Call<List<GroupUnexercisedMateResponse>>
 
     // 피드 리스트
     @GET("score/exercise/list")
