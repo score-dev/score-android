@@ -4,7 +4,7 @@ data class GroupRankingResponse(
     val groupId: Int,
     val startDate: String,
     val endDate: String,
-    val rankersInfo: List<RankerInfo>
+    var rankersInfo: List<RankerInfo>
 )
 
 data class RankerInfo(

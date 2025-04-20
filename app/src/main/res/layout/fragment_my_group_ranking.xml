@@ -3,4 +3,201 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Group.MyGroupRankingFragment" />
+    android:background="@color/grey2"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Group.MyGroupRankingFragment">
+
+    <LinearLayout
+        android:id="@+id/layout_week_ranking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/button_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="180"
+            android:src="@drawable/ic_next_black" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_week_month"
+                style="@style/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0월 0주차"
+                android:textAlignment="center"
+                android:textColor="@color/text_color1" />
+
+            <TextView
+                android:id="@+id/textView_week_days"
+                style="@style/caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2024.01.01 ~ 2024.01.01"
+                android:textAlignment="center"
+                android:textColor="@color/text_color3" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/button_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next_black" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_group_ranking_top3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_week_ranking">
+
+        <include
+            android:id="@+id/layout_group_ranking2"
+            layout="@layout/layout_group_member_ranking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layout_group_ranking1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/layout_group_ranking1" />
+
+        <include
+            android:id="@+id/layout_group_ranking1"
+            layout="@layout/layout_group_member_ranking1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="49dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/layout_group_ranking2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/layout_group_ranking3"
+            layout="@layout/layout_group_member_ranking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="49dp"
+            android:layout_marginTop="37dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layout_group_ranking1"
+            app:layout_constraintStart_toEndOf="@+id/layout_group_ranking1"
+            app:layout_constraintTop_toTopOf="@+id/layout_group_ranking1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/layout_group_my_ranking"
+        layout="@layout/layout_group_my_ranking"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_ranking_top3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:padding="10dp"
+        android:background="@drawable/background_bottom_sheet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_my_ranking"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_empty_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="200dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_mood_cry"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_empty_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12sp"
+                android:fontFamily="@font/pretendard_semi_bold"
+                android:text="아직 그룹이 없어요"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="@+id/imageView_empty"
+                app:layout_constraintStart_toStartOf="@+id/imageView_empty"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_empty" />
+
+            <TextView
+                android:id="@+id/textView_empty_description"
+                style="@style/body3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="함께 운동할 그룹을 만들어볼까요?"
+                android:textColor="@color/text_color2"
+                app:layout_constraintEnd_toEndOf="@+id/textView_empty_title"
+                app:layout_constraintStart_toStartOf="@+id/textView_empty_title"
+                app:layout_constraintTop_toBottomOf="@+id/textView_empty_title" />
+
+            <Button
+                android:id="@+id/button_create_group"
+                style="@style/body3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:backgroundTint="@color/sub"
+                android:paddingHorizontal="11.5dp"
+                android:paddingVertical="10.5dp"
+                android:text="내그룹 만들기"
+                app:cornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/textView_empty_description"
+                app:layout_constraintStart_toStartOf="@+id/textView_empty_description"
+                app:layout_constraintTop_toBottomOf="@+id/textView_empty_description" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_group_member_ranking_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
