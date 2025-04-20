@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.API.response.home.HomeGroupUnexercisedMemebrInfo
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.databinding.RowGroupMateBinding
@@ -23,13 +24,15 @@ class GroupUnexercisedMateAdapter(
 
     private var onItemClickListener: ((Int) -> Unit)? = null
     private var context: Context? = null
+    var selectedPosition = -1
 
     fun setOnItemClickListener(listener: (Int) -> Unit) {
         onItemClickListener = listener
     }
 
-    fun updateList(newMates: List<GroupUnexercisedMateResponse>?) {
-        mates = newMates
+    fun updateList(newMateInfos: List<GroupUnexercisedMateResponse>?, batonMemberPostion: Int) {
+        mates = newMateInfos
+        selectedPosition = batonMemberPostion
         notifyDataSetChanged()
     }
 
@@ -54,15 +57,10 @@ class GroupUnexercisedMateAdapter(
             textViewNickname.text = item?.nickname
             Glide.with(holder.itemView.context).load(item?.profileImageUrl)
                 .into(imageViewUnexercisedMemberProfile)
-            buttonBaton.run {
-                if(item?.canTurnOverBaton == true) {
-                    isEnabled = true
-                    setBackgroundResource(R.drawable.background_sub_radius10)
-                    text = "바통 찌르기"
-                } else {
-                    isEnabled = false
-                    setBackgroundResource(R.drawable.background_main_radius10)
+            if(position == selectedPosition) {
+                buttonBaton.run {
                     text = "찌르기 완료!"
+                    setBackgroundResource(R.drawable.background_main_radius10)
                 }
             }
         }

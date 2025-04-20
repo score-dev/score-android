@@ -13,6 +13,7 @@ import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.Group.adapter.GroupMateAdapter
 import com.team.score.Group.adapter.GroupUnexercisedMateAdapter
 import com.team.score.Group.viewModel.GroupViewModel
+import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
 import com.team.score.databinding.FragmentGroupMateListBinding
 
@@ -22,6 +23,9 @@ class GroupMateListFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private val viewModel: GroupViewModel by lazy {
         ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+    }
+    private val homeViewModel: HomeViewModel by lazy {
+        ViewModelProvider(requireActivity())[HomeViewModel::class.java]
     }
 
     lateinit var groupMateAdapter : GroupMateAdapter
@@ -69,7 +73,9 @@ class GroupMateListFragment : Fragment() {
         groupUnexercisedMateAdapter = GroupUnexercisedMateAdapter(mainActivity, getGroupUnexercisedMateInfo).apply {
             itemClickListener = object : GroupUnexercisedMateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
+                    val userId = getGroupUnexercisedMateInfo?.get(position)?.userId ?: 0
 
+                    homeViewModel.batonGroupMember(mainActivity, userId)
                 }
             }
         }
@@ -98,7 +104,16 @@ class GroupMateListFragment : Fragment() {
             groupUnexercisedMateList.observe(viewLifecycleOwner) {
                 getGroupUnexercisedMateInfo = it
 
-                groupUnexercisedMateAdapter.updateList(getGroupUnexercisedMateInfo)
+                groupUnexercisedMateAdapter.updateList(getGroupUnexercisedMateInfo, -1)
+            }
+        }
+
+        homeViewModel.run {
+            isBaton.observe(viewLifecycleOwner) { baton ->
+                if(baton?.isBaton == true) {
+                    val position = getGroupUnexercisedMateInfo?.find { it.userId == baton.receiverId }?.userId ?: 0
+                    groupUnexercisedMateAdapter.updateList(getGroupUnexercisedMateInfo, position)
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.response.home.BatonStatus
 import com.team.score.API.response.home.HomeResponse
 import com.team.score.Utils.MyApplication
 import retrofit2.Call
@@ -15,6 +16,8 @@ import retrofit2.Response
 class HomeViewModel: ViewModel() {
 
     var homeData = MutableLiveData<HomeResponse?>()
+
+    var isBaton = MutableLiveData<BatonStatus>()
 
     // 홈 정보
     fun getHomeData(activity: Activity) {
@@ -72,7 +75,7 @@ class HomeViewModel: ViewModel() {
                     val result: Boolean? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
-
+                    isBaton.value = BatonStatus(true, receiverId)
 
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
@@ -82,12 +85,15 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    isBaton.value = BatonStatus(false, receiverId)
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
+                isBaton.value = BatonStatus(false, receiverId)
             }
         })
     }
