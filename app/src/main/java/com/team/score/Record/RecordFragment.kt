@@ -1,16 +1,21 @@
 package com.team.score.Record
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,6 +25,7 @@ import com.team.score.databinding.FragmentRecordBinding
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
 import com.team.score.Utils.TimerManager
+import java.io.File
 
 
 class RecordFragment : Fragment() {
@@ -27,12 +33,6 @@ class RecordFragment : Fragment() {
     lateinit var binding: FragmentRecordBinding
     lateinit var mainActivity: MainActivity
 
-    // storage 권한 처리에 필요한 변수
-    val CAMERA = arrayOf(Manifest.permission.CAMERA)
-    val STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    val CAMERA_CODE = 98
-    val STORAGE_CODE = 99
     private val LOCATION_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
 
@@ -41,6 +41,23 @@ class RecordFragment : Fragment() {
     private val timerUIHandler = Handler(Looper.getMainLooper())
     private lateinit var timerUIRunnable: Runnable
 
+    private lateinit var imageUri: Uri
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+
+            }
+        }
+
+    private val cameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            openCamera()
+        } else {
+            Toast.makeText(requireContext(), "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
@@ -56,10 +73,10 @@ class RecordFragment : Fragment() {
 
         binding.run {
             buttonCamera.setOnClickListener {
-//                CallCamera()
+                checkCameraPermissionAndOpen()
             }
             buttonMap.setOnClickListener {
-                if(TimerManager.startedAtIso != null) {
+                if (TimerManager.startedAtIso != null) {
                     mainActivity.supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, RecordMapFragment())
                         .addToBackStack(null)
@@ -108,7 +125,7 @@ class RecordFragment : Fragment() {
                 }
             }
 
-            if(isStart) {
+            if (isStart) {
                 buttonRecord.setImageResource(R.drawable.ic_temporary_stop)
             } else {
                 buttonRecord.setImageResource(R.drawable.ic_start)
@@ -121,10 +138,22 @@ class RecordFragment : Fragment() {
         }
     }
 
+    fun checkCameraPermissionAndOpen() {
+        val permission = Manifest.permission.CAMERA
+        if (ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED) {
+            openCamera()
+        } else {
+            cameraPermissionLauncher.launch(permission)
+        }
+    }
+
     private fun checkLocationPermission(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val permissionGranted = LOCATION_PERMISSIONS.all {
-                ContextCompat.checkSelfPermission(mainActivity, it) == PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(
+                    mainActivity,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
             }
 
             if (!permissionGranted) {
@@ -176,122 +205,16 @@ class RecordFragment : Fragment() {
         }
     }
 
+    fun openCamera() {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "camera_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES) // 갤러리 내 Pictures 폴더
+        }
 
-    // 카메라 권한, 저장소 권한
-    // 요청 권한
-//    override fun onRequestPermissionsResult(requestCode: Int,
-//                                            permissions: Array<out String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//
-//        when(requestCode){
-//            CAMERA_CODE -> {
-//                for (grant in grantResults){
-//                    if(grant != PackageManager.PERMISSION_GRANTED){
-//                        Toast.makeText(mainActivity, "카메라 권한을 승인해 주세요", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//            }
-//            STORAGE_CODE -> {
-//                for(grant in grantResults){
-//                    if(grant != PackageManager.PERMISSION_GRANTED){
-//                        Toast.makeText(mainActivity, "저장소 권한을 승인해 주세요", Toast.LENGTH_LONG).show()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    // 다른 권한등도 확인이 가능하도록
-//    fun checkPermission(permissions: Array<out String>, type:Int):Boolean{
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//            for (permission in permissions){
-//                if(ContextCompat.checkSelfPermission(mainActivity, permission)
-//                    != PackageManager.PERMISSION_GRANTED){
-//                    ActivityCompat.requestPermissions(mainActivity, permissions, type)
-//                    return false
-//                }
-//            }
-//        }
-//        return true
-//    }
-//
-//    // 카메라 촬영 - 권한 처리
-//    fun CallCamera(){
-//        if(checkPermission(CAMERA, CAMERA_CODE) && checkPermission(STORAGE, STORAGE_CODE)){
-//            val itt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//            startActivityForResult(itt, CAMERA_CODE)
-//        }
-//    }
-//
-//    // 사진 저장
-//    fun saveFile(fileName:String, mimeType:String, bitmap: Bitmap): Uri?{
-//
-//        var CV = ContentValues()
-//
-//        // MediaStore 에 파일명, mimeType 을 지정
-//        CV.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-//        CV.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
-//
-//        // 안정성 검사
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-//            CV.put(MediaStore.Images.Media.IS_PENDING, 1)
-//        }
-//
-//        // MediaStore 에 파일을 저장
-//        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, CV)
-//        if(uri != null){
-//            var scriptor = contentResolver.openFileDescriptor(uri, "w")
-//
-//            val fos = FileOutputStream(scriptor?.fileDescriptor)
-//
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-//            fos.close()
-//
-//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-//                CV.clear()
-//                // IS_PENDING 을 초기화
-//                CV.put(MediaStore.Images.Media.IS_PENDING, 0)
-//                contentResolver.update(uri, CV, null, null)
-//            }
-//        }
-//        return uri
-//    }
-//
-//    // 결과
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        val imageView = findViewById<ImageView>(R.id.avatars)
-//
-//        if(resultCode == Activity.RESULT_OK){
-//            when(requestCode){
-//                CAMERA_CODE -> {
-//                    if(data?.extras?.get("data") != null){
-//                        val img = data?.extras?.get("data") as Bitmap
-//                        val uri = saveFile(RandomFileName(), "image/jpeg", img)
-//                        imageView.setImageURI(uri)
-//                    }
-//                }
-//                STORAGE_CODE -> {
-//                    val uri = data?.data
-//                    imageView.setImageURI(uri)
-//                }
-//            }
-//        }
-//    }
-//
-//    // 파일명을 날짜 저장
-//    fun RandomFileName() : String{
-//        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis())
-//        return fileName
-//    }
-//
-//    // 갤러리 취득
-//    fun GetAlbum(){
-//        if(checkPermission(STORAGE, STORAGE_CODE)){
-//            val itt = Intent(Intent.ACTION_PICK)
-//            itt.type = MediaStore.Images.Media.CONTENT_TYPE
-//            startActivityForResult(itt, STORAGE_CODE)
-//        }
-//    }
+        val contentResolver = requireContext().contentResolver
+        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+
+        takePictureLauncher.launch(imageUri)
+    }
 }
