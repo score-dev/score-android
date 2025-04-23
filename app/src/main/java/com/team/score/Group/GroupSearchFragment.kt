@@ -6,7 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.team.score.API.weather.response.Main
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.team.score.API.response.group.GroupInfoResponse
+import com.team.score.Group.adapter.MyGroupListAdapter
+import com.team.score.Group.adapter.SearchGroupAdapter
+import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.databinding.FragmentGroupSearchBinding
@@ -15,6 +21,15 @@ class GroupSearchFragment : Fragment() {
 
     lateinit var binding: FragmentGroupSearchBinding
     lateinit var mainActivity: MainActivity
+    private val viewModel: GroupViewModel by lazy {
+        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+    }
+
+    lateinit var searchGroupAdapter : SearchGroupAdapter
+
+    var getGroupInfo: List<GroupInfoResponse>? = null
+
+    var schoolId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,8 +39,11 @@ class GroupSearchFragment : Fragment() {
         binding = FragmentGroupSearchBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
+        initAdapter()
+        observeViewModel()
+
         binding.run {
-            layoutSearchbar.run {
+            searchBar.run {
                 editTextSearch.addTextChangedListener {
                     if(editTextSearch.text.isNotEmpty()) {
                         buttonClear.visibility = View.VISIBLE
@@ -36,7 +54,7 @@ class GroupSearchFragment : Fragment() {
 
                 editTextSearch.setOnEditorActionListener { v, actionId, event ->
                     // 검색
-
+                    viewModel.searchSchoolGroup(mainActivity, schoolId, editTextSearch.text.toString())
                     true
                 }
             }
@@ -50,11 +68,56 @@ class GroupSearchFragment : Fragment() {
         initView()
     }
 
-    fun initView() {
+    fun initAdapter() {
+        searchGroupAdapter = SearchGroupAdapter(mainActivity, getGroupInfo).apply {
+            itemClickListener = object : SearchGroupAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    val bundle = Bundle().apply {
+                        putInt("groupId", getGroupInfo?.get(position)?.id ?: 0)
+                    }
+
+                    // 전달할 Fragment 생성
+                    val  nextFragment = MyGroupDetailFragment().apply {
+                        arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                    }
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, nextFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+        }
+
         binding.run {
-            layoutSearchbar.editTextSearch.hint = "그룹 이름을 입력해주세요"
+            recyclerViewSearchResult.apply {
+                adapter = searchGroupAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+        }
+    }
+
+    fun observeViewModel() {
+        viewModel.run {
+            searchGroupList.observe(viewLifecycleOwner) {
+                getGroupInfo = it
+
+                binding.run {
+                    layoutSearchResult.visibility = View.VISIBLE
+                    layoutSearchEmpty.visibility = View.GONE
+                }
+
+                searchGroupAdapter.updateList(getGroupInfo)
+            }
+        }
+    }
+
+    fun initView() {
+        schoolId = arguments?.getInt("schoolId") ?: 0
+
+        binding.run {
+            searchBar.editTextSearch.hint = "그룹 이름을 입력해주세요"
             layoutSearchEmpty.visibility = View.VISIBLE
-            layoutSearch.visibility = View.GONE
+            layoutSearchResult.visibility = View.GONE
 
             toolbar.run {
                 buttonBack.setOnClickListener {

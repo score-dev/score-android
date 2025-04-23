@@ -8,18 +8,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.team.score.API.response.group.MyGroupResponse
-import com.team.score.API.weather.response.Main
+import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.Group.adapter.MyGroupListAdapter
 import com.team.score.Group.viewModel.GroupViewModel
-import com.team.score.Home.adapter.GroupRelayAdapter
-import com.team.score.Home.adapter.GroupRelayTodayUnexercisedMemberAdapter
-import com.team.score.Home.adapter.WeeklyCalendarAdapter
 import com.team.score.MainActivity
-import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
-import com.team.score.Utils.CalendarUtil
-import com.team.score.Utils.DynamicSpacingItemDecoration
 import com.team.score.databinding.FragmentMyGroupListBinding
 
 class MyGroupListFragment : Fragment() {
@@ -32,7 +25,7 @@ class MyGroupListFragment : Fragment() {
 
     lateinit var groupAdapter : MyGroupListAdapter
 
-    var getGroupInfo: List<MyGroupResponse>? = null
+    var getGroupInfo: List<GroupInfoResponse>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

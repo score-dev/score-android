@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.MainActivity
-import com.team.score.databinding.RowMyGroupBinding
+import com.team.score.databinding.RowGroupSearchBinding
 
-class MyGroupListAdapter(
+class SearchGroupAdapter(
     private var activity: MainActivity,
     private var groupInfos: List<GroupInfoResponse>?
 ) :
-    RecyclerView.Adapter<MyGroupListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<SearchGroupAdapter.ViewHolder>() {
 
     private var onItemClickListener: ((Int) -> Unit)? = null
     private var context: Context? = null
@@ -37,7 +37,7 @@ class MyGroupListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
         val binding =
-            RowMyGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RowGroupSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolder(binding)
     }
@@ -56,44 +56,13 @@ class MyGroupListAdapter(
                 textViewPublic.visibility = View.GONE
             }
 
-            // 그룹 프로필 이미지 설정 (최대 3개 표시)
-            val profileImages = item?.recentMembersPic ?: emptyList()
-            val profileViews = listOf(imageViewGroupMemberProfile1, imageViewGroupMemberProfile2, imageViewGroupMemberProfile3)
-            val layouts = listOf(layoutGroupMemberProfile1, layoutGroupMemberProfile2, layoutGroupMemberProfile3)
-
-            profileViews.forEachIndexed { index, imageView ->
-                if (index < profileImages.size) {
-                    imageView.visibility = View.VISIBLE
-                    Glide.with(activity).load(profileImages[index]).into(imageView)
-                } else {
-                    imageView.visibility = View.GONE
-                }
-            }
-
-            layouts.forEachIndexed { index, layout ->
-                if (index < profileImages.size) {
-                    layout.visibility = View.VISIBLE
-                } else {
-                    layout.visibility = View.GONE
-                }
-            }
-
-            if((item?.currentMembers ?: 0) > 3) {
-                textViewPeople.run {
-                    visibility = View.VISIBLE
-                    text = "+${(item?.currentMembers ?: 0) - 3}"
-                }
-            } else {
-                textViewPeople.visibility = View.GONE
-            }
-
-            textViewGroupMember.text = "${item?.currentMembers}/${item?.userLimit}명"
+            textViewGroupMemberNum.text = "${item?.currentMembers}/${item?.userLimit}명"
         }
     }
 
     override fun getItemCount() = (groupInfos?.size ?: 0)
 
-    inner class ViewHolder(val binding: RowMyGroupBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: RowGroupSearchBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 itemClickListener?.onItemClick(adapterPosition)

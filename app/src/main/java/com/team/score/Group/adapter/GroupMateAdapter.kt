@@ -2,15 +2,12 @@ package com.team.score.Group.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.group.GroupMateResponse
-import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.MainActivity
 import com.team.score.databinding.RowGroupMateBinding
-import com.team.score.databinding.RowMyGroupBinding
 
 class GroupMateAdapter(
     private var activity: MainActivity,

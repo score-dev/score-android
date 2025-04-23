@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        android:id="@+id/layout_searchbar"
+        android:id="@+id/search_bar"
         layout="@layout/layout_search_disabled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,14 +27,14 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_search"
+        android:id="@+id/layout_search_result"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/layout_searchbar"
-        app:layout_constraintStart_toStartOf="@+id/layout_searchbar"
-        app:layout_constraintTop_toBottomOf="@+id/layout_searchbar">
+        app:layout_constraintEnd_toEndOf="@+id/search_bar"
+        app:layout_constraintStart_toStartOf="@+id/search_bar"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
         <TextView
             android:id="@+id/textView_search_title"
@@ -63,9 +63,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/layout_search"
-        app:layout_constraintStart_toStartOf="@+id/layout_search"
-        app:layout_constraintTop_toBottomOf="@+id/layout_search">
+        app:layout_constraintEnd_toEndOf="@+id/search_bar"
+        app:layout_constraintStart_toStartOf="@+id/search_bar"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
         <TextView
             android:id="@+id/textView_recent_search_title"
@@ -95,7 +95,7 @@
             android:text="학교 그룹 추천"
             app:layout_constraintEnd_toEndOf="@+id/textView_recent_search_title"
             app:layout_constraintStart_toStartOf="@+id/textView_recent_search_title"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView_search" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_search_word" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_recommend"

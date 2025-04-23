@@ -15,6 +15,7 @@ import com.team.score.Group.adapter.MyGroupRankingAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Record.FeedDetailFragment
 import com.team.score.Utils.CalendarUtil.getCurrentWeekInfo
 import com.team.score.Utils.CalendarUtil.moveToNextWeek
 import com.team.score.Utils.CalendarUtil.moveToPreviousWeek
@@ -25,7 +26,9 @@ class GroupFragment : Fragment() {
 
     lateinit var binding: FragmentGroupBinding
     lateinit var mainActivity: MainActivity
-    lateinit var viewModel: GroupViewModel
+    private val viewModel: GroupViewModel by lazy {
+        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+    }
 
     lateinit var myGroupAdapter : MyGroupRankingAdapter
     lateinit var otherGroupsAdapter : GroupOthersRankingAdapter
@@ -39,14 +42,27 @@ class GroupFragment : Fragment() {
 
         binding = FragmentGroupBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        viewModel = ViewModelProvider(mainActivity)[GroupViewModel::class.java]
 
         initAdapter()
         observeViewModel()
 
         binding.run {
-            searchBar.layoutSearch.setOnClickListener {
+            searchBar.editTextSearch.setOnClickListener {
                 // 검색 화면 이동
+                var nextFragment = GroupSearchFragment()
+
+                val bundle = Bundle().apply {
+                    putInt("schoolId", MyApplication.userInfo?.schoolId ?: 0)
+                }
+                // 전달할 Fragment 생성
+                nextFragment = GroupSearchFragment().apply {
+                    arguments = bundle
+                }
+
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, nextFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             buttonLeft.setOnClickListener {
@@ -160,6 +176,10 @@ class GroupFragment : Fragment() {
 
         binding.run {
             toolbar.textViewHead.text = MyApplication.userInfo?.schoolName.toString()
+            searchBar.editTextSearch.run {
+                isFocusable = false
+                isClickable = true
+            }
 
             val weekInfo = getCurrentWeekInfo()
             textViewWeekMonth.text = "${weekInfo.month}월 ${weekInfo.weekOfMonth}주차"

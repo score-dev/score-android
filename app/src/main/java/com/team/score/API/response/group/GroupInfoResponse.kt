@@ -1,6 +1,6 @@
 package com.team.score.API.response.group
 
-data class MyGroupResponse(
+data class GroupInfoResponse(
     val id: Int,
     val name: String,
     val description: String,
