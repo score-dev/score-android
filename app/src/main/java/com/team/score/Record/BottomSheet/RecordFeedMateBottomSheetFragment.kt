@@ -44,10 +44,13 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
         observeViewModel()
 
         binding.run {
-            layoutSearch.editTextSearch.setOnEditorActionListener { v, actionId, event ->
-                viewModel.getSearchExerciseFriend(activity, layoutSearch.editTextSearch.text.toString())
+            layoutSearch.editTextSearch.run {
+                hint = "메이트 검색"
+                setOnEditorActionListener { v, actionId, event ->
+                    viewModel.getSearchExerciseFriend(activity, layoutSearch.editTextSearch.text.toString())
 
-                true
+                    true
+                }
             }
 
             recyclerViewMate.addOnScrollListener(object : RecyclerView.OnScrollListener() {
