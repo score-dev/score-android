@@ -68,6 +68,7 @@ class GroupViewModel: ViewModel() {
                             id = group.id,
                             name = group.name,
                             description = group.description,
+                            groupImg = group.groupImg,
                             userLimit = group.userLimit,
                             currentMembers = group.currentMembers,
                             recentMembersPic = group.recentMembersPic,
