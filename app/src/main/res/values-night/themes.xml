@@ -3,6 +3,7 @@
     <style name="Base.Theme.Score" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/main</item>
+        <item name="colorAccent">@color/grey1</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="colorSurfaceVariant">@color/grey3</item>
