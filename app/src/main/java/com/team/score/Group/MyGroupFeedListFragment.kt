@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.weather.response.Main
@@ -49,7 +50,7 @@ class MyGroupFeedListFragment : Fragment() {
 
         binding = FragmentMyGroupFeedListBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        feedAdapter = MyGroupFeedAdapter(requireContext())
+        feedAdapter = MyGroupFeedAdapter(mainActivity, requireContext(), viewModel)
 
         observeViewModel(feedAdapter)
 
@@ -85,6 +86,11 @@ class MyGroupFeedListFragment : Fragment() {
                     getFeedList.add(feed)
                 }
 
+                getFeedList.forEach { feed ->
+                    viewModel.getFeedEmotion(mainActivity, feed.feedId)
+                }
+
+
                 binding.recyclerViewGroupFeed.apply {
                     layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                     adapter = feedAdapter
@@ -107,6 +113,10 @@ class MyGroupFeedListFragment : Fragment() {
             firstFeed.observe(viewLifecycleOwner) {
                 // 첫 페이지 확인
                 isFirstPage = it
+            }
+
+            feedEmotionsMap.observe(viewLifecycleOwner) { emotionMap ->
+                feedAdapter.updateAllEmotions(emotionMap)
             }
         }
     }
