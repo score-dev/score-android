@@ -100,6 +100,7 @@ class MyGroupFeedAdapter(
                 Glide.with(holder.itemView.context).load(item.taggedProfileImgUrls[0])
                     .into(imageViewOtherProfile)
                 textViewOtherNickname.text = item.taggedNicknames[0]
+                textViewFeedDescription3.visibility = View.VISIBLE
             } else {
                 layoutOthers.visibility = View.GONE
                 textViewFeedDescription3.visibility = View.GONE
