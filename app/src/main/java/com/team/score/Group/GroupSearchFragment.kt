@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.Group.adapter.MyGroupListAdapter
+import com.team.score.Group.adapter.RecentSearchGroupKeywordAdapter
 import com.team.score.Group.adapter.SearchGroupAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentGroupSearchBinding
 
 class GroupSearchFragment : Fragment() {
@@ -26,10 +28,12 @@ class GroupSearchFragment : Fragment() {
     }
 
     lateinit var searchGroupAdapter : SearchGroupAdapter
+    lateinit var searchKewordAdapter : RecentSearchGroupKeywordAdapter
 
     var getGroupInfo: List<GroupInfoResponse>? = null
 
     var schoolId = 0
+    var keyword = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +58,19 @@ class GroupSearchFragment : Fragment() {
 
                 editTextSearch.setOnEditorActionListener { v, actionId, event ->
                     // 검색
-                    viewModel.searchSchoolGroup(mainActivity, schoolId, editTextSearch.text.toString())
+                    if(editTextSearch.text.isNotEmpty()) {
+                        keyword = editTextSearch.text.toString()
+                        viewModel.searchSchoolGroup(mainActivity, schoolId, keyword)
+                    }
+
                     true
+                }
+
+                buttonClear.setOnClickListener {
+                    editTextSearch.text.clear()
+                    layoutSearchEmpty.visibility = View.VISIBLE
+                    layoutSearchResult.visibility = View.GONE
+                    searchKewordAdapter.updateList(MyApplication.preferences.getRecentSearchesLimited(mainActivity))
                 }
             }
         }
@@ -88,10 +103,25 @@ class GroupSearchFragment : Fragment() {
             }
         }
 
+        searchKewordAdapter = RecentSearchGroupKeywordAdapter(mainActivity, MyApplication.preferences.getRecentSearchesLimited(mainActivity)).apply {
+            itemClickListener = object : RecentSearchGroupKeywordAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    keyword = MyApplication.preferences.getRecentSearchesLimited(mainActivity).get(position)
+                    binding.searchBar.editTextSearch.setText(keyword)
+                    viewModel.searchSchoolGroup(mainActivity, schoolId, keyword)
+                }
+            }
+        }
+
         binding.run {
             recyclerViewSearchResult.apply {
                 adapter = searchGroupAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+
+            recyclerViewSearchWord.apply {
+                adapter = searchKewordAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             }
         }
     }
@@ -101,9 +131,11 @@ class GroupSearchFragment : Fragment() {
             searchGroupList.observe(viewLifecycleOwner) {
                 getGroupInfo = it
 
+                MyApplication.preferences.saveRecentSearchLimited(mainActivity, keyword)
                 binding.run {
                     layoutSearchResult.visibility = View.VISIBLE
                     layoutSearchEmpty.visibility = View.GONE
+                    textViewSearchTitle.text = "‘${keyword}’ 검색 결과"
                 }
 
                 searchGroupAdapter.updateList(getGroupInfo)
