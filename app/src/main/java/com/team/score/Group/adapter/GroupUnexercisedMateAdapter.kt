@@ -57,6 +57,19 @@ class GroupUnexercisedMateAdapter(
             textViewNickname.text = item?.nickname
             Glide.with(holder.itemView.context).load(item?.profileImageUrl)
                 .into(imageViewUnexercisedMemberProfile)
+
+            if(item?.canTurnOverBaton == true) {
+                buttonBaton.run {
+                    text = "바통 찌르기"
+                    setBackgroundResource(R.drawable.background_sub_radius10)
+                }
+            } else {
+                buttonBaton.run {
+                    text = "찌르기 완료!"
+                    setBackgroundResource(R.drawable.background_main_radius10)
+                }
+            }
+
             if(position == selectedPosition) {
                 buttonBaton.run {
                     text = "찌르기 완료!"

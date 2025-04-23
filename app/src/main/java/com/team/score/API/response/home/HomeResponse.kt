@@ -26,7 +26,8 @@ data class HomeGroupInfo(
 data class HomeGroupUnexercisedMemebrInfo(
     val userId: Int,
     val nickname: String,
-    val profileImgUrl: String
+    val profileImgUrl: String,
+    val canTurnOverBaton: Boolean
 )
 
 data class BatonStatus(

@@ -49,6 +49,18 @@ class GroupRelayTodayUnexercisedMemberAdapter(
         Glide.with(activity).load(unexercisedMembers?.get(position)?.profileImgUrl).into(holder.profile)
         holder.memberName.text = unexercisedMembers?.get(position)?.nickname.toString()
 
+        if(unexercisedMembers?.get(position)?.canTurnOverBaton == true) {
+            holder.buttonBaton.run {
+                text = "바통 찌르기"
+                backgroundTintList = resources.getColorStateList(R.color.sub)
+            }
+        } else {
+            holder.buttonBaton.run {
+                text = "찌르기 완료!"
+                backgroundTintList = resources.getColorStateList(R.color.main)
+            }
+        }
+
         if(position == selectedPosition) {
             holder.buttonBaton.run {
                 text = "찌르기 완료!"
