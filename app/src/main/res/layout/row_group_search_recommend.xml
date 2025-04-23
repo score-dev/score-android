@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingStart="15dp"
+    android:layout_marginBottom="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView_group"
+        android:layout_width="61dp"
+        android:layout_height="61dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_profile_null"
+        app:layout_constraintBottom_toBottomOf="@+id/layout_group"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/layout_group" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="33dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView_group"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.512">
+
+        <TextView
+            android:id="@+id/textView_group_name"
+            style="@style/body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="그룹명"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_group_description"
+            style="@style/body2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/pretendard_regular"
+            android:lines="2"
+            android:maxLines="2"
+            android:minLines="2"
+            android:text="그룹 설명"
+            android:textColor="@color/text_color2"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/textView_public"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_group_name" />
+
+        <TextView
+            android:id="@+id/textView_public"
+            style="@style/caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/background_sub3_circle"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="비공개"
+            android:textColor="@color/main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_group_member_num"
+            style="@style/caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="0/0명"
+            android:textColor="@color/text_color3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_group_image"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_group" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grey3"
+        android:layout_marginTop="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView_group_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

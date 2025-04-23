@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Group.GroupSearchFragment" >
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_back_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/layout_searchbar"
+        layout="@layout/layout_search_disabled"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_search"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/layout_searchbar"
+        app:layout_constraintStart_toStartOf="@+id/layout_searchbar"
+        app:layout_constraintTop_toBottomOf="@+id/layout_searchbar">
+
+        <TextView
+            android:id="@+id/textView_search_title"
+            style="@style/body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="'검색어' 검색 결과"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_search_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView_search_title"
+            app:layout_constraintTop_toBottomOf="@+id/textView_search_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_search_empty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/layout_search"
+        app:layout_constraintStart_toStartOf="@+id/layout_search"
+        app:layout_constraintTop_toBottomOf="@+id/layout_search">
+
+        <TextView
+            android:id="@+id/textView_recent_search_title"
+            style="@style/body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="최근 검색어"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_search_word"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView_recent_search_title"
+            app:layout_constraintTop_toBottomOf="@+id/textView_recent_search_title" />
+
+        <TextView
+            android:id="@+id/textView_recommend_title"
+            style="@style/body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="학교 그룹 추천"
+            app:layout_constraintEnd_toEndOf="@+id/textView_recent_search_title"
+            app:layout_constraintStart_toStartOf="@+id/textView_recent_search_title"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_search" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_recommend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView_recommend_title"
+            app:layout_constraintTop_toBottomOf="@+id/textView_recommend_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
