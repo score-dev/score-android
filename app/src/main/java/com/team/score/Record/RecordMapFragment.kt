@@ -3,6 +3,7 @@ package com.team.score.Record
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -172,12 +173,17 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
             naverMap.moveCamera(cameraUpdate)
 
             val timerText = TimeUtil.formatRecordTime(MyApplication.recordTimer)
-            createCustomMarkerBitmap(mainActivity, timerText, MyApplication.userInfo?.profileImgUrl ?: "") { bitmap ->
-                marker.icon = OverlayImage.fromBitmap(bitmap)
-                marker.position = currentLocation
-                marker.width = Marker.SIZE_AUTO
-                marker.height = Marker.SIZE_AUTO
-                marker.map = naverMap
+            createCustomMarkerBitmap(
+                mainActivity,
+                timerText,
+                MyApplication.userInfo?.profileImgUrl ?: ""
+            ) { bitmap ->
+                naverMap.locationOverlay.apply {
+                    isVisible = true
+                    icon = OverlayImage.fromBitmap(bitmap)
+                    anchor = PointF(0.5f, 1.0f)
+                    bearing = 0f
+                }
             }
 
             // UI 자동 갱신 루프 시작
@@ -194,10 +200,17 @@ class RecordMapFragment : Fragment(), OnMapReadyCallback {
             override fun run() {
                 // 마커 갱신
                 val timerText = TimeUtil.formatRecordTime(MyApplication.recordTimer)
-                createCustomMarkerBitmap(mainActivity, timerText, MyApplication.userInfo?.profileImgUrl ?: "") { bitmap ->
-                    marker.icon = OverlayImage.fromBitmap(bitmap)
-                    marker.position = currentLocation
-                    marker.map = naverMap
+                createCustomMarkerBitmap(
+                    mainActivity,
+                    timerText,
+                    MyApplication.userInfo?.profileImgUrl ?: ""
+                ) { bitmap ->
+                    naverMap.locationOverlay.apply {
+                        isVisible = true
+                        icon = OverlayImage.fromBitmap(bitmap)
+                        anchor = PointF(0.5f, 1.0f)
+                        bearing = 0f
+                    }
                 }
 
                 // UI 갱신

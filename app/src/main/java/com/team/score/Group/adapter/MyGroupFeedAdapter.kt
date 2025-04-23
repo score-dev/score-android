@@ -5,18 +5,28 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.GroupFeedListResponse
+import com.team.score.Group.viewModel.GroupViewModel
+import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Record.BottomSheet.FeedEmotionBottomSheetFragment
+import com.team.score.Record.viewModel.RecordViewModel
+import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
 import com.team.score.databinding.LayoutFeedDetailBinding
 import com.team.score.databinding.RowFeedBinding
 
 class MyGroupFeedAdapter(
+    private var activity: MainActivity,
     private var context: Context,
+    private val viewModel: GroupViewModel
 ) :
     RecyclerView.Adapter<MyGroupFeedAdapter.ViewHolder>() {
 
@@ -27,6 +37,8 @@ class MyGroupFeedAdapter(
     }
 
     private var feedList = mutableListOf<GroupFeedListResponse>()
+    private val feedEmotionMap = mutableMapOf<Int, List<FeedEmotionResponse>>()
+    private var currentUserId: Int = TokenManager(activity).getUserId()
 
     fun addFeeds(newFeeds: List<GroupFeedListResponse>) {
         val start = feedList.size
@@ -39,6 +51,13 @@ class MyGroupFeedAdapter(
         feedList.clear()
         notifyDataSetChanged()
     }
+
+    fun updateAllEmotions(emotions: Map<Int, List<FeedEmotionResponse>>) {
+        feedEmotionMap.clear()
+        feedEmotionMap.putAll(emotions)
+        notifyDataSetChanged()
+    }
+
 
     interface OnItemClickListener {
         fun onItemClick(position: Int) {}
@@ -57,6 +76,7 @@ class MyGroupFeedAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = feedList[position]
+        val emotions = feedEmotionMap[item.feedId] ?: emptyList()
 
         with(holder.binding) {
             // 업로더 프로필
@@ -80,6 +100,7 @@ class MyGroupFeedAdapter(
                 Glide.with(holder.itemView.context).load(item.taggedProfileImgUrls[0])
                     .into(imageViewOtherProfile)
                 textViewOtherNickname.text = item.taggedNicknames[0]
+                textViewFeedDescription3.visibility = View.VISIBLE
             } else {
                 layoutOthers.visibility = View.GONE
                 textViewFeedDescription3.visibility = View.GONE
@@ -95,7 +116,7 @@ class MyGroupFeedAdapter(
             textViewTagFeeling.text = "# ${item.feeling}"
 
             // 감정 설정
-//            bindEmotionLayouts(holder.binding, item.emotions, userId)
+            bindEmotionLayouts(this, emotions, currentUserId)
         }
     }
 
@@ -181,25 +202,6 @@ class MyGroupFeedAdapter(
     override fun getItemCount() = feedList.size
 
     inner class ViewHolder(val binding: LayoutFeedDetailBinding) : RecyclerView.ViewHolder(binding.root) {
-        val profileImage = binding.imageViewProfile
-        val nickname = binding.textViewNickname
-        val date = binding.textViewDate
-
-        val feedImage = binding.imageViewFeed
-        val uploaderProfile = binding.imageViewUploaderProfile
-        val uploaderNickname = binding.textViewUploaderNickname
-        val location = binding.textViewLocation
-        val otherProfile = binding.imageViewOtherProfile
-        val otherNickname = binding.textViewOtherNickname
-        val exerciseTime = binding.textViewExerciseTime
-
-        val tagWeather = binding.textViewTagWeather
-        val tagFeeling = binding.textViewTagFeeling
-
-        val emotionPeople = binding.textViewEmotionPeople
-
-        val buttonKebab = binding.buttonKebab
-
 
         init {
             binding.imageViewFeed.setOnClickListener {
@@ -207,6 +209,47 @@ class MyGroupFeedAdapter(
 
                 // 클릭 리스너 호출
                 onItemClickListener?.invoke(position)
+            }
+
+            binding.textViewEmotionPeople.setOnClickListener {
+                // 바텀시트
+                println("emotion : ${feedEmotionMap[feedList.get(adapterPosition).feedId]}")
+                val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(activity, feedEmotionMap[feedList[adapterPosition].feedId])
+                emotionMateBottomSheet.show(activity.supportFragmentManager, emotionMateBottomSheet.tag)
+            }
+
+            binding.layoutEmotionAdd.setOnClickListener { view ->
+                val item = feedList[adapterPosition]
+                val popupView = LayoutInflater.from(context).inflate(R.layout.layout_pop_menu_emotion, null)
+
+                val popupWindow = PopupWindow(
+                    popupView,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+                )
+                popupWindow.elevation = 100f
+
+                // 클릭 리스너들
+                popupView.findViewById<TextView>(R.id.button_emotion_like).setOnClickListener {
+                    viewModel.setFeedEmotion(activity, item.feedId, "LIKE")
+                    popupWindow.dismiss()
+                }
+                popupView.findViewById<TextView>(R.id.button_emotion_best).setOnClickListener {
+                    viewModel.setFeedEmotion(activity, item.feedId, "BEST")
+                    popupWindow.dismiss()
+                }
+                popupView.findViewById<TextView>(R.id.button_emotion_congratulation).setOnClickListener {
+                    viewModel.setFeedEmotion(activity, item.feedId, "CONGRAT")
+                    popupWindow.dismiss()
+                }
+                popupView.findViewById<TextView>(R.id.button_emotion_support).setOnClickListener {
+                    viewModel.setFeedEmotion(activity, item.feedId, "SUPPORT")
+                    popupWindow.dismiss()
+                }
+
+                // 팝업 표시 (살짝 위로 위치 조정)
+                popupWindow.showAsDropDown(binding.layoutEmotionAdd, 0, -200)
             }
         }
     }

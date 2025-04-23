@@ -15,6 +15,7 @@ import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.API.response.group.MyGroupResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
+import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.Group.CreateGroupCompleteFragment
 import com.team.score.MainActivity
@@ -34,11 +35,14 @@ class GroupViewModel: ViewModel() {
 
     var groupDetail = MutableLiveData<GroupDetailResponse?>()
     var groupRanking = MutableLiveData<GroupRankingResponse?>()
-    var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
     var groupMateList = MutableLiveData<MutableList<GroupMateResponse>>()
     var groupUnexercisedMateList = MutableLiveData<MutableList<GroupUnexercisedMateResponse>>()
+
+    var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
     var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
+    var feedEmotion: MutableLiveData<MutableList<FeedEmotionResponse>?> = MutableLiveData()
+    val feedEmotionsMap = MutableLiveData<Map<Int, List<FeedEmotionResponse>>>()
 
     // 내 그룹 리스트 정보
     fun getMyGroupList(activity: Activity) {
@@ -68,6 +72,7 @@ class GroupViewModel: ViewModel() {
                             id = group.id,
                             name = group.name,
                             description = group.description,
+                            groupImg = group.groupImg,
                             userLimit = group.userLimit,
                             currentMembers = group.currentMembers,
                             recentMembersPic = group.recentMembersPic,
@@ -328,6 +333,101 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<PagingResponse<GroupFeedListResponse>>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 감정 표현 정보
+    fun getFeedEmotion(activity: MainActivity, feedId: Int) {
+
+        val tempFeedEmotion = mutableListOf<FeedEmotionResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getFeedEmotion(tokenManager.getAccessToken().toString(), feedId).enqueue(object :
+            Callback<List<FeedEmotionResponse>> {
+            override fun onResponse(
+                call: Call<List<FeedEmotionResponse>>,
+                response: Response<List<FeedEmotionResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: List<FeedEmotionResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    val resultFeedEmotionList = result ?: emptyList()
+
+                    for (feed in resultFeedEmotionList) {
+                        val feedEmotionList = FeedEmotionResponse(
+                            feed.agentId,
+                            feed.agentProfileImgUrl,
+                            feed.agentNickname,
+                            feed.emotionType,
+                            feed.reactedAt
+                        )
+
+                        tempFeedEmotion.add(feedEmotionList)
+                    }
+
+                    feedEmotion.value = tempFeedEmotion
+
+                    val currentMap = feedEmotionsMap.value?.toMutableMap() ?: mutableMapOf()
+                    currentMap[feedId] = response.body() ?: emptyList()
+                    feedEmotionsMap.value = currentMap
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: List<FeedEmotionResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<FeedEmotionResponse>>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 감정표현 추가
+    fun setFeedEmotion(activity: MainActivity, feedId: Int, type: String) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.setFeedEmotion(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), feedId, type).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    getFeedEmotion(activity, feedId)
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

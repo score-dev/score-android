@@ -50,6 +50,7 @@ class MyGroupListAdapter(
         with(holder.binding) {
             textViewGroupName.text = item?.name
             textViewGroupDescription.text = item?.description
+            Glide.with(activity).load(item?.groupImg).into(imageViewGroup)
 
             if(item?.private == true) {
                 textViewPublic.visibility = View.VISIBLE
