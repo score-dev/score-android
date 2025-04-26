@@ -87,18 +87,35 @@ class GroupSearchFragment : Fragment() {
         searchGroupAdapter = SearchGroupAdapter(mainActivity, getGroupInfo).apply {
             itemClickListener = object : SearchGroupAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
-                    val bundle = Bundle().apply {
-                        putInt("groupId", getGroupInfo?.get(position)?.id ?: 0)
-                    }
+                    if(MyApplication.myGroupList.contains(getGroupInfo?.get(position)?.id ?: 0)) {
+                        // 내 그룹 화면
+                        val bundle = Bundle().apply {
+                            putInt("groupId", getGroupInfo?.get(position)?.id ?: 0)
+                        }
 
-                    // 전달할 Fragment 생성
-                    val  nextFragment = MyGroupDetailFragment().apply {
-                        arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                        // 전달할 Fragment 생성
+                        val  nextFragment = MyGroupDetailFragment().apply {
+                            arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                        }
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_main, nextFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    } else {
+                        // 다른 그룹 화면
+                        val bundle = Bundle().apply {
+                            putInt("groupId", getGroupInfo?.get(position)?.id ?: 0)
+                        }
+
+                        // 전달할 Fragment 생성
+//                        val  nextFragment = MyGroupDetailFragment().apply {
+//                            arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+//                        }
+//                        mainActivity.supportFragmentManager.beginTransaction()
+//                            .replace(R.id.fragmentContainerView_main, nextFragment)
+//                            .addToBackStack(null)
+//                            .commit()
                     }
-                    mainActivity.supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView_main, nextFragment)
-                        .addToBackStack(null)
-                        .commit()
                 }
             }
         }

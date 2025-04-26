@@ -172,6 +172,8 @@ class GroupFragment : Fragment() {
 
     fun initView() {
         viewModel.getSchoolGroupRanking(mainActivity, null)
+        viewModel.getMyGroupList(mainActivity)
+
         mainActivity.hideBottomNavigation(false)
 
         binding.run {

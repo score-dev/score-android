@@ -86,6 +86,9 @@ class GroupViewModel: ViewModel() {
                         tempGroupList.add(groupItem)
                     }
 
+                    val groupIdList = tempGroupList.map { it.id }
+                    MyApplication.myGroupList = groupIdList
+
                     myGroupList.value = tempGroupList
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
