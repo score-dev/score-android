@@ -2,6 +2,7 @@ package com.team.score.Group.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,7 +12,8 @@ import com.team.score.databinding.RowGroupMateBinding
 
 class GroupMateAdapter(
     private var activity: MainActivity,
-    private var mates: List<GroupMateResponse>?
+    private var mates: List<GroupMateResponse>?,
+    private var isMyGroup: Boolean
 ) :
     RecyclerView.Adapter<GroupMateAdapter.ViewHolder>() {
 
@@ -49,6 +51,12 @@ class GroupMateAdapter(
             textViewNickname.text = item?.nickname
             Glide.with(holder.itemView.context).load(item?.profileImgUrl)
                 .into(imageViewProfile)
+
+            if(isMyGroup) {
+                buttonNext.visibility = View.VISIBLE
+            } else {
+                buttonNext.visibility = View.GONE
+            }
         }
     }
 
