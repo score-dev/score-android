@@ -1,28 +1,44 @@
-package com.team.score.Record.BottomSheet
+package com.team.score.Mypage
 
-import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.kakao.sdk.talk.TalkApiClient
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.DefaultTemplate
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.share.WebSharerClient
+import com.kakao.sdk.template.model.Button
+import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FriendResponse
+import com.team.score.API.weather.response.Main
+import com.team.score.MainActivity
+import com.team.score.R
 import com.team.score.Record.adapter.MateAdapter
 import com.team.score.Record.viewModel.RecordViewModel
-import com.team.score.databinding.FragmentRecordFeedMateBottomSheetBinding
+import com.team.score.Utils.MyApplication
+import com.team.score.databinding.FragmentMateBinding
 
-class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: MutableList<FriendResponse>?) : BottomSheetDialogFragment() {
-    lateinit var binding: FragmentRecordFeedMateBottomSheetBinding
+
+class MateFragment : Fragment() {
+
+    lateinit var binding: FragmentMateBinding
+    lateinit var mainActivity: MainActivity
     private val viewModel: RecordViewModel by lazy {
         ViewModelProvider(requireActivity())[RecordViewModel::class.java]
     }
 
-    lateinit var exerciseMateAdapter: MateAdapter
+    lateinit var mateAdapter: MateAdapter
 
     var isLoading = true
     var isLastPage = false
@@ -30,27 +46,21 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
     var currentPage = 0
     val pageSize = 20
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
+    var mates: MutableList<FriendResponse>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRecordFeedMateBottomSheetBinding.inflate(inflater, container, false)
+
+        binding = FragmentMateBinding.inflate(layoutInflater)
+        mainActivity = activity as MainActivity
 
         initAdapter()
         observeViewModel()
 
         binding.run {
-            layoutSearch.editTextSearch.run {
-                hint = "메이트 검색"
-                setOnEditorActionListener { v, actionId, event ->
-                    viewModel.getSearchExerciseFriend(activity, layoutSearch.editTextSearch.text.toString())
-
-                    true
-                }
+            buttonKakao.setOnClickListener {
             }
 
             recyclerViewMate.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -63,7 +73,7 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
                     if (!isLoading && !isLastPage && lastVisible >= totalItemCount - 1 && !(isFirstPage == true && isLastPage == true)) {
                         Log.d("##", "reload")
                         isLoading = true
-                        viewModel.getFriendList(activity, currentPage)
+                        viewModel.getFriendList(mainActivity, currentPage)
                     }
                 }
             })
@@ -77,6 +87,7 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
         initView()
     }
 
+
     fun observeViewModel() {
         viewModel.run {
             friendList.observe(viewLifecycleOwner) { friendsResponse ->
@@ -85,11 +96,11 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
                 }
 
                 binding.recyclerViewMate.apply {
-                    adapter = exerciseMateAdapter
+                    adapter = mateAdapter
                     layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                 }
 
-                if (currentPage == 0) exerciseMateAdapter.clearFriends()
+                if (currentPage == 0) mateAdapter.clearFriends()
 
                 val friendsList = mutableListOf<FriendResponse>()
                 for (i in 0..<(mates?.size ?: 0)) {
@@ -102,7 +113,7 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
                     )
                 }
 
-                exerciseMateAdapter.addFriends(friendsList)
+                mateAdapter.addFriends(friendsList)
 
                 // 다음 페이지 준비
                 isLoading = false
@@ -118,52 +129,35 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
                 // 첫 페이지 확인
                 isFirstPage = it
             }
-
-            searchFriendList.observe(viewLifecycleOwner) { friendsResponse ->
-                if (friendsResponse != null) {
-                    for (friends in friendsResponse) {
-                        mates?.add(friends)
-                    }
-                }
-
-                binding.recyclerViewMate.apply {
-                    adapter = exerciseMateAdapter
-                    layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                }
-
-                if (currentPage == 0) exerciseMateAdapter.clearFriends()
-
-                val friendsList = mutableListOf<FriendResponse>()
-                for (i in 0..<(mates?.size ?: 0)) {
-                    friendsList.add(
-                        FriendResponse(
-                            mates?.get(i)?.id!!,
-                            mates?.get(i)?.nickname!!,
-                            mates?.get(i)?.profileImgUrl!!
-                        )
-                    )
-                }
-
-                exerciseMateAdapter.addFriends(friendsList)
-            }
         }
     }
 
     fun initAdapter() {
-        exerciseMateAdapter = MateAdapter(activity).apply {
+        mateAdapter = MateAdapter(mainActivity).apply {
             itemClickListener = object : MateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
-                    dismiss()
+
                 }
             }
         }
     }
 
     fun initView() {
-        exerciseMateAdapter.clearFriends()
+        mateAdapter.clearFriends()
 
         currentPage = 0
         isLastPage = false
         isLoading = true
+
+        viewModel.getFriendList(mainActivity, currentPage)
+
+        binding.run {
+            toolbar.run {
+                textViewHead.text = "내 친구"
+                buttonBack.setOnClickListener {
+                    fragmentManager?.popBackStack()
+                }
+            }
+        }
     }
 }

@@ -51,7 +51,10 @@ class MypageMainFragment : Fragment() {
 
         binding.run {
             buttonMate.setOnClickListener {
-
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, MateFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
 
             buttonEditProfile.setOnClickListener {

@@ -8,10 +8,10 @@ import com.bumptech.glide.Glide
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.databinding.RowMateBinding
 
-class FeedExerciseMateAdapter(
+class MateAdapter(
     private var context: Context,
 ) :
-    RecyclerView.Adapter<FeedExerciseMateAdapter.ViewHolder>() {
+    RecyclerView.Adapter<MateAdapter.ViewHolder>() {
 
     private var onItemClickListener: ((Int) -> Unit)? = null
 
