@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.team.score.API.response.group.GroupMateResponse
+import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.MainActivity
-import com.team.score.databinding.RowGroupMateBinding
+import com.team.score.Utils.MyApplication
+import com.team.score.databinding.RowGroupSearchBinding
+import com.team.score.databinding.RowSearchWordBinding
 
-class GroupMateAdapter(
+class RecentSearchGroupKeywordAdapter(
     private var activity: MainActivity,
-    private var mates: List<GroupMateResponse>?,
-    private var isMyGroup: Boolean
+    private var keywords: List<String>?
 ) :
-    RecyclerView.Adapter<GroupMateAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecentSearchGroupKeywordAdapter.ViewHolder>() {
 
     private var onItemClickListener: ((Int) -> Unit)? = null
     private var context: Context? = null
@@ -24,8 +25,8 @@ class GroupMateAdapter(
         onItemClickListener = listener
     }
 
-    fun updateList(newMates: List<GroupMateResponse>?) {
-        mates = newMates
+    fun updateList(newKeywords: List<String>?) {
+        keywords = newKeywords
         notifyDataSetChanged()
     }
 
@@ -38,32 +39,27 @@ class GroupMateAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
         val binding =
-            RowGroupMateBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RowSearchWordBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mates?.get(position)
 
         with(holder.binding) {
-            textViewNumber.text = "${position + 1}"
-            textViewNickname.text = item?.nickname
-            Glide.with(holder.itemView.context).load(item?.profileImgUrl)
-                .into(imageViewProfile)
-
-            if(isMyGroup) {
-                buttonNext.visibility = View.VISIBLE
-            } else {
-                buttonNext.visibility = View.GONE
-            }
+           textViewSearch.text = keywords?.get(position) ?: ""
         }
     }
 
-    override fun getItemCount() = (mates?.size ?: 0)
+    override fun getItemCount() = (keywords?.size ?: 0)
 
-    inner class ViewHolder(val binding: RowGroupMateBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: RowSearchWordBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
+            binding.buttonDelete.setOnClickListener {
+                MyApplication.preferences.removeRecentSearch(activity, MyApplication.preferences.getRecentSearchesLimited(activity).get(position))
+                updateList(MyApplication.preferences.getRecentSearchesLimited(activity))
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.onItemClick(adapterPosition)
 

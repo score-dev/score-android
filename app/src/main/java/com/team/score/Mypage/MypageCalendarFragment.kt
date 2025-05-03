@@ -79,6 +79,8 @@ class MypageCalendarFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun initView() {
         binding.run {
+            root.requestLayout()
+
             val daysInMonth = getDaysInMonth(today.year, today.monthValue)
 
             Log.d("스코어", "daysInMonth : ${daysInMonth}")

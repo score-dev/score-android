@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.response.user.FeedListResponse
+import com.team.score.Group.MyGroupRankingFragment
 import com.team.score.MainActivity
 import com.team.score.Mypage.Adapter.FeedAdapter
 import com.team.score.R
@@ -154,10 +155,11 @@ class MypageFeedFragment : Fragment() {
         // 기존 리스트 초기화
         feedAdapter.clearFeeds()
 
-
         currentPage = 0
         isLastPage = false
         isLoading = true
+
+        binding.root.requestLayout()
 
         viewModel.getFeedList(mainActivity, currentPage)
     }

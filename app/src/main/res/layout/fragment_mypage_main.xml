@@ -233,7 +233,7 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/pagerTab"
                 android:layout_width="match_parent"
-                android:layout_height="600dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/tab"
                 app:layout_constraintStart_toStartOf="@id/tab"

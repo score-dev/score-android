@@ -2,19 +2,13 @@ package com.team.score.Group.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupUnexercisedMateResponse
-import com.team.score.API.response.group.MyGroupResponse
-import com.team.score.API.response.home.HomeGroupUnexercisedMemebrInfo
 import com.team.score.MainActivity
 import com.team.score.R
-import com.team.score.databinding.RowGroupMateBinding
 import com.team.score.databinding.RowGroupUnexercisedMemberBinding
-import com.team.score.databinding.RowMyGroupBinding
 
 class GroupUnexercisedMateAdapter(
     private var activity: MainActivity,

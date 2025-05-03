@@ -15,6 +15,7 @@ import com.team.score.Group.adapter.GroupUnexercisedMateAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
+import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentGroupMateListBinding
 
 class GroupMateListFragment : Fragment() {
@@ -22,7 +23,7 @@ class GroupMateListFragment : Fragment() {
     lateinit var binding: FragmentGroupMateListBinding
     lateinit var mainActivity: MainActivity
     private val viewModel: GroupViewModel by lazy {
-        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+        ViewModelProvider(this)[GroupViewModel::class.java]
     }
     private val homeViewModel: HomeViewModel by lazy {
         ViewModelProvider(requireActivity())[HomeViewModel::class.java]
@@ -32,6 +33,8 @@ class GroupMateListFragment : Fragment() {
     lateinit var groupUnexercisedMateAdapter : GroupUnexercisedMateAdapter
     var getGroupMateInfo: List<GroupMateResponse>? = null
     var getGroupUnexercisedMateInfo: List<GroupUnexercisedMateResponse>? = null
+
+    var isMyGroup = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,19 +56,32 @@ class GroupMateListFragment : Fragment() {
     }
 
     fun initView() {
-        viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
-        viewModel.getGroupUnexercisedMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
-
         binding.run {
-            textViewGroupName.text = "${viewModel.groupDetail.value?.groupName} 메이트"
+            root.requestLayout()
+
+            isMyGroup = MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)
+            if(isMyGroup) {
+                viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
+                viewModel.getGroupUnexercisedMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
+
+                textViewGroupName.text = "${viewModel.groupDetail.value?.groupName} 메이트"
+            } else {
+                viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
+
+                textViewGroupName.visibility = View.GONE
+                textViewUnexercisedMate.visibility = View.GONE
+                recyclerViewUnexercisedMember.visibility = View.GONE
+            }
         }
     }
 
     fun initAdapter() {
-        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo).apply {
+        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo, isMyGroup).apply {
             itemClickListener = object : GroupMateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
+                    if(MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)) {
 
+                    }
                 }
             }
         }

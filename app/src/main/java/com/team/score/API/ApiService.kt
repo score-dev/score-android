@@ -6,15 +6,15 @@ import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.GroupUnexercisedMateResponse
-import com.team.score.API.response.group.MyGroupResponse
+import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
+import com.team.score.API.response.group.SearchGroupResponse
 import com.team.score.API.response.home.HomeResponse
 import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
-import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.API.response.user.BlockedMateListResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
@@ -92,7 +92,7 @@ interface ApiService {
     fun getMyGroupList(
         @Header("Authorization") token: String,
         @Query("id") id: Int
-    ): Call<List<MyGroupResponse>>
+    ): Call<List<GroupInfoResponse>>
 
     // 그룹 상세 조회
     @GET("score/groups/info")
@@ -119,6 +119,21 @@ interface ApiService {
         @Query("localDate") localDateId: String?,
     ): Call<SchoolGroupRankingResponse>
 
+    // 학교 그룹 검색
+    @GET("score/school/search")
+    fun searchSchoolGroup(
+        @Header("Authorization") token: String,
+        @Query("schoolId") schoolId: Int,
+        @Query("keyword") keyword: String?,
+    ): Call<SearchGroupResponse>
+
+    // 학교 추천 그룹
+    @GET("score/school/recommend/recent")
+    fun getRecommendGroup(
+        @Header("Authorization") token: String,
+        @Query("schoolCode") schoolCode: String
+    ): Call<List<GroupInfoResponse>>
+
     // 그룹 내 랭킹 조회
     @GET("score/ranking/group")
     fun getGroupRanking(
@@ -134,7 +149,7 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("groupId") groupId: Int,
         @Query("page") page: Int
-    ): Call<PagingResponse<GroupFeedListResponse>>
+    ): Call<PagingResponse<FeedListResponse>>
 
     // 그룹 내 메이트 조회
     @GET("score/groups/mates/list")

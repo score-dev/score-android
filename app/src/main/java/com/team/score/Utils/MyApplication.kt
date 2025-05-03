@@ -57,6 +57,9 @@ class MyApplication : Application() {
         // group
         var groupImage: MultipartBody.Part? = null
 
+        // 내 그룹 리스트
+        var myGroupList: List<Int> = emptyList()
+
         // record
         var recordTimer = 0
         var locationList = mutableListOf<LatLng>()
