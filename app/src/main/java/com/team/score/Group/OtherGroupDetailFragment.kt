@@ -56,9 +56,9 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
         binding.run {
             buttonParticipate.setOnClickListener {
                 // 다이얼로그
-                val description = if(getGroupDetail?.private == true) { "‘000’ 그룹 비밀번호를 입력해주세요" } else { "그룹 가입 신청합니다!" }
+                val description = if(getGroupDetail?.private == true) { "${getGroupDetail?.groupName} 그룹 비밀번호를 입력해주세요" } else { "그룹 가입 신청합니다!" }
 
-                val dialog = EnterGroupDialog(this@OtherGroupDetailFragment, description, "취소", "확인")
+                val dialog = EnterGroupDialog(this@OtherGroupDetailFragment, description, "취소", "확인", getGroupDetail?.private ?: false ,groupId)
                 // 알림창이 띄워져있는 동안 배경 클릭 막기
                 dialog.isCancelable = false
                 activity?.let {
@@ -144,10 +144,5 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
 
     override fun onClickRightButton() {
         // 그룹 가입 신청
-        if(getGroupDetail?.private == true) {
-            
-        } else {
-
-        }
     }
 }
