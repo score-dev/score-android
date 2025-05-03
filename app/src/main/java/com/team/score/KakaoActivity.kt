@@ -21,9 +21,40 @@ class KakaoActivity : AppCompatActivity() {
 
         binding = ActivityKakaoBinding.inflate(layoutInflater)
 
+        val uri = intent?.data
+        val userId = uri?.getQueryParameter("userId")
+        val nickname = uri?.getQueryParameter("nickname")
+        val profileImage = uri?.getQueryParameter("userProfileImage")
+
+        binding.run {
+            Glide.with(this@KakaoActivity).load(profileImage).into(imageViewProfile)
+            textViewMateName.text = nickname
+
+            buttonAddMate.setOnClickListener {
+
+            }
+
+            buttonClose.setOnClickListener {
+                
+            }
+        }
 
         setContentView(binding.root)
     }
 
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+
+        val uri = intent?.data
+        val userId = uri?.getQueryParameter("userId")
+        val nickname = uri?.getQueryParameter("nickname")
+        val profileImage = uri?.getQueryParameter("userProfileImage")
+
+        binding.run {
+            Glide.with(this@KakaoActivity).load(profileImage).into(imageViewProfile)
+            textViewMateName.text = nickname
+        }
+    }
 }

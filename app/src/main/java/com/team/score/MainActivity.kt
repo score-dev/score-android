@@ -1,9 +1,12 @@
 package com.team.score
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresPermission
@@ -15,6 +18,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.team.score.Group.GroupFragment
 import com.team.score.Home.HomeFragment
+import com.team.score.Mypage.MypageMainFragment
 import com.team.score.Record.RecordFragment
 import com.team.score.Utils.DistanceUtil
 import com.team.score.Utils.MyApplication
@@ -41,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        initDeepLink(intent)
+
         binding.run {
             fabRecord.setOnClickListener {
                 supportFragmentManager.beginTransaction()
@@ -56,6 +62,27 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setBottomNavigationView()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent) // 새로운 Intent 설정
+
+        intent.let {
+            if (it != null) {
+                initDeepLink(it)
+            }
+        } // 앱 실행 중 알림 클릭 처리
+    }
+
+    private fun initDeepLink(intent: Intent) {
+        intent?.data?.let { uri ->
+
+            val kakaoIntent = Intent(this, KakaoActivity::class.java).apply {
+                data = uri // 딥링크 그대로 넘기기
+            }
+            startActivity(kakaoIntent)
+        }
     }
 
     private fun setBottomNavigationView() {
