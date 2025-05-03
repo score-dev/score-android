@@ -127,6 +127,13 @@ interface ApiService {
         @Query("keyword") keyword: String?,
     ): Call<SearchGroupResponse>
 
+    // 학교 추천 그룹
+    @GET("score/school/recommend/recent")
+    fun getRecommendGroup(
+        @Header("Authorization") token: String,
+        @Query("schoolCode") schoolCode: String
+    ): Call<List<GroupInfoResponse>>
+
     // 그룹 내 랭킹 조회
     @GET("score/ranking/group")
     fun getGroupRanking(

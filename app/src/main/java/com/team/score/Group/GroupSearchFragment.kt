@@ -163,6 +163,8 @@ class GroupSearchFragment : Fragment() {
     fun initView() {
         schoolId = arguments?.getInt("schoolId") ?: 0
 
+        viewModel.getRecommendGroup(mainActivity, schoolId.toString())
+
         binding.run {
             searchBar.editTextSearch.hint = "그룹 이름을 입력해주세요"
             layoutSearchEmpty.visibility = View.VISIBLE

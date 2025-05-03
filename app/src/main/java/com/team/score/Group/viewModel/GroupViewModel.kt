@@ -17,7 +17,7 @@ import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.group.SearchGroupResponse
 import com.team.score.API.response.record.FeedEmotionResponse
-import com.team.score.API.response.record.GroupFeedListResponse
+import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.CreateGroupCompleteFragment
 import com.team.score.MainActivity
 import com.team.score.R
@@ -35,6 +35,7 @@ class GroupViewModel: ViewModel() {
     var myGroupList = MutableLiveData<MutableList<GroupInfoResponse>>()
 
     var searchGroupList = MutableLiveData<MutableList<GroupInfoResponse>>()
+    var recommendGroupList = MutableLiveData<MutableList<GroupInfoResponse>>()
 
     var groupDetail = MutableLiveData<GroupDetailResponse?>()
     var groupRanking = MutableLiveData<GroupRankingResponse?>()
@@ -256,6 +257,66 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<SearchGroupResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 학교 그룹 추천
+    fun getRecommendGroup(activity: MainActivity, schoolCode: String) {
+
+        val tempGroupList = mutableListOf<GroupInfoResponse>()
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getRecommendGroup(tokenManager.getAccessToken().toString(), schoolCode).enqueue(object :
+            Callback<List<GroupInfoResponse>> {
+            override fun onResponse(
+                call: Call<List<GroupInfoResponse>>,
+                response: Response<List<GroupInfoResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: List<GroupInfoResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    val resultGroupList = result ?: emptyList()
+
+                    for (group in resultGroupList) {
+
+                        val groupItem = GroupInfoResponse(
+                            id = group.id,
+                            name = group.name,
+                            description = group.description,
+                            groupImg = group.groupImg,
+                            userLimit = group.userLimit,
+                            currentMembers = group.currentMembers,
+                            recentMembersPic = group.recentMembersPic,
+                            otherMembers = group.otherMembers,
+                            private = group.private
+                        )
+
+                        tempGroupList.add(groupItem)
+                    }
+
+                    recommendGroupList.value = tempGroupList
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: List<GroupInfoResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<GroupInfoResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }
