@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.team.score.API.TokenManager
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.Group.adapter.GroupMemberOthersRankingAdapter
@@ -78,6 +79,8 @@ class MyGroupRankingFragment : Fragment() {
         mainActivity.hideBottomNavigation(false)
 
         binding.run {
+            root.requestLayout()
+
             val weekInfo = getCurrentWeekInfo()
             textViewWeekMonth.text = "${weekInfo.month}월 ${weekInfo.weekOfMonth}주차"
             textViewWeekDays.text = "${weekInfo.startDate} ~ ${weekInfo.endDate}"
@@ -144,6 +147,21 @@ class MyGroupRankingFragment : Fragment() {
                                 .into(layoutGroupRanking1.imageViewMemberProfile)
                             layoutGroupRanking1.textViewNickname.text = top3.nickname
                             layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "+${top3.weeklyLevelIncrement / 500}Lv"
+                        }
+
+                        var myRanking = getGroupRankingData?.rankersInfo?.find { it.userId == TokenManager(mainActivity).getUserId() }
+                        if(myRanking != null) {
+                            layoutGroupMyRanking.run {
+                                textViewGroupTotalExerciseTimeValue.text = "${myRanking.weeklyExerciseTime?.div(60)}시간"
+                                textViewGroupLevelValue.text = "${myRanking.weeklyLevelIncrement}"
+                                textViewGroupRankingValue.text = "${myRanking.rankNum}위"
+                            }
+                        } else {
+                            layoutGroupMyRanking.run {
+                                textViewGroupTotalExerciseTimeValue.text = "-시간"
+                                textViewGroupLevelValue.text = "-"
+                                textViewGroupRankingValue.text = "-위"
+                            }
                         }
                     }
                 }

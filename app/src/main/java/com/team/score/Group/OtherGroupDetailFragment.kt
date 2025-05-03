@@ -45,6 +45,12 @@ class OtherGroupDetailFragment : Fragment() {
 
         groupId = arguments?.getInt("groupId") ?: 0
 
+        // Fragment 리스트 설정
+        fragmentList = listOf(
+            OtherGroupFeedListFragment.newInstance(groupId),
+            MyGroupRankingFragment.newInstance(groupId),
+            GroupMateListFragment.newInstance(groupId)
+        )
 
         return binding.root
     }
