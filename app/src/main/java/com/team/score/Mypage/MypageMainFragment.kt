@@ -53,6 +53,7 @@ class MypageMainFragment : Fragment() {
             buttonMate.setOnClickListener {
 
             }
+
             buttonEditProfile.setOnClickListener {
                 mainActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_main, MypageProfileEditFragment())
@@ -105,6 +106,8 @@ class MypageMainFragment : Fragment() {
         mainActivity.hideBottomNavigation(false)
 
         binding.run {
+            root.requestLayout()
+
             // 탭에 표시할 이름
             val tabName = arrayOf("피드", "캘린더")
 

@@ -202,6 +202,8 @@ class HomeFragment : Fragment() {
         mainActivity.hideBottomNavigation(false)
 
         binding.run {
+            root.requestLayout()
+            
             layoutWeeklyResult.recyclerViewGraph.visibility = View.INVISIBLE
             toolbar.layoutMypage.setOnClickListener {
                 mainActivity.supportFragmentManager.beginTransaction()
