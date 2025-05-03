@@ -88,6 +88,8 @@ object TimeUtil {
     // 기간 계산 (00분 전)
     @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeAgo(timeString: String): String {
+        if (timeString.isNullOrBlank()) return "방금 전"
+
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         val time = LocalDateTime.parse(timeString, formatter)
         val now = LocalDateTime.now()

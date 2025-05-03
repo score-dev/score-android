@@ -30,6 +30,9 @@ import retrofit2.Response
 
 class GroupViewModel: ViewModel() {
 
+    var isValidPassword = MutableLiveData<Boolean?>()
+    var isParticipated = MutableLiveData<Boolean?>()
+
     var schoolGroupRanking = MutableLiveData<SchoolGroupRankingResponse?>()
 
     var myGroupList = MutableLiveData<MutableList<GroupInfoResponse>>()
@@ -161,6 +164,89 @@ class GroupViewModel: ViewModel() {
             override fun onFailure(call: Call<Int>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 그룹 참여 신청
+    fun participateGroup(activity: MainActivity, groupId: Int) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.participateGroup(tokenManager.getAccessToken().toString(), groupId, tokenManager.getUserId()).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    isParticipated.value = true
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                    isParticipated.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+                isParticipated.value = false
+            }
+        })
+    }
+
+    // 그룹 비밀번호 확인
+    fun verifyGroupPassword(activity: MainActivity, groupId: Int, password: String) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.verifyGroupPassword(tokenManager.getAccessToken().toString(), password, groupId).enqueue(object :
+            Callback<Boolean> {
+            override fun onResponse(
+                call: Call<Boolean>,
+                response: Response<Boolean>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: Boolean? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    isValidPassword.value = result
+
+                    if(result == true) {
+                        participateGroup(activity, groupId)
+                    }
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: Boolean? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                    isValidPassword.value = null
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+
+                isValidPassword.value = null
             }
         })
     }

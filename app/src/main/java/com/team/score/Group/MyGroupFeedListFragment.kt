@@ -29,7 +29,7 @@ class MyGroupFeedListFragment : Fragment() {
     lateinit var mainActivity: MainActivity
 
     private val viewModel: GroupViewModel by lazy {
-        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+        ViewModelProvider(this)[GroupViewModel::class.java]
     }
 
     lateinit var feedAdapter: MyGroupFeedAdapter

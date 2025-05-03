@@ -111,6 +111,22 @@ interface ApiService {
         @Part file: MultipartBody.Part
     ): Call<Int>
 
+    // 그룹 가입 신청
+    @GET("score/groups/join/request")
+    fun participateGroup(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("userId") userId: Int
+    ): Call<String>
+
+    // 그룹 가입 신청
+    @GET("score/groups/join/verify")
+    fun verifyGroupPassword(
+        @Header("Authorization") token: String,
+        @Query("input") input: String,
+        @Query("groupId") groupId: Int
+    ): Call<Boolean>
+
     // 학교 그룹 랭킹
     @GET("score/ranking/school")
     fun getSchoolGroupRanking(
