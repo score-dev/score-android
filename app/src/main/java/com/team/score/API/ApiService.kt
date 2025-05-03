@@ -15,7 +15,6 @@ import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
-import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.API.response.user.BlockedMateListResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
@@ -143,7 +142,7 @@ interface ApiService {
         @Query("userId") userId: Int,
         @Query("groupId") groupId: Int,
         @Query("page") page: Int
-    ): Call<PagingResponse<GroupFeedListResponse>>
+    ): Call<PagingResponse<FeedListResponse>>
 
     // 그룹 내 메이트 조회
     @GET("score/groups/mates/list")

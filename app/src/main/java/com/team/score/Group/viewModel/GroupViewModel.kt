@@ -41,7 +41,7 @@ class GroupViewModel: ViewModel() {
     var groupMateList = MutableLiveData<MutableList<GroupMateResponse>>()
     var groupUnexercisedMateList = MutableLiveData<MutableList<GroupUnexercisedMateResponse>>()
 
-    var groupFeedList = MutableLiveData<MutableList<GroupFeedListResponse>>()
+    var groupFeedList = MutableLiveData<MutableList<FeedListResponse>>()
     var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
     var feedEmotion: MutableLiveData<MutableList<FeedEmotionResponse>?> = MutableLiveData()
@@ -343,21 +343,21 @@ class GroupViewModel: ViewModel() {
     // 그룹 피드 리스트 정보
     fun getGroupFeedList(activity: Activity, groupId: Int, currentPage: Int) {
 
-        val tempFeedList = mutableListOf<GroupFeedListResponse>()
+        val tempFeedList = mutableListOf<FeedListResponse>()
 
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
         apiClient.apiService.getGroupFeedList(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), groupId, currentPage).enqueue(object :
-            Callback<PagingResponse<GroupFeedListResponse>> {
+            Callback<PagingResponse<FeedListResponse>> {
             override fun onResponse(
-                call: Call<PagingResponse<GroupFeedListResponse>>,
-                response: Response<PagingResponse<GroupFeedListResponse>>
+                call: Call<PagingResponse<FeedListResponse>>,
+                response: Response<PagingResponse<FeedListResponse>>
             ) {
                 Log.d("##", "onResponse 성공: " + response.body().toString())
                 if (response.isSuccessful) {
                     // 정상적으로 통신이 성공된 경우
-                    val result: PagingResponse<GroupFeedListResponse>? = response.body()
+                    val result: PagingResponse<FeedListResponse>? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
                     lastFeed.value = (result?.last == true)
@@ -366,7 +366,7 @@ class GroupViewModel: ViewModel() {
                     val resultFeedList = result?.content ?: emptyList()
 
                     for (feed in resultFeedList) {
-                        val feedItem = GroupFeedListResponse(
+                        val feedItem = FeedListResponse(
                             feedId = feed.feedId,
                             uploaderNickname = feed.uploaderNickname ?: "",
                             uploaderProfileImgUrl = feed.uploaderProfileImgUrl ?: "",
@@ -388,7 +388,7 @@ class GroupViewModel: ViewModel() {
                     groupFeedList.value = tempFeedList
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
-                    var result: PagingResponse<GroupFeedListResponse>? = response.body()
+                    var result: PagingResponse<FeedListResponse>? = response.body()
                     Log.d("##", "onResponse 실패")
                     Log.d("##", "onResponse 실패: " + response.code())
                     Log.d("##", "onResponse 실패: " + response.body())
@@ -398,7 +398,7 @@ class GroupViewModel: ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<PagingResponse<GroupFeedListResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<PagingResponse<FeedListResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

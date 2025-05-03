@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FeedEmotionResponse
-import com.team.score.API.response.record.GroupFeedListResponse
+import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
@@ -36,18 +36,18 @@ class MyGroupFeedAdapter(
         onItemClickListener = listener
     }
 
-    private var feedList = mutableListOf<GroupFeedListResponse>()
+    private var feedList = mutableListOf<FeedListResponse>()
     private val feedEmotionMap = mutableMapOf<Int, List<FeedEmotionResponse>>()
     private var currentUserId: Int = TokenManager(activity).getUserId()
 
-    fun addFeeds(newFeeds: List<GroupFeedListResponse>) {
+    fun addFeeds(newFeeds: List<FeedListResponse>) {
         val start = feedList.size
         feedList.addAll(newFeeds)
         notifyItemRangeInserted(start, newFeeds.size)
     }
 
     fun clearFeeds() {
-        feedList = mutableListOf<GroupFeedListResponse>()
+        feedList = mutableListOf<FeedListResponse>()
         feedList.clear()
         notifyDataSetChanged()
     }

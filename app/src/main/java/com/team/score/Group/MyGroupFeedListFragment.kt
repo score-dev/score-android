@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.response.record.FeedEmotionResponse
-import com.team.score.API.response.record.GroupFeedListResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.weather.response.Main
 import com.team.score.Group.adapter.MyGroupFeedAdapter
@@ -41,7 +40,7 @@ class MyGroupFeedListFragment : Fragment() {
     var currentPage = 0
     val pageSize = 20
 
-    var getFeedList: MutableList<GroupFeedListResponse> = mutableListOf()
+    var getFeedList: MutableList<FeedListResponse> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
