@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.weather.response.Main
+import com.team.score.BasicDialog
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.Mypage.MypageFeedFragment
@@ -21,7 +22,7 @@ import com.team.score.R
 import com.team.score.Utils.TimeUtil.formatExerciseTime
 import com.team.score.databinding.FragmentOtherGroupDetailBinding
 
-class OtherGroupDetailFragment : Fragment() {
+class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
 
     lateinit var binding: FragmentOtherGroupDetailBinding
     lateinit var mainActivity: MainActivity
@@ -51,6 +52,20 @@ class OtherGroupDetailFragment : Fragment() {
             MyGroupRankingFragment.newInstance(groupId),
             GroupMateListFragment.newInstance(groupId)
         )
+
+        binding.run {
+            buttonParticipate.setOnClickListener {
+                // 다이얼로그
+                val description = if(getGroupDetail?.private == true) { "‘000’ 그룹 비밀번호를 입력해주세요" } else { "그룹 가입 신청합니다!" }
+
+                val dialog = EnterGroupDialog(this@OtherGroupDetailFragment, description, "취소", "확인")
+                // 알림창이 띄워져있는 동안 배경 클릭 막기
+                dialog.isCancelable = false
+                activity?.let {
+                    dialog.show(it.supportFragmentManager, "EnterGroupDialog")
+                }
+            }
+        }
 
         return binding.root
     }
@@ -127,4 +142,12 @@ class OtherGroupDetailFragment : Fragment() {
         override fun createFragment(position: Int): Fragment = fragments[position]
     }
 
+    override fun onClickRightButton() {
+        // 그룹 가입 신청
+        if(getGroupDetail?.private == true) {
+            
+        } else {
+
+        }
+    }
 }

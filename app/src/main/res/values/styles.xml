@@ -99,6 +99,16 @@
         <item name="android:background">@drawable/background_edittext</item>
     </style>
 
+    <style name="UnderLineEditText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textColor">#2A3038</item>
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColorHint">@color/text_color3</item>
+        <item name="android:backgroundTint">@color/grey3</item>
+    </style>
+
     <!-- 이미지 round style-->
     <style name="RoundSector50">
         <item name="cornerSizeTopLeft">50dp</item>
