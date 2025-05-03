@@ -61,6 +61,7 @@ class MateFragment : Fragment() {
 
         binding.run {
             buttonKakao.setOnClickListener {
+                shareToKakao(mainActivity)
             }
 
             recyclerViewMate.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -87,6 +88,51 @@ class MateFragment : Fragment() {
         initView()
     }
 
+    fun shareToKakao(context: Context) {
+        // FeedTemplate 생성
+        val feedTemplate = FeedTemplate(
+            content = Content(
+                title = "${MyApplication.userNickname}님이 스코어로 초대했어요!",
+                description = "#스코어 #운동 #같이해요",
+                imageUrl = "https://yourdomain.com/default-image.jpg", // 필수: 외부 이미지 URL
+                link = Link(
+                    webUrl = "https://play.google.com/store/apps/details?id=com.team.score",
+                    mobileWebUrl = "https://play.google.com/store/apps/details?id=com.team.score"
+                )
+            ),
+            buttons = listOf(
+                Button(
+                    title = "앱으로 보기",
+                    link = Link(
+                        androidExecutionParams = mapOf(
+                            "nickname" to "${MyApplication.userNickname}",
+                            "userId" to "${TokenManager(mainActivity).getUserId()}",
+                            "userProfileImage" to "${MyApplication.userInfo?.profileImgUrl}"),
+                    )
+                )
+            )
+        )
+
+        // 카카오링크 실행
+        if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
+            ShareClient.instance.shareDefault(context, feedTemplate) { linkResult, error ->
+                if (error != null) {
+                    Log.e("KakaoShare", "카카오톡 공유 실패", error)
+                } else if (linkResult != null) {
+                    context.startActivity(linkResult.intent)
+                    Log.d("KakaoShare", "카카오톡 공유 성공")
+                }
+            }
+        } else {
+            // 카카오톡 미설치 시 웹 공유 URL 생성
+            WebSharerClient.instance.makeDefaultUrl(feedTemplate)?.let { sharerUrl ->
+                val intent = Intent(Intent.ACTION_VIEW, sharerUrl)
+                context.startActivity(intent)
+            } ?: run {
+                Log.e("KakaoShare", "공유 URL 생성 실패")
+            }
+        }
+    }
 
     fun observeViewModel() {
         viewModel.run {
