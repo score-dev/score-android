@@ -108,13 +108,13 @@ class GroupSearchFragment : Fragment() {
                         }
 
                         // 전달할 Fragment 생성
-//                        val  nextFragment = MyGroupDetailFragment().apply {
-//                            arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
-//                        }
-//                        mainActivity.supportFragmentManager.beginTransaction()
-//                            .replace(R.id.fragmentContainerView_main, nextFragment)
-//                            .addToBackStack(null)
-//                            .commit()
+                        val  nextFragment = OtherGroupDetailFragment().apply {
+                            arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                        }
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_main, nextFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                 }
             }
