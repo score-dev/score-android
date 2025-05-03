@@ -27,7 +27,7 @@ class OtherGroupFeedListFragment : Fragment() {
     lateinit var binding: FragmentOtherGroupFeedListBinding
     lateinit var mainActivity: MainActivity
     private val viewModel: GroupViewModel by lazy {
-        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+        ViewModelProvider(this)[GroupViewModel::class.java]
     }
 
     lateinit var feedAdapter: FeedAdapter
