@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.team.score.API.TokenManager
 import com.team.score.Login.LoginFragment
 import com.team.score.R
 import com.team.score.databinding.FragmentOnboardingBinding
+import kotlin.math.min
 
 class OnboardingFragment : Fragment() {
 
@@ -45,12 +47,16 @@ class OnboardingFragment : Fragment() {
                     } else {
                         Log.d("##", "current item == totalPager")
                         // 마지막 페이지면 버튼을 비활성화하거나 다른 작업 수행
+                        TokenManager(onboardingActivity).saveEnter(false)
+
                         onboardingActivity.supportFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainerView_onboarding, LoginFragment())
                             .commit()
                     }
                 }
                 buttonSkip.setOnClickListener {
+                    TokenManager(onboardingActivity).saveEnter(false)
+
                     onboardingActivity.supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_onboarding, LoginFragment())
                         .commit()
