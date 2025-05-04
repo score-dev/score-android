@@ -52,6 +52,7 @@ class MyGroupListFragment : Fragment() {
                 override fun onItemClick(position: Int) {
                     val bundle = Bundle().apply {
                         putInt("groupId", getGroupInfo?.get(position)?.id ?: 0)
+                        putString("groupName", getGroupInfo?.get(position)?.name ?: "")
                     }
 
                     // 전달할 Fragment 생성

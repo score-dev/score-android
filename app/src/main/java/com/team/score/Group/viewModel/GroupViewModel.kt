@@ -16,6 +16,7 @@ import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.group.SearchGroupResponse
+import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.CreateGroupCompleteFragment
@@ -50,6 +51,8 @@ class GroupViewModel: ViewModel() {
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
     var feedEmotion: MutableLiveData<MutableList<FeedEmotionResponse>?> = MutableLiveData()
     val feedEmotionsMap = MutableLiveData<Map<Int, List<FeedEmotionResponse>>>()
+
+    var userInfo: MutableLiveData<UserInfoResponse> = MutableLiveData()
 
     // 내 그룹 리스트 정보
     fun getMyGroupList(activity: Activity) {
@@ -694,6 +697,43 @@ class GroupViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<List<GroupMateResponse>>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 메이트 정보 조회
+    fun getUserInfo(activity: Activity, userId: Int) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getUserInfo(userId, tokenManager.getAccessToken().toString()).enqueue(object :
+            Callback<UserInfoResponse> {
+            override fun onResponse(
+                call: Call<UserInfoResponse>,
+                response: Response<UserInfoResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: UserInfoResponse? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    userInfo.value = result!!
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: UserInfoResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

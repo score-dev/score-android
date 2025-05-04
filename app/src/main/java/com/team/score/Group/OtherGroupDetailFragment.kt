@@ -13,12 +13,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.team.score.API.response.group.GroupDetailResponse
-import com.team.score.API.weather.response.Main
-import com.team.score.BasicDialog
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
-import com.team.score.Mypage.MypageFeedFragment
-import com.team.score.R
 import com.team.score.Utils.TimeUtil.formatExerciseTime
 import com.team.score.databinding.FragmentOtherGroupDetailBinding
 
@@ -50,7 +46,7 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
         fragmentList = listOf(
             OtherGroupFeedListFragment.newInstance(groupId),
             MyGroupRankingFragment.newInstance(groupId),
-            GroupMateListFragment.newInstance(groupId)
+            GroupMateListFragment.newInstance(groupId, getGroupDetail?.groupName ?: "")
         )
 
         binding.run {

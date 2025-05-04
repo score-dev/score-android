@@ -11,13 +11,13 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import com.team.score.MainActivity
 import com.team.score.Mypage.Adapter.CalendarAdapter
-import com.team.score.databinding.FragmentMypageCalendarBinding
+import com.team.score.databinding.FragmentUserCalendarBinding
 import java.time.LocalDate
 import java.time.YearMonth
 
-class MypageCalendarFragment : Fragment() {
+class UserCalendarFragment : Fragment() {
 
-    lateinit var binding: FragmentMypageCalendarBinding
+    lateinit var binding: FragmentUserCalendarBinding
     lateinit var mainActivity: MainActivity
 
     // 선택된 날짜
@@ -37,7 +37,7 @@ class MypageCalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentMypageCalendarBinding.inflate(layoutInflater)
+        binding = FragmentUserCalendarBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
         binding.run {
@@ -130,6 +130,16 @@ class MypageCalendarFragment : Fragment() {
         val formattedMonthYear = date.format(formatter)
 
         return formattedMonthYear
+    }
+
+    companion object {
+        fun newInstance(userId: Int): UserCalendarFragment {
+            val fragment = UserCalendarFragment()
+            val bundle = Bundle()
+            bundle.putInt("userId", userId)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
 }

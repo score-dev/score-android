@@ -118,6 +118,7 @@ class GroupRelayAdapter(
             holder.itemView.setOnClickListener {
                 val bundle = Bundle().apply {
                     putInt("groupId", groupInfos?.get(position)?.groupId ?: 0)
+                    putString("groupName", groupInfos?.get(position)?.groupName ?: "")
                 }
 
                 // 전달할 Fragment 생성

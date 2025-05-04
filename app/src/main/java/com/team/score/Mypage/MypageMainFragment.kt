@@ -14,6 +14,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.team.score.API.TokenManager
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.MainActivity
 import com.team.score.Mypage.Setting.SettingFragment
@@ -32,11 +33,7 @@ class MypageMainFragment : Fragment() {
 
     var getUserInfo: UserInfoResponse? = null
 
-    // Fragment 리스트를 onCreateView에서만 설정
-    private val fragmentList = listOf(
-        MypageFeedFragment(),
-        MypageCalendarFragment()
-    )
+    private lateinit var fragmentList: List<Fragment>
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -46,6 +43,12 @@ class MypageMainFragment : Fragment() {
 
         binding = FragmentMypageMainBinding.inflate(inflater, container, false)
         mainActivity = activity as MainActivity
+
+        val userId = TokenManager(mainActivity).getUserId()
+        fragmentList = listOf(
+            UserFeedFragment.newInstance(userId),
+            UserCalendarFragment.newInstance(userId)
+        )
 
         observeViewModel()
 
@@ -104,7 +107,7 @@ class MypageMainFragment : Fragment() {
     }
 
     fun initView() {
-        viewModel.getUserInfo(mainActivity)
+        viewModel.getUserInfo(mainActivity, TokenManager(mainActivity).getUserId())
 
         mainActivity.hideBottomNavigation(false)
 

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.response.user.FeedListResponse
-import com.team.score.Group.MyGroupRankingFragment
+import com.team.score.Group.OtherGroupFeedListFragment
 import com.team.score.MainActivity
 import com.team.score.Mypage.Adapter.FeedAdapter
 import com.team.score.R
@@ -18,11 +18,11 @@ import com.team.score.Record.FeedDetailFragment
 import com.team.score.Record.RecordFragment
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.MyApplication
-import com.team.score.databinding.FragmentMypageFeedBinding
+import com.team.score.databinding.FragmentUserFeedBinding
 
-class MypageFeedFragment : Fragment() {
+class UserFeedFragment : Fragment() {
 
-    lateinit var binding: FragmentMypageFeedBinding
+    lateinit var binding: FragmentUserFeedBinding
     lateinit var mainActivity: MainActivity
     private val viewModel: RecordViewModel by lazy {
         ViewModelProvider(requireActivity())[RecordViewModel::class.java]
@@ -43,7 +43,7 @@ class MypageFeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentMypageFeedBinding.inflate(layoutInflater)
+        binding = FragmentUserFeedBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
         feedAdapter = FeedAdapter(requireContext()).apply {
             itemClickListener = object : FeedAdapter.OnItemClickListener {
@@ -88,7 +88,7 @@ class MypageFeedFragment : Fragment() {
                     if (!isLoading && !isLastPage && lastVisible >= totalItemCount - 1 && !(isFirstPage == true && isLastPage == true)) {
                         Log.d("##", "reload")
                         isLoading = true
-                        viewModel.getFeedList(mainActivity, currentPage)
+                        viewModel.getFeedList(mainActivity, arguments?.getInt("userId") ?: 0, currentPage)
                     }
                 }
             })
@@ -161,6 +161,16 @@ class MypageFeedFragment : Fragment() {
 
         binding.root.requestLayout()
 
-        viewModel.getFeedList(mainActivity, currentPage)
+        viewModel.getFeedList(mainActivity, arguments?.getInt("userId") ?: 0, currentPage)
+    }
+
+    companion object {
+        fun newInstance(userId: Int): UserFeedFragment {
+            val fragment = UserFeedFragment()
+            val bundle = Bundle()
+            bundle.putInt("userId", userId)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 }

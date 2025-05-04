@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.team.score.API.TokenManager
 import com.team.score.API.response.home.HomeResponse
 import com.team.score.Group.MyGroupDetailFragment
 import com.team.score.Group.MyGroupListFragment
@@ -197,7 +198,7 @@ class HomeFragment : Fragment() {
 
     fun initView() {
         viewModel.getHomeData(mainActivity)
-        mypageViewModel.getUserInfo(mainActivity)
+        mypageViewModel.getUserInfo(mainActivity, TokenManager(mainActivity).getUserId())
 
         mainActivity.hideBottomNavigation(false)
 

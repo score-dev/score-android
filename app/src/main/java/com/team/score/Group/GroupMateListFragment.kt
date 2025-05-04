@@ -15,6 +15,7 @@ import com.team.score.Group.adapter.GroupUnexercisedMateAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
+import com.team.score.R
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentGroupMateListBinding
 
@@ -64,7 +65,7 @@ class GroupMateListFragment : Fragment() {
                 viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
                 viewModel.getGroupUnexercisedMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
 
-                textViewGroupName.text = "${viewModel.groupDetail.value?.groupName} 메이트"
+                textViewGroupName.text = "${arguments?.getString("groupName") ?: ""} 메이트"
             } else {
                 viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
 
@@ -76,11 +77,24 @@ class GroupMateListFragment : Fragment() {
     }
 
     fun initAdapter() {
-        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo, isMyGroup).apply {
+        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo, MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)).apply {
             itemClickListener = object : GroupMateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     if(MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)) {
+                        var nextFragment = MateDetailFragment()
 
+                        val bundle = Bundle().apply {
+                            putInt("userId", getGroupMateInfo?.get(position)?.id ?: 0)
+                        }
+                        // 전달할 Fragment 생성
+                        nextFragment = MateDetailFragment().apply {
+                            arguments = bundle
+                        }
+
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_main, nextFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                 }
             }
@@ -135,10 +149,11 @@ class GroupMateListFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(groupId: Int): GroupMateListFragment {
+        fun newInstance(groupId: Int, groupName: String): GroupMateListFragment {
             val fragment = GroupMateListFragment()
             val bundle = Bundle()
             bundle.putInt("groupId", groupId)
+            bundle.putString("groupName", groupName)
             fragment.arguments = bundle
             return fragment
         }
