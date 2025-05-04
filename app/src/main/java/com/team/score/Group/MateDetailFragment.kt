@@ -1,13 +1,13 @@
-package com.team.score.Mypage
+package com.team.score.Group
 
 import android.os.Build
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -16,17 +16,20 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.team.score.API.TokenManager
 import com.team.score.API.response.login.UserInfoResponse
+import com.team.score.API.weather.response.Main
 import com.team.score.MainActivity
 import com.team.score.Mypage.Setting.SettingFragment
+import com.team.score.Mypage.UserCalendarFragment
+import com.team.score.Mypage.UserFeedFragment
 import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
 import com.team.score.Utils.TimeUtil.formatExerciseTimeToKorean
-import com.team.score.databinding.FragmentMypageMainBinding
+import com.team.score.databinding.FragmentMateDetailBinding
 
-class MypageMainFragment : Fragment() {
+class MateDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentMypageMainBinding
-    private lateinit var mainActivity: MainActivity
+    lateinit var binding: FragmentMateDetailBinding
+    lateinit var mainActivity: MainActivity
     private val viewModel: MypageViewModel by lazy {
         ViewModelProvider(requireActivity())[MypageViewModel::class.java]
     }
@@ -45,26 +48,10 @@ class MypageMainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = FragmentMypageMainBinding.inflate(inflater, container, false)
+        binding = FragmentMateDetailBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
         observeViewModel()
-
-        binding.run {
-            buttonMate.setOnClickListener {
-                mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_main, MateFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-
-            buttonEditProfile.setOnClickListener {
-                mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_main, MypageProfileEditFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
-        }
 
         return binding.root
     }
@@ -77,35 +64,34 @@ class MypageMainFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun observeViewModel() {
         viewModel.run {
-           userInfo.observe(viewLifecycleOwner) {
-               getUserInfo = it
+            userInfo.observe(viewLifecycleOwner) {
+                getUserInfo = it
 
-               binding.run {
-                   textViewNickname.text = getUserInfo?.nickname
-                   textViewSchoolGrade.text = "${getUserInfo?.schoolName} ${getUserInfo?.grade}학년"
-                   Glide.with(this@MypageMainFragment)
-                       .load(getUserInfo?.profileImgUrl)
-                       .into(imageViewProfile)
-                   textViewNotificationTime.text = "${formatExerciseTimeToKorean(getUserInfo?.goal ?: "00:00:00")}"
+                binding.run {
+                    textViewNickname.text = getUserInfo?.nickname
+                    textViewSchoolGrade.text = "${getUserInfo?.schoolName} ${getUserInfo?.grade}학년"
+                    Glide.with(mainActivity)
+                        .load(getUserInfo?.profileImgUrl)
+                        .into(imageViewProfile)
 
-                   // 레벨 layout
-                   layoutLevel.run {
-                       Glide.with(mainActivity).load(getUserInfo?.profileImgUrl).into(imageViewLevelProfile)
-                       textViewLevel.text = "Lv.${getUserInfo?.level}"
-                       textViewLevelPoint.text = "${500 - (getUserInfo?.point ?: 0)} 포인트"
+                    // 레벨 layout
+                    layoutLevel.run {
+                        Glide.with(mainActivity).load(getUserInfo?.profileImgUrl).into(imageViewLevelProfile)
+                        textViewLevel.text = "Lv.${getUserInfo?.level}"
+                        textViewLevelPoint.text = "${500 - (getUserInfo?.point ?: 0)} 포인트"
 
-                       val pointRatio = (getUserInfo?.point ?: 0) / 500f
-                       val params = graphLevelMyStatus.layoutParams as ConstraintLayout.LayoutParams
-                       params.matchConstraintPercentWidth = pointRatio
-                       graphLevelMyStatus.layoutParams = params
-                   }
-               }
-           }
+                        val pointRatio = (getUserInfo?.point ?: 0) / 500f
+                        val params = graphLevelMyStatus.layoutParams as ConstraintLayout.LayoutParams
+                        params.matchConstraintPercentWidth = pointRatio
+                        graphLevelMyStatus.layoutParams = params
+                    }
+                }
+            }
         }
     }
 
     fun initView() {
-        viewModel.getUserInfo(mainActivity, TokenManager(mainActivity).getUserId())
+        viewModel.getUserInfo(mainActivity, arguments?.getInt("userId") ?: 0)
 
         mainActivity.hideBottomNavigation(false)
 
@@ -117,8 +103,7 @@ class MypageMainFragment : Fragment() {
 
             pagerTab.bringToFront()
             toolbar.run {
-                textViewHead.bringToFront()
-                buttonSetting.bringToFront()
+                buttonKebab.bringToFront()
                 buttonBack.bringToFront()
             }
 
@@ -131,12 +116,9 @@ class MypageMainFragment : Fragment() {
             }.attach()
 
             toolbar.run {
-                textViewHead.text = "마이페이지"
-                buttonSetting.setOnClickListener {
-                    mainActivity.supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView_main, SettingFragment())
-                        .addToBackStack(null)
-                        .commit()
+                buttonKebab.setOnClickListener {
+                    // 메이트 차단 or 신고
+
                 }
                 buttonBack.setOnClickListener {
                     fragmentManager?.popBackStack()
@@ -155,4 +137,5 @@ class MypageMainFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment = fragments[position]
     }
+
 }

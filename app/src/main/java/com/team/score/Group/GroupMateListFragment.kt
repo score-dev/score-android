@@ -15,6 +15,7 @@ import com.team.score.Group.adapter.GroupUnexercisedMateAdapter
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
+import com.team.score.R
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentGroupMateListBinding
 
@@ -80,7 +81,20 @@ class GroupMateListFragment : Fragment() {
             itemClickListener = object : GroupMateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     if(MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)) {
+                        var nextFragment = MateDetailFragment()
 
+                        val bundle = Bundle().apply {
+                            putInt("userId", getGroupMateInfo?.get(position)?.id ?: 0)
+                        }
+                        // 전달할 Fragment 생성
+                        nextFragment = MateDetailFragment().apply {
+                            arguments = bundle
+                        }
+
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_main, nextFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                 }
             }

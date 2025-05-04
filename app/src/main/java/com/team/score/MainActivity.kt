@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.team.score.API.TokenManager
 import com.team.score.Group.GroupFragment
 import com.team.score.Home.HomeFragment
 import com.team.score.Login.viewModel.UserViewModel
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        viewModel.getUserInfo(this)
+        viewModel.getUserInfo(this, TokenManager(this).getUserId())
 
         initDeepLink(intent)
 

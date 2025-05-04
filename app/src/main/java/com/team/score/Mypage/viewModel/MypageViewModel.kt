@@ -30,11 +30,11 @@ class MypageViewModel: ViewModel() {
     var isAddMate: MutableLiveData<Boolean?> = MutableLiveData()
 
     // 유저 정보
-    fun getUserInfo(activity: Activity) {
+    fun getUserInfo(activity: Activity, userId: Int) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
-        apiClient.apiService.getUserInfo(tokenManager.getUserId(), tokenManager.getAccessToken().toString()).enqueue(object :
+        apiClient.apiService.getUserInfo(userId, tokenManager.getAccessToken().toString()).enqueue(object :
             Callback<UserInfoResponse> {
             override fun onResponse(
                 call: Call<UserInfoResponse>,

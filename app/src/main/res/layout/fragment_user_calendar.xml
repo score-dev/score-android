@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="20dp"
     android:paddingVertical="24dp"
-    tools:context=".Mypage.MypageCalendarFragment">
+    tools:context=".Mypage.UserCalendarFragment">
 
     <TextView
         android:id="@+id/textView_month_year"

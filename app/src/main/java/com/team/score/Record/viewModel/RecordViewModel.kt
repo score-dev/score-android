@@ -41,14 +41,14 @@ class RecordViewModel: ViewModel() {
     var firstFriend: MutableLiveData<Boolean> = MutableLiveData()
 
     // 피드 리스트 정보
-    fun getFeedList(activity: Activity, currentPage: Int) {
+    fun getFeedList(activity: Activity, userId: Int, currentPage: Int) {
 
         val tempFeedList = mutableListOf<FeedListResponse>()
 
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
-        apiClient.apiService.getFeedList(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), tokenManager.getUserId(), currentPage).enqueue(object :
+        apiClient.apiService.getFeedList(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), userId, currentPage).enqueue(object :
             Callback<PagingResponse<FeedListResponse>> {
             override fun onResponse(
                 call: Call<PagingResponse<FeedListResponse>>,
