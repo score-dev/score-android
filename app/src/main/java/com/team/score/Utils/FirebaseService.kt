@@ -32,11 +32,6 @@ class FirebaseService : FirebaseMessagingService() {
 
         // 알림 표시
         showNotification(title, body)
-
-        // 데이터 메시지 처리
-        if (message.data.isNotEmpty()) {
-
-        }
     }
 
     private fun showNotification(
