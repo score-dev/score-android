@@ -5,26 +5,20 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FriendResponse
-import com.team.score.BuildConfig
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.BottomSheet.RecordFeedMateBottomSheetFragment
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
-import com.team.score.Utils.DistanceUtil
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil.convertToSimpleIso
 import com.team.score.Utils.TimerManager
@@ -112,7 +106,7 @@ class RecordFeedUploadFragment : Fragment() {
     fun checkExerciseMates() {
         binding.run {
             if(isAlone) {
-                MyApplication.recordFeedInfo.othersId = null
+                MyApplication.recordFeedInfo.othersId = emptyList()
                 buttonNoExerciseMate.run {
                     setBackgroundResource(R.drawable.background_main_circle)
                     setTextColor(resources.getColor(R.color.white))
@@ -151,7 +145,7 @@ class RecordFeedUploadFragment : Fragment() {
 
     fun checkEnabled() {
         binding.run {
-            if(editTextPlace.text.isNotEmpty() && MyApplication.recordFeedInfo.feeling != null && (isAlone xor (MyApplication.recordFeedInfo?.othersId != null))) {
+            if(editTextPlace.text.isNotEmpty() && MyApplication.recordFeedInfo.feeling != null && (isAlone xor (MyApplication.recordFeedInfo.othersId?.size != 0))) {
                 buttonUpload.isEnabled = true
             } else {
                 buttonUpload.isEnabled = false
@@ -187,6 +181,7 @@ class RecordFeedUploadFragment : Fragment() {
 
             textViewWeatherValue.text = "${MyApplication.recordFeedInfo.temperature}°"
             textViewDustValue.text = MyApplication.recordFeedInfo.fineDust
+            editTextPlace.setText(MyApplication.recordFeedInfo.location)
 
             checkExerciseMates()
             highlightSelectedFeeling(MyApplication.recordFeedInfo.feeling)
