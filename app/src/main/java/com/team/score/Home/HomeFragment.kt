@@ -22,6 +22,7 @@ import com.team.score.API.response.home.HomeResponse
 import com.team.score.Group.MyGroupDetailFragment
 import com.team.score.Group.MyGroupListFragment
 import com.team.score.Group.adapter.MyGroupListAdapter
+import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.Home.adapter.GroupRelayAdapter
 import com.team.score.Home.adapter.WeeklyCalendarAdapter
 import com.team.score.Home.viewModel.HomeViewModel
@@ -41,6 +42,9 @@ class HomeFragment : Fragment() {
     lateinit var viewModel: HomeViewModel
     private val mypageViewModel: MypageViewModel by lazy {
         ViewModelProvider(requireActivity())[MypageViewModel::class.java]
+    }
+    private val groupViewModel: GroupViewModel by lazy {
+        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
     }
 
     lateinit var weeklyGraphAdapter : WeeklyCalendarAdapter
@@ -78,6 +82,7 @@ class HomeFragment : Fragment() {
 
         initAdapter()
         observeViewModel()
+        groupViewModel.getMyGroupList(mainActivity)
 
         binding.run {
             layoutMore.setOnClickListener {

@@ -1,6 +1,7 @@
 package com.team.score.Group
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,7 @@ class MyGroupRankingFragment : Fragment() {
     lateinit var binding: FragmentMyGroupRankingBinding
     lateinit var mainActivity: MainActivity
     private val viewModel: GroupViewModel by lazy {
-        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
+        ViewModelProvider(this)[GroupViewModel::class.java]
     }
 
     lateinit var otherGroupMembersAdapter : GroupMemberOthersRankingAdapter
@@ -136,17 +137,17 @@ class MyGroupRankingFragment : Fragment() {
                         top3?.getOrNull(1)?.let { top2 ->
                             Glide.with(requireContext())
                                 .load(top2.profileImgUrl)
-                                .into(layoutGroupRanking1.imageViewMemberProfile)
-                            layoutGroupRanking1.textViewNickname.text = top2.nickname
-                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "+${top2.weeklyLevelIncrement / 500}Lv"
+                                .into(layoutGroupRanking2.imageViewMemberProfile)
+                            layoutGroupRanking2.textViewNickname.text = top2.nickname
+                            layoutGroupRanking2.textViewGroupMemberParticipationRate.text = "+${top2.weeklyLevelIncrement / 500}Lv"
                         }
 
                         top3?.getOrNull(2)?.let { top3 ->
                             Glide.with(requireContext())
                                 .load(top3.profileImgUrl)
-                                .into(layoutGroupRanking1.imageViewMemberProfile)
-                            layoutGroupRanking1.textViewNickname.text = top3.nickname
-                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "+${top3.weeklyLevelIncrement / 500}Lv"
+                                .into(layoutGroupRanking3.imageViewMemberProfile)
+                            layoutGroupRanking3.textViewNickname.text = top3.nickname
+                            layoutGroupRanking3.textViewGroupMemberParticipationRate.text = "+${top3.weeklyLevelIncrement / 500}Lv"
                         }
 
                         var myRanking = getGroupRankingData?.rankersInfo?.find { it.userId == TokenManager(mainActivity).getUserId() }

@@ -152,17 +152,17 @@ class GroupFragment : Fragment() {
                         top3?.getOrNull(1)?.let { top2 ->
                             Glide.with(requireContext())
                                 .load(top2.groupImg)
-                                .into(layoutGroupRanking1.imageViewGroupProfile)
-                            layoutGroupRanking1.textViewGroupName.text = top2.groupName
-                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "${top2.participateRatio}%"
+                                .into(layoutGroupRanking2.imageViewGroupProfile)
+                            layoutGroupRanking2.textViewGroupName.text = top2.groupName
+                            layoutGroupRanking2.textViewGroupMemberParticipationRate.text = "${top2.participateRatio}%"
                         }
 
                         top3?.getOrNull(2)?.let { top3 ->
                             Glide.with(requireContext())
                                 .load(top3.groupImg)
-                                .into(layoutGroupRanking1.imageViewGroupProfile)
-                            layoutGroupRanking1.textViewGroupName.text = top3.groupName
-                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "${top3.participateRatio}%"
+                                .into(layoutGroupRanking3.imageViewGroupProfile)
+                            layoutGroupRanking3.textViewGroupName.text = top3.groupName
+                            layoutGroupRanking3.textViewGroupMemberParticipationRate.text = "${top3.participateRatio}%"
                         }
                     }
                 }
