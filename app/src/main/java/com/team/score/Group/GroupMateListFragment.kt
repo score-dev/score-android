@@ -65,7 +65,7 @@ class GroupMateListFragment : Fragment() {
                 viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
                 viewModel.getGroupUnexercisedMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
 
-                textViewGroupName.text = "${viewModel.groupDetail.value?.groupName} 메이트"
+                textViewGroupName.text = "${arguments?.getString("groupName") ?: ""} 메이트"
             } else {
                 viewModel.getGroupMateList(mainActivity, arguments?.getInt("groupId") ?: 0)
 
@@ -77,7 +77,7 @@ class GroupMateListFragment : Fragment() {
     }
 
     fun initAdapter() {
-        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo, isMyGroup).apply {
+        groupMateAdapter = GroupMateAdapter(mainActivity, getGroupMateInfo, MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)).apply {
             itemClickListener = object : GroupMateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     if(MyApplication.myGroupList.contains(arguments?.getInt("groupId") ?: 0)) {
@@ -149,10 +149,11 @@ class GroupMateListFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(groupId: Int): GroupMateListFragment {
+        fun newInstance(groupId: Int, groupName: String): GroupMateListFragment {
             val fragment = GroupMateListFragment()
             val bundle = Bundle()
             bundle.putInt("groupId", groupId)
+            bundle.putString("groupName", groupName)
             fragment.arguments = bundle
             return fragment
         }

@@ -51,7 +51,7 @@ class MyGroupDetailFragment : Fragment() {
         fragmentList = listOf(
             MyGroupFeedListFragment.newInstance(groupId),
             MyGroupRankingFragment.newInstance(groupId),
-            GroupMateListFragment.newInstance(groupId)
+            GroupMateListFragment.newInstance(groupId, arguments?.getString("groupName") ?: "")
         )
 
         return binding.root

@@ -46,7 +46,7 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
         fragmentList = listOf(
             OtherGroupFeedListFragment.newInstance(groupId),
             MyGroupRankingFragment.newInstance(groupId),
-            GroupMateListFragment.newInstance(groupId)
+            GroupMateListFragment.newInstance(groupId, getGroupDetail?.groupName ?: "")
         )
 
         binding.run {
