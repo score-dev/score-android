@@ -7,15 +7,15 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.map.ReverseGeoCodingClient
+import com.team.score.API.map.response.ReverseGeocodingResponse
 import com.team.score.API.response.PagingResponse
-import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.weather.WeatherApiClient
 import com.team.score.API.weather.response.AirPollutionResponse
-import com.team.score.API.weather.response.Main
 import com.team.score.API.weather.response.WeatherResponse
 import com.team.score.MainActivity
 import com.team.score.R
@@ -26,6 +26,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class RecordViewModel: ViewModel() {
     var feedList = MutableLiveData<MutableList<FeedListResponse>>()
@@ -421,6 +422,45 @@ class RecordViewModel: ViewModel() {
             }
         })
     }
+
+    // reverse geocoding
+    fun getAddressByReverseGeocoding(activity: Activity, lat: Double, lon: Double) {
+        val apiClient = ReverseGeoCodingClient(activity)
+
+        apiClient.apiService.getAddress("$lon,$lat").enqueue(object :
+            Callback<ReverseGeocodingResponse> {
+            override fun onResponse(
+                call: Call<ReverseGeocodingResponse>,
+                response: Response<ReverseGeocodingResponse>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+
+                    var area1 = response.body()?.results?.get(0)?.region?.area1?.name
+                    var area2 = response.body()?.results?.get(0)?.region?.area2?.name
+                    var area3 = response.body()?.results?.get(0)?.region?.area3?.name
+
+                    MyApplication.recordFeedInfo.location = "${area1} ${area2} ${area3}"
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: ReverseGeocodingResponse? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<ReverseGeocodingResponse>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
 
     // 피드 저장
     fun uploadFeed(activity: MainActivity) {

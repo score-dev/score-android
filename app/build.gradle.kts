@@ -21,12 +21,13 @@ android {
         applicationId = "com.team.score"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "MAP_API_KEY", "\"${properties["map_client_id"]}\"")
+        buildConfigField("String", "MAP_SECRET_KEY", "\"${properties["map_secret_key"]}\"")
         buildConfigField("String","server_url",getApiKey("server_url"))
         buildConfigField("String","google_key",getApiKey("google_key"))
         buildConfigField("String", "KAKAO_APP_KEY", "\"${properties["kakao_key"]}\"")

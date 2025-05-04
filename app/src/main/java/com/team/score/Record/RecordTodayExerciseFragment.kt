@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.NaverMapSdk
@@ -78,6 +77,7 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
 
         viewModel.getWeather(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
         viewModel.getAirPollution(mainActivity, BuildConfig.weather_api_key, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
+        viewModel.getAddressByReverseGeocoding(mainActivity, MyApplication.locationList[0].latitude, MyApplication.locationList[0].longitude)
 
         MyApplication.recordFeedInfo.distance = MyApplication.totalDistance
         val hourTime = MyApplication.recordTimer / 3600.0
