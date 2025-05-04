@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.team.score.API.TokenManager
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.weather.response.Main
+import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.Mypage.Setting.SettingFragment
 import com.team.score.Mypage.UserCalendarFragment
@@ -30,8 +31,8 @@ class MateDetailFragment : Fragment() {
 
     lateinit var binding: FragmentMateDetailBinding
     lateinit var mainActivity: MainActivity
-    private val viewModel: MypageViewModel by lazy {
-        ViewModelProvider(requireActivity())[MypageViewModel::class.java]
+    private val viewModel: GroupViewModel by lazy {
+        ViewModelProvider(this)[GroupViewModel::class.java]
     }
 
     var getUserInfo: UserInfoResponse? = null
