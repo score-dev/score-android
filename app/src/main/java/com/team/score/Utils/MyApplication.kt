@@ -72,7 +72,7 @@ class MyApplication : Application() {
                 startedAt = "",
                 completedAt = "",
                 agentId = 0,
-                othersId = null,
+                othersId = emptyList(),
                 distance = 0,
                 reducedKcal = 0,
                 location = "",
