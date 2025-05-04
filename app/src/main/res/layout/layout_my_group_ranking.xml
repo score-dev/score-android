@@ -95,7 +95,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginVertical="1dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="14dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/textView_ranking1"
             app:layout_constraintEnd_toStartOf="@+id/textView_ranking1"
@@ -103,7 +103,7 @@
 
         <TextView
             android:id="@+id/textView_ranking1_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="27dp"
             android:ellipsize="end"
@@ -112,7 +112,6 @@
             android:minLines="1"
             android:singleLine="true"
             android:fontFamily="@font/pretendard_medium"
-            android:text="닉네임"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -229,7 +228,7 @@
 
         <TextView
             android:id="@+id/textView_ranking2_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="27dp"
             android:ellipsize="end"
@@ -238,7 +237,6 @@
             android:minLines="1"
             android:singleLine="true"
             android:fontFamily="@font/pretendard_medium"
-            android:text="닉네임"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -354,7 +352,7 @@
 
         <TextView
             android:id="@+id/textView_ranking3_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="27dp"
             android:ellipsize="end"
@@ -363,7 +361,6 @@
             android:minLines="1"
             android:singleLine="true"
             android:fontFamily="@font/pretendard_medium"
-            android:text="닉네임"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -480,7 +477,7 @@
 
         <TextView
             android:id="@+id/textView_ranking4_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="27dp"
             android:ellipsize="end"
@@ -489,7 +486,6 @@
             android:minLines="1"
             android:singleLine="true"
             android:fontFamily="@font/pretendard_medium"
-            android:text="닉네임"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -605,7 +601,7 @@
 
         <TextView
             android:id="@+id/textView_ranking5_nickname"
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="27dp"
             android:ellipsize="end"
@@ -614,7 +610,6 @@
             android:minLines="1"
             android:singleLine="true"
             android:fontFamily="@font/pretendard_medium"
-            android:text="닉네임"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"

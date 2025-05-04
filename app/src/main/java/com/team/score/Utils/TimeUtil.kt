@@ -121,6 +121,13 @@ object TimeUtil {
         }
     }
 
+    // 기록하기 시간 포맷: 00'00"
+    fun formatSecondsToMinuteString(seconds: Int): String {
+        val min = seconds / 60
+        val sec = seconds % 60
+        return String.format("%02d’%02d”", min, sec)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun convertMillisToIso(millis: Long): String {
         val zonedDateTime = Instant.ofEpochMilli(millis)

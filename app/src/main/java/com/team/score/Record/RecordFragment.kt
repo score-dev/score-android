@@ -107,10 +107,16 @@ class RecordFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNavigation(true)
+    }
+
 
     fun initView() {
-        mainActivity.hideBottomNavigation(true)
-        mainActivity.initTracking()
+        mainActivity.run {
+            initTracking()
+        }
 
         binding.run {
             startTimerUIUpdater()
