@@ -99,7 +99,12 @@ dependencies {
     implementation("com.tbuonomo:dotsindicator:5.1.0")
 
     // 카카오 로그인
-    implementation("com.kakao.sdk:v2-user:2.20.6")
+    implementation("com.kakao.sdk:v2-user:2.21.2")
+    // 카카오 공유
+    implementation("com.kakao.sdk:v2-talk:2.21.2")
+    implementation("com.kakao.sdk:v2-friend:2.21.2")
+    implementation("com.kakao.sdk:v2-share:2.21.2")
+
 
     // 구글 로그인
     implementation("com.google.gms:google-services:4.3.15")

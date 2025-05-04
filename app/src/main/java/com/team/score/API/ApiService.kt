@@ -254,6 +254,14 @@ interface ApiService {
         @Query("page") page: Int
     ): Call<PagingResponse<FriendResponse>>
 
+    // 친구 추가
+    @POST("score/friends/new/{id1}/{id2}")
+    fun addNewFriends(
+        @Header("Authorization") token: String,
+        @Path("id1") id1: Int,
+        @Path("id2") id2: Int
+    ): Call<String>
+
     // 피드 정보 저장
     @Multipart
     @POST("score/exercise/walking/save")

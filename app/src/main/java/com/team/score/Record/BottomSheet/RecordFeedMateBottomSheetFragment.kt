@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.team.score.API.response.record.FriendResponse
-import com.team.score.Record.adapter.FeedExerciseMateAdapter
+import com.team.score.Record.adapter.MateAdapter
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.databinding.FragmentRecordFeedMateBottomSheetBinding
 
@@ -22,7 +22,7 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
         ViewModelProvider(requireActivity())[RecordViewModel::class.java]
     }
 
-    lateinit var exerciseMateAdapter: FeedExerciseMateAdapter
+    lateinit var exerciseMateAdapter: MateAdapter
 
     var isLoading = true
     var isLastPage = false
@@ -150,8 +150,8 @@ class RecordFeedMateBottomSheetFragment(var activity: Activity, var mates: Mutab
     }
 
     fun initAdapter() {
-        exerciseMateAdapter = FeedExerciseMateAdapter(activity).apply {
-            itemClickListener = object : FeedExerciseMateAdapter.OnItemClickListener {
+        exerciseMateAdapter = MateAdapter(activity).apply {
+            itemClickListener = object : MateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     dismiss()
                 }

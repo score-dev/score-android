@@ -27,6 +27,8 @@ class MypageViewModel: ViewModel() {
 
     var isUpdateUserInfo: MutableLiveData<Boolean?> = MutableLiveData()
 
+    var isAddMate: MutableLiveData<Boolean?> = MutableLiveData()
+
     // 유저 정보
     fun getUserInfo(activity: Activity) {
         val apiClient = ApiClient(activity)
@@ -45,6 +47,7 @@ class MypageViewModel: ViewModel() {
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
                     userInfo.value = result!!
+                    tokenManager.saveUserId(result.userId ?: 0)
                     MyApplication.userInfo = result
                     MyApplication.userNickname = result?.nickname.toString()
                     Log.d("##", "viewModel user info : ${MyApplication.userInfo}")
@@ -236,6 +239,47 @@ class MypageViewModel: ViewModel() {
             override fun onFailure(call: Call<List<BlockedMateListResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 메이트 추가
+    fun addNewFriends(activity: Activity, mateId: Int) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.addNewFriends(tokenManager.getAccessToken().toString(), mateId, tokenManager.getUserId()).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    isAddMate.value = true
+
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                    isAddMate.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+
+                isAddMate.value = false
             }
         })
     }
