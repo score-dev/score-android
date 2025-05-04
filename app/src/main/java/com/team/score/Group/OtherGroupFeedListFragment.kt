@@ -10,16 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.response.user.FeedListResponse
-import com.team.score.Group.MyGroupRankingFragment
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.Mypage.Adapter.FeedAdapter
 import com.team.score.R
-import com.team.score.Record.FeedDetailFragment
 import com.team.score.Record.RecordFragment
-import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.MyApplication
-import com.team.score.databinding.FragmentMypageFeedBinding
 import com.team.score.databinding.FragmentOtherGroupFeedListBinding
 
 class OtherGroupFeedListFragment : Fragment() {
