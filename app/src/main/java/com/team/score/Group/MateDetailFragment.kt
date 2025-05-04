@@ -36,11 +36,8 @@ class MateDetailFragment : Fragment() {
 
     var getUserInfo: UserInfoResponse? = null
 
-    // Fragment 리스트를 onCreateView에서만 설정
-    private val fragmentList = listOf(
-        UserFeedFragment.newInstance(TokenManager(mainActivity).getUserId()),
-        UserCalendarFragment.newInstance(TokenManager(mainActivity).getUserId())
-    )
+    private lateinit var fragmentList: List<Fragment>
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -50,6 +47,12 @@ class MateDetailFragment : Fragment() {
 
         binding = FragmentMateDetailBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
+
+        val userId = arguments?.getInt("userId") ?: 0
+        fragmentList = listOf(
+            UserFeedFragment.newInstance(userId),
+            UserCalendarFragment.newInstance(userId)
+        )
 
         observeViewModel()
 

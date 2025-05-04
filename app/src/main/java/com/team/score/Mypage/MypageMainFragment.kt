@@ -33,11 +33,7 @@ class MypageMainFragment : Fragment() {
 
     var getUserInfo: UserInfoResponse? = null
 
-    // Fragment 리스트를 onCreateView에서만 설정
-    private val fragmentList = listOf(
-        UserFeedFragment.newInstance(TokenManager(mainActivity).getUserId()),
-        UserCalendarFragment.newInstance(TokenManager(mainActivity).getUserId())
-    )
+    private lateinit var fragmentList: List<Fragment>
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -47,6 +43,12 @@ class MypageMainFragment : Fragment() {
 
         binding = FragmentMypageMainBinding.inflate(inflater, container, false)
         mainActivity = activity as MainActivity
+
+        val userId = TokenManager(mainActivity).getUserId()
+        fragmentList = listOf(
+            UserFeedFragment.newInstance(userId),
+            UserCalendarFragment.newInstance(userId)
+        )
 
         observeViewModel()
 
