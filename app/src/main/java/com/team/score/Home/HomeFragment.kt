@@ -211,11 +211,19 @@ class HomeFragment : Fragment() {
             root.requestLayout()
             
             layoutWeeklyResult.recyclerViewGraph.visibility = View.INVISIBLE
-            toolbar.layoutMypage.setOnClickListener {
-                mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_main, MypageMainFragment())
-                    .addToBackStack(null)
-                    .commit()
+            toolbar.run {
+                layoutMypage.setOnClickListener {
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, MypageMainFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                layoutNotification.setOnClickListener {
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, NotificationFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
     }
