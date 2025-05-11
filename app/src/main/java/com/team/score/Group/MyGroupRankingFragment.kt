@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.TokenManager
 import com.team.score.API.response.group.GroupRankingResponse
+import com.team.score.API.response.group.RankerInfo
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.Group.adapter.GroupMemberOthersRankingAdapter
 import com.team.score.Group.adapter.GroupOthersRankingAdapter
@@ -45,7 +46,7 @@ class MyGroupRankingFragment : Fragment() {
         binding = FragmentMyGroupRankingBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
-        initAdapter()
+        initAdapter(emptyList())
         observeViewModel()
 
         binding.run {
@@ -95,7 +96,7 @@ class MyGroupRankingFragment : Fragment() {
         }
     }
 
-    fun initAdapter() {
+    fun initAdapter(others: List<RankerInfo>?) {
         otherGroupMembersAdapter = GroupMemberOthersRankingAdapter(
             mainActivity,
             getGroupRankingData?.rankersInfo
@@ -107,68 +108,105 @@ class MyGroupRankingFragment : Fragment() {
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             }
         }
+
+        otherGroupMembersAdapter.updateList(others)
     }
 
     fun observeViewModel() {
-        viewModel.run {
-            groupRanking.observe(viewLifecycleOwner) { it ->
-                getGroupRankingData = it
-                getGroupRankingData?.rankersInfo = getGroupRankingData?.rankersInfo?.sortedBy { it.rankNum } ?: emptyList()
+        viewModel.groupRanking.observe(viewLifecycleOwner) { it ->
+            getGroupRankingData = it
+            if (it != null) {
+                getGroupRankingData?.rankersInfo = it.rankersInfo.sortedBy { it.rankNum }
+            }
 
-                binding.run {
-                    if (getGroupRankingData == null) {
-                        layoutEmptyGroup.visibility = View.VISIBLE
-                        layoutWeekRanking.visibility = View.GONE
-                    } else {
-                        layoutEmptyGroup.visibility = View.GONE
-                        layoutWeekRanking.visibility = View.VISIBLE
-                        otherGroupMembersAdapter.updateList(getGroupRankingData?.rankersInfo?.drop(3))
+            val top3 = getGroupRankingData?.rankersInfo?.take(3)
+            val others = getGroupRankingData?.rankersInfo?.drop(3)
+            val myRanking = getGroupRankingData?.rankersInfo?.find { it.userId == TokenManager(mainActivity).getUserId() }
 
-                        val top3 = getGroupRankingData?.rankersInfo?.take(3)
+            binding.run {
+                // ✅ 1. Top3 초기화 후 다시 세팅
+                resetTop3Views()
+                bindTop3GroupRankingView(top3)
 
-                        top3?.getOrNull(0)?.let { top1 ->
-                            Glide.with(requireContext())
-                                .load(top1.profileImgUrl)
-                                .into(layoutGroupRanking1.imageViewMemberProfile)
-                            layoutGroupRanking1.textViewNickname.text = top1.nickname
-                            layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "+${top1.weeklyLevelIncrement / 500}Lv"
-                        }
+                // ✅ 2. 내 랭킹 초기화 후 다시 세팅
+                bindMyGroupRankingView(null) // 초기화
+                bindMyGroupRankingView(myRanking)
 
-                        top3?.getOrNull(1)?.let { top2 ->
-                            Glide.with(requireContext())
-                                .load(top2.profileImgUrl)
-                                .into(layoutGroupRanking2.imageViewMemberProfile)
-                            layoutGroupRanking2.textViewNickname.text = top2.nickname
-                            layoutGroupRanking2.textViewGroupMemberParticipationRate.text = "+${top2.weeklyLevelIncrement / 500}Lv"
-                        }
+                // ✅ 3. RecyclerView 어댑터 새로 설정 (무조건 새로 생성)
+                initAdapter(others)
 
-                        top3?.getOrNull(2)?.let { top3 ->
-                            Glide.with(requireContext())
-                                .load(top3.profileImgUrl)
-                                .into(layoutGroupRanking3.imageViewMemberProfile)
-                            layoutGroupRanking3.textViewNickname.text = top3.nickname
-                            layoutGroupRanking3.textViewGroupMemberParticipationRate.text = "+${top3.weeklyLevelIncrement / 500}Lv"
-                        }
+                layoutEmptyGroup.visibility =
+                    if (getGroupRankingData == null || getGroupRankingData?.rankersInfo.isNullOrEmpty())
+                        View.VISIBLE else View.GONE
+            }
+        }
+    }
 
-                        var myRanking = getGroupRankingData?.rankersInfo?.find { it.userId == TokenManager(mainActivity).getUserId() }
-                        if(myRanking != null) {
-                            layoutGroupMyRanking.run {
-                                textViewGroupTotalExerciseTimeValue.text = "${myRanking.weeklyExerciseTime?.div(60)}시간"
-                                textViewGroupLevelValue.text = "${myRanking.weeklyLevelIncrement}"
-                                textViewGroupRankingValue.text = "${myRanking.rankNum}위"
-                            }
-                        } else {
-                            layoutGroupMyRanking.run {
-                                textViewGroupTotalExerciseTimeValue.text = "-시간"
-                                textViewGroupLevelValue.text = "-"
-                                textViewGroupRankingValue.text = "-위"
-                            }
-                        }
-                    }
+    private fun resetTop3Views() {
+        binding.layoutGroupRanking1.run {
+            imageViewMemberProfile.setImageResource(R.drawable.img_profile_null)
+            textViewNickname.text = "-"
+            textViewGroupMemberParticipationRate.text = "-Lv"
+        }
+        binding.layoutGroupRanking2.run {
+            imageViewMemberProfile.setImageResource(R.drawable.img_profile_null)
+            textViewNickname.text = "-"
+            textViewGroupMemberParticipationRate.text = "-Lv"
+        }
+        binding.layoutGroupRanking3.run {
+            imageViewMemberProfile.setImageResource(R.drawable.img_profile_null)
+            textViewNickname.text = "-"
+            textViewGroupMemberParticipationRate.text = "-Lv"
+        }
+    }
+
+
+    fun bindTop3GroupRankingView(top3: List<RankerInfo>?) {
+        binding.run {
+            top3?.getOrNull(0)?.let { top1 ->
+                Glide.with(requireContext())
+                    .load(top1.profileImgUrl)
+                    .into(layoutGroupRanking1.imageViewMemberProfile)
+                layoutGroupRanking1.textViewNickname.text = top1.nickname
+                layoutGroupRanking1.textViewGroupMemberParticipationRate.text = "+${top1.weeklyLevelIncrement / 500}Lv"
+            }
+
+            top3?.getOrNull(1)?.let { top2 ->
+                Glide.with(requireContext())
+                    .load(top2.profileImgUrl)
+                    .into(layoutGroupRanking2.imageViewMemberProfile)
+                layoutGroupRanking2.textViewNickname.text = top2.nickname
+                layoutGroupRanking2.textViewGroupMemberParticipationRate.text = "+${top2.weeklyLevelIncrement / 500}Lv"
+            }
+
+            top3?.getOrNull(2)?.let { top3 ->
+                Glide.with(requireContext())
+                    .load(top3.profileImgUrl)
+                    .into(layoutGroupRanking3.imageViewMemberProfile)
+                layoutGroupRanking3.textViewNickname.text = top3.nickname
+                layoutGroupRanking3.textViewGroupMemberParticipationRate.text = "+${top3.weeklyLevelIncrement / 500}Lv"
+            }
+        }
+    }
+
+    fun bindMyGroupRankingView(myRanking: RankerInfo?) {
+        binding.run {
+            if(myRanking != null) {
+                layoutGroupMyRanking.run {
+                    textViewGroupTotalExerciseTimeValue.text = "${myRanking.weeklyExerciseTime?.div(60)}시간"
+                    textViewGroupLevelValue.text = "${myRanking.weeklyLevelIncrement}"
+                    textViewGroupRankingValue.text = "${myRanking.rankNum}위"
+                }
+            } else {
+                layoutGroupMyRanking.run {
+                    textViewGroupTotalExerciseTimeValue.text = "-시간"
+                    textViewGroupLevelValue.text = "-"
+                    textViewGroupRankingValue.text = "-위"
                 }
             }
         }
     }
+
 
     companion object {
         fun newInstance(groupId: Int): MyGroupRankingFragment {

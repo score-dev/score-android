@@ -43,7 +43,7 @@ class MyGroupRankingAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(groupInfos?.get(position) == null) {
+        if(groupInfos == null || groupInfos.isNullOrEmpty()) {
             holder.profile.setImageResource(R.drawable.img_profile_null)
             holder.groupName.text = "내그룹"
             holder.totalExerciseTime.text = "-시간"
@@ -58,7 +58,7 @@ class MyGroupRankingAdapter(
         }
     }
 
-    override fun getItemCount() = (groupInfos?.size ?: 1)
+    override fun getItemCount() = (groupInfos?.size ?: 0) + 1
 
     inner class ViewHolder(val binding: RowMyGroupRankingBinding) : RecyclerView.ViewHolder(binding.root) {
         val profile = binding.imageViewGroupProfile

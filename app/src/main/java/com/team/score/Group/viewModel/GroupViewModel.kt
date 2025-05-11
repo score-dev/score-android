@@ -14,6 +14,7 @@ import com.team.score.API.response.group.GroupMateResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.GroupUnexercisedMateResponse
 import com.team.score.API.response.group.GroupInfoResponse
+import com.team.score.API.response.group.GroupRanking
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.group.SearchGroupResponse
 import com.team.score.API.response.login.UserInfoResponse
@@ -282,6 +283,14 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        404 -> {
+                            schoolGroupRanking.value == null
+                        }
+                         500 -> {
+                             schoolGroupRanking.value == null
+                         }
+                    }
                 }
             }
 

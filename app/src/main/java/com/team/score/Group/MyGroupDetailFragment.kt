@@ -70,7 +70,7 @@ class MyGroupDetailFragment : Fragment() {
 
                 binding.run {
                     toolbar.run {
-                        textViewHead.text = getGroupDetail?.groupName
+                        textViewHead.text = getGroupDetail?.groupName ?: ""
                         textViewPublic.visibility = if(getGroupDetail?.private == true) { View.VISIBLE } else { View.GONE }
                     }
 
@@ -115,7 +115,7 @@ class MyGroupDetailFragment : Fragment() {
             }.attach()
 
             toolbar.run {
-                textViewHead.text = "${myGroup?.name}"
+                textViewHead.text = myGroup?.name ?: ""
                 textViewPublic.visibility = if(myGroup?.private == true) { View.VISIBLE } else { View.GONE }
                 buttonBack.setOnClickListener {
                     fragmentManager?.popBackStack()
@@ -166,14 +166,6 @@ class MyGroupDetailFragment : Fragment() {
                 textViewRanking5ExerciseTime
             )
 
-            val days = listOf(
-                textViewRanking1Days,
-                textViewRanking2Days,
-                textViewRanking3Days,
-                textViewRanking4Days,
-                textViewRanking5Days
-            )
-
             val profiles = listOf(
                 imageViewRanking1Profile,
                 imageViewRanking2Profile,
@@ -203,13 +195,6 @@ class MyGroupDetailFragment : Fragment() {
 
                 times[index].text = if (hasExercise) timeText else ""  // 기록 없으면 시간 텍스트 없음
                 times[index].visibility = if (hasExercise) View.VISIBLE else View.INVISIBLE
-
-                days[index].text = if (index == 0 && hasExercise)
-                    "연속 ${ranker.changedAmount}일 째"
-                else if (hasExercise)
-                    "${ranker.changedAmount}일"
-                else
-                    ""  // 기록 없으면 일수 텍스트도 생략
 
                 Glide.with(profiles[index].context)
                     .load(ranker.profileImgUrl)
