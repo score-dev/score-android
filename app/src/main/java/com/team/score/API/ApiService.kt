@@ -16,6 +16,7 @@ import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.user.BlockedMateListResponse
+import com.team.score.API.response.user.ExerciseCalendarResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
 import okhttp3.MultipartBody
@@ -166,6 +167,14 @@ interface ApiService {
         @Query("groupId") groupId: Int,
         @Query("page") page: Int
     ): Call<PagingResponse<FeedListResponse>>
+
+    @GET("score/exercise/calendar")
+    fun getMateExerciseCalendar(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("year") year: Int,
+        @Query("month") month: Int
+    ): Call<List<ExerciseCalendarResponse>>
 
     // 그룹 내 메이트 조회
     @GET("score/groups/mates/list")

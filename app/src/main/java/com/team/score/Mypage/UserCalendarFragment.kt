@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.team.score.MainActivity
 import com.team.score.Mypage.Adapter.CalendarAdapter
+import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.databinding.FragmentUserCalendarBinding
 import java.time.LocalDate
 import java.time.YearMonth
@@ -19,15 +21,14 @@ class UserCalendarFragment : Fragment() {
 
     lateinit var binding: FragmentUserCalendarBinding
     lateinit var mainActivity: MainActivity
+    private val viewModel: RecordViewModel by lazy {
+        ViewModelProvider(requireActivity())[RecordViewModel::class.java]
+    }
 
     // 선택된 날짜
     @RequiresApi(Build.VERSION_CODES.O)
     private var selectedDate: LocalDate = LocalDate.now()
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    val exerciseDays = setOf( // 운동한 날짜를 정의합니다.
-        LocalDate.of(2025, 3, 1)
-    )
     @RequiresApi(Build.VERSION_CODES.O)
     val today = LocalDate.now()
 
@@ -40,17 +41,19 @@ class UserCalendarFragment : Fragment() {
         binding = FragmentUserCalendarBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
+        observeViewModel()
+
         binding.run {
             // 이전달 버튼 클릭
             buttonPrevious.setOnClickListener {
                 selectedDate = selectedDate.minusMonths(1)
-                updateCalendar(exerciseDays)
+                viewModel.getExerciseCalendar(mainActivity, arguments?.getInt("userId") ?: 0, selectedDate.year, selectedDate.monthValue)
             }
 
             // → 다음 달 버튼 클릭 시
             buttonNext.setOnClickListener {
                 selectedDate = selectedDate.plusMonths(1)
-                updateCalendar(exerciseDays)
+                viewModel.getExerciseCalendar(mainActivity, arguments?.getInt("userId") ?: 0, selectedDate.year, selectedDate.monthValue)
             }
 
         }
@@ -68,11 +71,28 @@ class UserCalendarFragment : Fragment() {
     private fun updateCalendar(exerciseDays: Set<LocalDate>) {
         binding.run {
             val daysInMonth = getDaysInMonth(selectedDate.year, selectedDate.monthValue)
-            recyclerViewCalendar.layoutManager = GridLayoutManager(mainActivity, 7)
-            recyclerViewCalendar.adapter = CalendarAdapter(daysInMonth, exerciseDays, selectedDate, today)
+            initAdapter(daysInMonth, exerciseDays)
 
             // 상단 월/연도 텍스트 설정
             textViewMonthYear.text = setMonthYearText(selectedDate)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun observeViewModel() {
+        viewModel.run {
+            exerciseList.observe(viewLifecycleOwner) {
+                updateCalendar(it)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun initAdapter(daysInMonth: List<LocalDate>, exerciseDays: Set<LocalDate>) {
+        binding.run {
+            val adapter = CalendarAdapter(daysInMonth, exerciseDays, selectedDate, today)
+            recyclerViewCalendar.layoutManager = GridLayoutManager(mainActivity, 7) // 7열로 그리드 배치
+            recyclerViewCalendar.adapter = adapter
         }
     }
 
@@ -82,12 +102,11 @@ class UserCalendarFragment : Fragment() {
             root.requestLayout()
 
             val daysInMonth = getDaysInMonth(today.year, today.monthValue)
+            initAdapter(daysInMonth, emptySet())
+
+            viewModel.getExerciseCalendar(mainActivity, arguments?.getInt("userId") ?: 0, today.year, today.monthValue)
 
             Log.d("스코어", "daysInMonth : ${daysInMonth}")
-
-            val adapter = CalendarAdapter(daysInMonth, exerciseDays, today, today)
-            recyclerViewCalendar.layoutManager = GridLayoutManager(mainActivity, 7) // 7열로 그리드 배치
-            recyclerViewCalendar.adapter = adapter
 
             textViewMonthYear.text = setMonthYearText(today)
         }
