@@ -353,14 +353,14 @@ class GroupViewModel: ViewModel() {
     }
 
     // 학교 그룹 추천
-    fun getRecommendGroup(activity: MainActivity, schoolCode: String) {
+    fun getRecommendGroup(activity: MainActivity, schoolId: Int) {
 
         val tempGroupList = mutableListOf<GroupInfoResponse>()
 
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
-        apiClient.apiService.getRecommendGroup(tokenManager.getAccessToken().toString(), schoolCode).enqueue(object :
+        apiClient.apiService.getRecommendGroup(tokenManager.getAccessToken().toString(), schoolId).enqueue(object :
             Callback<List<GroupInfoResponse>> {
             override fun onResponse(
                 call: Call<List<GroupInfoResponse>>,
@@ -480,6 +480,11 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        404 -> {
+                            groupRanking.value = null
+                        }
+                    }
                 }
             }
 

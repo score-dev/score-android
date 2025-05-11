@@ -120,7 +120,7 @@ interface ApiService {
         @Query("userId") userId: Int
     ): Call<String>
 
-    // 그룹 가입 신청
+    // 그룹 가입 신청 - 비공개 그룹 비밀번호 일치 확인
     @GET("score/groups/join/verify")
     fun verifyGroupPassword(
         @Header("Authorization") token: String,
@@ -148,7 +148,7 @@ interface ApiService {
     @GET("score/school/recommend/recent")
     fun getRecommendGroup(
         @Header("Authorization") token: String,
-        @Query("schoolCode") schoolCode: String
+        @Query("schoolId") schoolId: Int
     ): Call<List<GroupInfoResponse>>
 
     // 그룹 내 랭킹 조회
