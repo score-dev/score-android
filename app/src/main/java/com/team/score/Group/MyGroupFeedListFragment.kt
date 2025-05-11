@@ -51,6 +51,11 @@ class MyGroupFeedListFragment : Fragment() {
         mainActivity = activity as MainActivity
         feedAdapter = MyGroupFeedAdapter(mainActivity, requireContext(), viewModel)
 
+        binding.recyclerViewGroupFeed.apply {
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = feedAdapter
+        }
+
         observeViewModel(feedAdapter)
 
         binding.run {
@@ -81,28 +86,21 @@ class MyGroupFeedListFragment : Fragment() {
     fun observeViewModel(feedAdapter: MyGroupFeedAdapter) {
         viewModel.run {
             groupFeedList.observe(viewLifecycleOwner) { feedResponse ->
-                for(feed in feedResponse) {
-                    getFeedList.add(feed)
+
+                if (currentPage == 0) {
+                    feedAdapter.clearFeeds() // UI 초기화
                 }
 
-                getFeedList.forEach { feed ->
+                feedResponse.forEach { feed ->
                     viewModel.getFeedEmotion(mainActivity, feed.feedId)
                 }
 
+                feedAdapter.addFeeds(feedResponse)
 
-                binding.recyclerViewGroupFeed.apply {
-                    layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                    adapter = feedAdapter
-                }
-
-                if (currentPage == 0) feedAdapter.clearFeeds()
-
-                feedAdapter.addFeeds(getFeedList)
-
-                // 다음 페이지 준비
                 isLoading = false
                 currentPage++
             }
+
 
             lastFeed.observe(viewLifecycleOwner) {
                 // 마지막 페이지 확인
