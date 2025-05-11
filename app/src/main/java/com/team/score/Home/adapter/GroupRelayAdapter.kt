@@ -59,7 +59,7 @@ class GroupRelayAdapter(
             holder.layoutEmptyView.visibility = View.GONE
             holder.layoutGroupInfo.visibility = View.VISIBLE
 
-            holder.groupName.text = groupInfos?.get(position)?.groupName.toString()
+            holder.groupName.text = groupInfos?.get(position)?.groupName ?: ""
 
             // 그룹 프로필 이미지 설정 (최대 3개 표시)
             val profileImages = groupInfos?.get(position)?.wholeMatesImgUrl ?: emptyList()
@@ -87,7 +87,7 @@ class GroupRelayAdapter(
             holder.exercisedGroupMemberNum.text = "${groupInfos?.get(position)?.todayExercisedMatesImgUrl?.size}명"
             holder.userName.text = "${MyApplication.userNickname}님"
 
-            // **RecyclerView 설정**
+            // RecyclerView 설정
             holder.relayExercisedMemberProfile.run {
                 adapter = GroupExercisedMemberProfileAdapter(activity, groupInfos?.get(position)?.numOfMembers ?: 0, groupInfos?.get(position)?.todayExercisedMatesImgUrl)
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)

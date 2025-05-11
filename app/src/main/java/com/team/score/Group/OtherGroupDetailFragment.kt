@@ -79,7 +79,7 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
 
                 binding.run {
                     toolbar.run {
-                        textViewHead.text = getGroupDetail?.groupName
+                        textViewHead.text = getGroupDetail?.groupName ?: ""
                         textViewPublic.visibility = if(getGroupDetail?.private == true) { View.VISIBLE } else { View.GONE }
                     }
 
@@ -88,7 +88,7 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
 
                     Glide.with(mainActivity).load(getGroupDetail?.groupImg)
                         .into(imageViewGroup)
-                    textViewGroupName.text = "${getGroupDetail?.groupName}"
+                    textViewGroupName.text = getGroupDetail?.groupName ?: ""
                     textViewGroupMemberValue.text = "${getGroupDetail?.numOfTotalMembers}/${getGroupDetail?.userLimit} 명"
                 }
             }
@@ -115,7 +115,7 @@ class OtherGroupDetailFragment : Fragment(), EnterGroupDialogInterface {
             }.attach()
 
             toolbar.run {
-                textViewHead.text = "${getGroupDetail?.groupName}"
+                textViewHead.text = getGroupDetail?.groupName ?: ""
                 textViewPublic.visibility = if(getGroupDetail?.private == true) { View.VISIBLE } else { View.GONE }
                 buttonBack.setOnClickListener {
                     fragmentManager?.popBackStack()
