@@ -41,10 +41,10 @@ class MyGroupFeedAdapter(
     private var currentUserId: Int = TokenManager(activity).getUserId()
 
     fun addFeeds(newFeeds: List<FeedListResponse>) {
-        val start = feedList.size
         feedList.addAll(newFeeds)
-        notifyItemRangeInserted(start, newFeeds.size)
+        notifyDataSetChanged()
     }
+
 
     fun clearFeeds() {
         feedList = mutableListOf<FeedListResponse>()

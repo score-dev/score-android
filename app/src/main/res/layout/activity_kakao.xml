@@ -81,6 +81,7 @@
             android:drawableLeft="@drawable/ic_plus_white"
             android:fontFamily="@font/pretendard_bold"
             android:text="추가"
+            android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

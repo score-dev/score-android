@@ -29,8 +29,10 @@ class GroupSearchFragment : Fragment() {
 
     lateinit var searchGroupAdapter : SearchGroupAdapter
     lateinit var searchKewordAdapter : RecentSearchGroupKeywordAdapter
+    lateinit var recommendGroupAdapter : SearchGroupAdapter
 
     var getGroupInfo: List<GroupInfoResponse>? = null
+    var getRecommendGroupInfo: List<GroupInfoResponse>? = null
 
     var schoolId = 0
     var keyword = ""
@@ -130,6 +132,42 @@ class GroupSearchFragment : Fragment() {
             }
         }
 
+        recommendGroupAdapter = SearchGroupAdapter(mainActivity, getRecommendGroupInfo).apply {
+            itemClickListener = object : SearchGroupAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    if(MyApplication.myGroupList.contains(getRecommendGroupInfo?.get(position)?.id ?: 0)) {
+                        // 내 그룹 화면
+                        val bundle = Bundle().apply {
+                            putInt("groupId", getRecommendGroupInfo?.get(position)?.id ?: 0)
+                        }
+
+                        // 전달할 Fragment 생성
+                        val  nextFragment = MyGroupDetailFragment().apply {
+                            arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                        }
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_main, nextFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    } else {
+                        // 다른 그룹 화면
+                        val bundle = Bundle().apply {
+                            putInt("groupId", getRecommendGroupInfo?.get(position)?.id ?: 0)
+                        }
+
+                        // 전달할 Fragment 생성
+                        val  nextFragment = OtherGroupDetailFragment().apply {
+                            arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                        }
+                        mainActivity.supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainerView_main, nextFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
+                }
+            }
+        }
+
         binding.run {
             recyclerViewSearchResult.apply {
                 adapter = searchGroupAdapter
@@ -138,6 +176,11 @@ class GroupSearchFragment : Fragment() {
 
             recyclerViewSearchWord.apply {
                 adapter = searchKewordAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            }
+
+            recyclerViewRecommend.apply {
+                adapter = recommendGroupAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             }
         }
@@ -157,13 +200,19 @@ class GroupSearchFragment : Fragment() {
 
                 searchGroupAdapter.updateList(getGroupInfo)
             }
+
+            recommendGroupList.observe(viewLifecycleOwner) {
+                getRecommendGroupInfo = it
+
+                recommendGroupAdapter.updateList(getRecommendGroupInfo)
+            }
         }
     }
 
     fun initView() {
         schoolId = arguments?.getInt("schoolId") ?: 0
 
-        viewModel.getRecommendGroup(mainActivity, schoolId.toString())
+        viewModel.getRecommendGroup(mainActivity, schoolId)
 
         binding.run {
             searchBar.editTextSearch.hint = "그룹 이름을 입력해주세요"

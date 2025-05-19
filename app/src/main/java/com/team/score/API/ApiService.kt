@@ -16,6 +16,7 @@ import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.user.BlockedMateListResponse
+import com.team.score.API.response.user.ExerciseCalendarResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
 import okhttp3.MultipartBody
@@ -119,7 +120,7 @@ interface ApiService {
         @Query("userId") userId: Int
     ): Call<String>
 
-    // 그룹 가입 신청
+    // 그룹 가입 신청 - 비공개 그룹 비밀번호 일치 확인
     @GET("score/groups/join/verify")
     fun verifyGroupPassword(
         @Header("Authorization") token: String,
@@ -147,7 +148,7 @@ interface ApiService {
     @GET("score/school/recommend/recent")
     fun getRecommendGroup(
         @Header("Authorization") token: String,
-        @Query("schoolCode") schoolCode: String
+        @Query("schoolId") schoolId: Int
     ): Call<List<GroupInfoResponse>>
 
     // 그룹 내 랭킹 조회
@@ -166,6 +167,14 @@ interface ApiService {
         @Query("groupId") groupId: Int,
         @Query("page") page: Int
     ): Call<PagingResponse<FeedListResponse>>
+
+    @GET("score/exercise/calendar")
+    fun getMateExerciseCalendar(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("year") year: Int,
+        @Query("month") month: Int
+    ): Call<List<ExerciseCalendarResponse>>
 
     // 그룹 내 메이트 조회
     @GET("score/groups/mates/list")

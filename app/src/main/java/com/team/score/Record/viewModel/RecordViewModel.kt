@@ -10,9 +10,11 @@ import com.team.score.API.TokenManager
 import com.team.score.API.map.ReverseGeoCodingClient
 import com.team.score.API.map.response.ReverseGeocodingResponse
 import com.team.score.API.response.PagingResponse
+import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.record.FriendResponse
+import com.team.score.API.response.user.ExerciseCalendarResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.API.weather.WeatherApiClient
 import com.team.score.API.weather.response.AirPollutionResponse
@@ -26,12 +28,15 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
 
 
 class RecordViewModel: ViewModel() {
     var feedList = MutableLiveData<MutableList<FeedListResponse>>()
     var lastFeed: MutableLiveData<Boolean> = MutableLiveData()
     var firstFeed: MutableLiveData<Boolean> = MutableLiveData()
+
+    var exerciseList = MutableLiveData<MutableSet<LocalDate>>()
 
     var feedDetail: MutableLiveData<FeedDetailResponse?> = MutableLiveData()
     var feedEmotion: MutableLiveData<MutableList<FeedEmotionResponse>?> = MutableLiveData()
@@ -228,6 +233,53 @@ class RecordViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
+    // 피드 캘린더 정보 조회
+    fun getExerciseCalendar(activity: Activity, userId: Int, year: Int, month: Int) {
+
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.getMateExerciseCalendar(tokenManager.getAccessToken().toString(), userId, year, month).enqueue(object :
+            Callback<List<ExerciseCalendarResponse>> {
+            override fun onResponse(
+                call: Call<List<ExerciseCalendarResponse>>,
+                response: Response<List<ExerciseCalendarResponse>>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: List<ExerciseCalendarResponse>? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    val tempExerciseSet = mutableSetOf<LocalDate>()
+
+                    val resultExerciseList = result ?: emptyList()
+
+                    resultExerciseList.forEach {
+                        val localDate = LocalDate.parse(it.startedAt.substring(0, 10)) // "yyyy-MM-dd" 형태 추출
+                        tempExerciseSet.add(localDate)
+                    }
+
+                    exerciseList.value = tempExerciseSet
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: List<ExerciseCalendarResponse>? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<ExerciseCalendarResponse>>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
             }

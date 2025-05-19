@@ -78,6 +78,11 @@ class UserFeedFragment : Fragment() {
                     .commit()
             }
 
+            recyclerViewFeed.apply {
+                layoutManager = GridLayoutManager(context, 3)
+                adapter = feedAdapter
+            }
+
             recyclerViewFeed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     val layoutManager = recyclerView.layoutManager as GridLayoutManager
@@ -105,39 +110,30 @@ class UserFeedFragment : Fragment() {
     fun observeViewModel(feedAdapter: FeedAdapter) {
         viewModel.run {
             feedList.observe(viewLifecycleOwner) { feedResponse ->
-                for(feed in feedResponse) {
-                    getFeedList.add(feed)
+                if (currentPage == 0) {
+                    feedAdapter.clearFeeds()
                 }
 
-                binding.recyclerViewFeed.apply {
-                    layoutManager = GridLayoutManager(context, 3) // 3열 구성
-                    adapter = feedAdapter
-                }
-
-                binding.run {
-                    if(feedResponse.size == 0) {
-                        layoutEmptyFeed.visibility = View.VISIBLE
-                        textViewEmptyTitle.text = "${MyApplication.userNickname}님만의 운동기록을\n채워보세요!"
-                        recyclerViewFeed.visibility = View.GONE
-                    } else {
-                        layoutEmptyFeed.visibility = View.GONE
-                        recyclerViewFeed.visibility = View.VISIBLE
+                if(isFirstPage) {
+                    binding.run {
+                        if(feedResponse.isEmpty()) {
+                            layoutEmptyFeed.visibility = View.VISIBLE
+                            textViewEmptyTitle.text = "${MyApplication.userNickname}님만의 운동기록을\n채워보세요!"
+                            recyclerViewFeed.visibility = View.GONE
+                        } else {
+                            layoutEmptyFeed.visibility = View.GONE
+                            recyclerViewFeed.visibility = View.VISIBLE
+                        }
                     }
                 }
 
-                if (currentPage == 0) feedAdapter.clearFeeds()
+                val imageUrls = feedResponse.map { it.feedImg }
+                feedAdapter.addFeeds(imageUrls) // ✅ 꼭 새로 받은 것만 넘겨야 함
 
-                val imageUrls = mutableListOf<String>()
-                for(i in 0..<feedResponse.size) {
-                    imageUrls.add(feedResponse[i].feedImg)
-                }
-
-                feedAdapter.addFeeds(imageUrls)
-
-                // 다음 페이지 준비
                 isLoading = false
                 currentPage++
             }
+
 
             lastFeed.observe(viewLifecycleOwner) {
                 // 마지막 페이지 확인
