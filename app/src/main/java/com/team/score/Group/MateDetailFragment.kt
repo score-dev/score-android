@@ -212,6 +212,7 @@ class MateDetailFragment : Fragment(), ReportDialogInterface {
         when(type) {
             MateType.BLOCK -> {
                 // 메이트 차단하기
+                viewModel.blockMate(mainActivity, arguments?.getInt("userId") ?: 0)
             }
 
             MateType.REPORT -> {

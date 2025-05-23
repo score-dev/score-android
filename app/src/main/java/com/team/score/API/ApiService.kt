@@ -200,6 +200,13 @@ interface ApiService {
         @Query("userId") userId: Int
     ): Call<List<GroupUnexercisedMateResponse>>
 
+    // 메이트 차단
+    @POST("score/friends/block/{id1}/{id2}")
+    fun blockMate(
+        @Header("Authorization") token: String,
+        @Path("id1") id1: Int,
+        @Path("id2") id2: Int
+    ): Call<String?>
     // 피드 리스트
     @GET("score/exercise/list")
     fun getFeedList(
