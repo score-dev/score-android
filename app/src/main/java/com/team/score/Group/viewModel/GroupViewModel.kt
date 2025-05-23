@@ -34,6 +34,7 @@ class GroupViewModel: ViewModel() {
 
     var isValidPassword = MutableLiveData<Boolean?>()
     var isParticipated = MutableLiveData<Boolean?>()
+    var withdrawalGroupMessage = MutableLiveData<String?>()
 
     var schoolGroupRanking = MutableLiveData<SchoolGroupRankingResponse?>()
 
@@ -251,6 +252,48 @@ class GroupViewModel: ViewModel() {
                 Log.d("##", "onFailure 에러: " + t.message.toString())
 
                 isValidPassword.value = null
+            }
+        })
+    }
+
+    // 그룹 탈퇴
+    fun withdrawalGroup(activity: MainActivity, groupId: Int) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        apiClient.apiService.withdrawalGroup(tokenManager.getAccessToken().toString(), groupId, tokenManager.getUserId()).enqueue(object :
+            Callback<String> {
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    activity.supportFragmentManager.popBackStack()
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        400 -> withdrawalGroupMessage.value = "방장은 그룹에서 탈퇴할 수 없습니다."
+                        else -> withdrawalGroupMessage.value = "그룹 탈퇴에 실패하였습니다. 다시 시도해주세요"
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+                withdrawalGroupMessage.value = "그룹 탈퇴에 실패하였습니다. 다시 시도해주세요"
             }
         })
     }

@@ -101,6 +101,10 @@ class MyGroupDetailFragment : Fragment() {
                     }
                 }
             }
+
+            withdrawalGroupMessage.observe(viewLifecycleOwner) {
+                Toast.makeText(mainActivity, it, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -169,6 +173,7 @@ class MyGroupDetailFragment : Fragment() {
 
                     popupView.findViewById<LinearLayout>(R.id.layout_group_withdrawal).setOnClickListener {
                         // 그룹 탈퇴
+                        viewModel.withdrawalGroup(mainActivity, groupId)
 
                         popupWindow.dismiss()
 

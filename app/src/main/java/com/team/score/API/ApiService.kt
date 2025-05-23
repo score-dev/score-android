@@ -168,6 +168,15 @@ interface ApiService {
         @Query("page") page: Int
     ): Call<PagingResponse<FeedListResponse>>
 
+    // 그룹 탈퇴
+    @PUT("score/groups/leave/{groupId}/{userId}")
+    fun withdrawalGroup(
+        @Header("Authorization") token: String,
+        @Path("groupId") groupId: Int,
+        @Path("userId") userId: Int,
+    ): Call<String>
+
+    // 운동 일자 조회
     @GET("score/exercise/calendar")
     fun getMateExerciseCalendar(
         @Header("Authorization") token: String,
