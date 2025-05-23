@@ -24,16 +24,19 @@ import com.team.score.BasicDialog
 import com.team.score.BasicDialogInterface
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
+import com.team.score.Mypage.Setting.NotificationSettingFragment
 import com.team.score.Mypage.Setting.SettingFragment
 import com.team.score.Mypage.UserCalendarFragment
 import com.team.score.Mypage.UserFeedFragment
 import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
+import com.team.score.ReportDialog
+import com.team.score.ReportDialogInterface
 import com.team.score.Utils.TimeUtil.formatExerciseTimeToKorean
 import com.team.score.databinding.FragmentMateDetailBinding
 import kotlinx.coroutines.channels.ticker
 
-class MateDetailFragment : Fragment(), BasicDialogInterface {
+class MateDetailFragment : Fragment(), ReportDialogInterface {
 
     lateinit var binding: FragmentMateDetailBinding
     lateinit var mainActivity: MainActivity
@@ -193,7 +196,7 @@ class MateDetailFragment : Fragment(), BasicDialogInterface {
         val title = type?.title ?: ""
         val description = type?.description ?: ""
 
-        val dialog = BasicDialog(this@MateDetailFragment, title, description, "예", "아니요", false)
+        val dialog = ReportDialog(this@MateDetailFragment, title, description, "예", "아니요")
         // 알림창이 띄워져있는 동안 배경 클릭 막기
         dialog.isCancelable = false
         activity?.let {
@@ -213,6 +216,9 @@ class MateDetailFragment : Fragment(), BasicDialogInterface {
 
             MateType.REPORT -> {
                 // 메이트 신고하기
+                mainActivity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, MateReportFragment())
+                    .commit()
             }
 
             else -> { }
