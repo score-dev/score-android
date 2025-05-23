@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="12dp"
+    android:paddingHorizontal="20dp"
+    android:background="@drawable/background_popup_menu"
+    android:orientation="vertical"
+    android:outlineAmbientShadowColor="#4DABABAB"
+    android:outlineProvider="background"
+    android:outlineSpotShadowColor="#4DABABAB">
+
+    <!-- 친구 초대 메뉴 -->
+    <LinearLayout
+        android:id="@+id/layout_mate_block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="180dp"
+        android:paddingVertical="22dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView_menu_block"
+            style="@style/body2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="메이트 차단하기"
+            android:textColor="@color/red" />
+    </LinearLayout>
+
+    <!-- Divider -->
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:translationZ="1dp"
+        app:dividerColor="#E4E4E4" />
+
+    <!-- 그룹 탈퇴 메뉴 -->
+    <LinearLayout
+        android:id="@+id/layout_mate_report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="180dp"
+        android:paddingVertical="22dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView_menu_report"
+            style="@style/body2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="메이트 신고하기"
+            android:textColor="@color/red" />
+    </LinearLayout>
+</LinearLayout>
