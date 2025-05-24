@@ -61,7 +61,6 @@ class EnterGroupDialog(
 
         binding.run {
             editTextPassword.run {
-                isFocusable = isPrivate == true
                 setHint(content)
                 addTextChangedListener {
                     backgroundTintList = resources.getColorStateList(R.color.grey3)
@@ -104,7 +103,7 @@ class EnterGroupDialog(
                     if(isPrivate == true) {
                         viewModel.verifyGroupPassword(mainActivity, groupId ?: 0, editTextPassword.text.toString())
                     } else {
-                        viewModel.participateGroup(mainActivity, groupId ?: 0)
+                        viewModel.participateGroup(mainActivity, groupId ?: 0, editTextPassword.text.toString())
                     }
                 }
             }

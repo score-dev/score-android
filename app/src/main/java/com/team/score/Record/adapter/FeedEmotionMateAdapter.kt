@@ -24,7 +24,7 @@ class FeedEmotionMateAdapter(
     }
 
     fun updateList(newEmotions: List<FeedEmotionResponse>?) {
-        emotions = newEmotions
+        emotions = newEmotions?.map { it.copy() } ?: emptyList()
         notifyDataSetChanged()
     }
 

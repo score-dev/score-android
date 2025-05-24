@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
 import com.team.score.API.request.group.CreateGroupRequest
+import com.team.score.API.request.group.ParticipateGroupRequest
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupMateResponse
@@ -174,11 +175,11 @@ class GroupViewModel: ViewModel() {
     }
 
     // 그룹 참여 신청
-    fun participateGroup(activity: MainActivity, groupId: Int) {
+    fun participateGroup(activity: MainActivity, groupId: Int, message: String?) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
-        apiClient.apiService.participateGroup(tokenManager.getAccessToken().toString(), groupId, tokenManager.getUserId()).enqueue(object :
+        apiClient.apiService.participateGroup(tokenManager.getAccessToken().toString(), ParticipateGroupRequest(tokenManager.getUserId(), groupId, message ?: "")).enqueue(object :
             Callback<String> {
             override fun onResponse(
                 call: Call<String>,
@@ -232,7 +233,7 @@ class GroupViewModel: ViewModel() {
                     isValidPassword.value = result
 
                     if(result == true) {
-                        participateGroup(activity, groupId)
+                        participateGroup(activity, groupId, "")
                     }
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
