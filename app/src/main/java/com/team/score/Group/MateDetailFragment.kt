@@ -217,8 +217,19 @@ class MateDetailFragment : Fragment(), ReportDialogInterface {
 
             MateType.REPORT -> {
                 // 메이트 신고하기
+                var nextFragment = MateReportFragment()
+
+                val bundle = Bundle().apply {
+                    putInt("userId", arguments?.getInt("userId") ?: 0)
+                }
+                // 전달할 Fragment 생성
+                nextFragment = MateReportFragment().apply {
+                    arguments = bundle
+                }
+
                 mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_main, MateReportFragment())
+                    .replace(R.id.fragmentContainerView_main, nextFragment)
+                    .addToBackStack(null)
                     .commit()
             }
 
