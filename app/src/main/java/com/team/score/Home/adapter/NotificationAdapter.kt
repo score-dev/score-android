@@ -6,14 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources.getColorStateList
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.NotificationResponse
+import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Record.RecordFragment
+import com.team.score.Record.RecordMapFragment
 import com.team.score.Utils.CalendarUtil.formatToMonthDay
 import com.team.score.databinding.RowNotificationBinding
 
 class NotificationAdapter(
+    private var activity: MainActivity,
     private var context: Context,
 ) :
     RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
@@ -74,13 +80,30 @@ class NotificationAdapter(
             // 타입별 버튼 분기
             when (item.type) {
                 "JOIN_REQUEST" -> {
-                    layoutTwoButton.visibility = View.VISIBLE
+                    if(item.read == true) {
+                        buttonOne.run {
+                            visibility = View.VISIBLE
+                            backgroundTintList = ContextCompat.getColorStateList(context, R.color.grey1)
+                        }
+
+                        if(item.joinRequestAccepted == true) {
+                            buttonOne.text = "수락하셨습니다!"
+                        } else {
+                            buttonOne.text = "거절하셨습니다."
+                        }
+                    } else {
+                        layoutTwoButton.visibility = View.VISIBLE
+                    }
                 }
                 "JOIN_COMPLETE", "GROUP_RANKING", "SCHOOL_RANKING", "TAGGED" -> {
                     textViewDescription.visibility = View.VISIBLE
                 }
                 "BATON", "GOAL" -> {
                     buttonOne.visibility = View.VISIBLE
+
+                    if(item.read == true) {
+                        buttonOne.backgroundTintList = ContextCompat.getColorStateList(context, R.color.grey1)
+                    }
                 }
                 "ETC" -> {
                     textViewDescription.visibility = View.VISIBLE
@@ -116,10 +139,10 @@ class NotificationAdapter(
             }
 
             binding.buttonOne.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
-
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, RecordFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }

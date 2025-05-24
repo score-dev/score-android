@@ -41,7 +41,7 @@ class NotificationFragment : Fragment() {
 
         binding = FragmentNotificationBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        notificationAdapter = NotificationAdapter(requireContext()).apply {
+        notificationAdapter = NotificationAdapter(mainActivity, requireContext()).apply {
             itemClickListener = object : NotificationAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
 
