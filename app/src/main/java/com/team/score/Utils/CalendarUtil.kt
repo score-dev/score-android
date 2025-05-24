@@ -73,6 +73,17 @@ object CalendarUtil {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    fun formatToMonthDay(input: String): String {
+        return try {
+            val parsedDate = LocalDateTime.parse(input, DateTimeFormatter.ISO_DATE_TIME)
+            val outputFormatter = DateTimeFormatter.ofPattern("MM월 dd일", Locale.KOREA)
+            parsedDate.format(outputFormatter)
+        } catch (e: Exception) {
+            "" // 잘못된 형식일 경우 빈 문자열 반환
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getAmPmAndTime(time: String): Pair<String, String> {
         return try {
             // 1. 오프셋이 있는 경우
