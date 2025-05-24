@@ -1,18 +1,27 @@
 package com.team.score.Group.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.user.FeedListResponse
+import com.team.score.Group.FeedReportFragment
+import com.team.score.Group.MateDetailFragment.MateType
+import com.team.score.Group.MateReportFragment
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
@@ -26,6 +35,7 @@ import com.team.score.databinding.RowFeedBinding
 class MyGroupFeedAdapter(
     private var activity: MainActivity,
     private var context: Context,
+    private var fragmentManager: FragmentManager,
     private val viewModel: GroupViewModel
 ) :
     RecyclerView.Adapter<MyGroupFeedAdapter.ViewHolder>() {
@@ -204,53 +214,163 @@ class MyGroupFeedAdapter(
     inner class ViewHolder(val binding: LayoutFeedDetailBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.imageViewFeed.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
+            binding.run {
+                imageViewFeed.setOnClickListener {
+                    itemClickListener?.onItemClick(adapterPosition)
 
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
-            }
-
-            binding.textViewEmotionPeople.setOnClickListener {
-                // 바텀시트
-                println("emotion : ${feedEmotionMap[feedList.get(adapterPosition).feedId]}")
-                val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(activity, feedEmotionMap[feedList[adapterPosition].feedId])
-                emotionMateBottomSheet.show(activity.supportFragmentManager, emotionMateBottomSheet.tag)
-            }
-
-            binding.layoutEmotionAdd.setOnClickListener { view ->
-                val item = feedList[adapterPosition]
-                val popupView = LayoutInflater.from(context).inflate(R.layout.layout_pop_menu_emotion, null)
-
-                val popupWindow = PopupWindow(
-                    popupView,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    true
-                )
-                popupWindow.elevation = 100f
-
-                // 클릭 리스너들
-                popupView.findViewById<TextView>(R.id.button_emotion_like).setOnClickListener {
-                    viewModel.setFeedEmotion(activity, item.feedId, "LIKE")
-                    popupWindow.dismiss()
-                }
-                popupView.findViewById<TextView>(R.id.button_emotion_best).setOnClickListener {
-                    viewModel.setFeedEmotion(activity, item.feedId, "BEST")
-                    popupWindow.dismiss()
-                }
-                popupView.findViewById<TextView>(R.id.button_emotion_congratulation).setOnClickListener {
-                    viewModel.setFeedEmotion(activity, item.feedId, "CONGRAT")
-                    popupWindow.dismiss()
-                }
-                popupView.findViewById<TextView>(R.id.button_emotion_support).setOnClickListener {
-                    viewModel.setFeedEmotion(activity, item.feedId, "SUPPORT")
-                    popupWindow.dismiss()
+                    // 클릭 리스너 호출
+                    onItemClickListener?.invoke(position)
                 }
 
-                // 팝업 표시 (살짝 위로 위치 조정)
-                popupWindow.showAsDropDown(binding.layoutEmotionAdd, 0, -200)
+
+                buttonKebab.setOnClickListener {
+                    if(feedList.get(adapterPosition).uploaderNickname == MyApplication.userNickname) {
+                        showMyFeedPopUp(buttonKebab, adapterPosition)
+                    } else {
+                        showOtherFeedPopUp(buttonKebab, adapterPosition)
+                    }
+                }
+
+                textViewEmotionPeople.setOnClickListener {
+                    // 바텀시트
+                    println("emotion : ${feedEmotionMap[feedList.get(adapterPosition).feedId]}")
+                    val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(
+                        activity,
+                        feedEmotionMap[feedList[adapterPosition].feedId]
+                    )
+                    emotionMateBottomSheet.show(fragmentManager, emotionMateBottomSheet.tag)
+                }
+
+                layoutEmotionAdd.setOnClickListener { view ->
+                    val item = feedList[adapterPosition]
+                    val popupView =
+                        LayoutInflater.from(context).inflate(R.layout.layout_pop_menu_emotion, null)
+
+                    val popupWindow = PopupWindow(
+                        popupView,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        true
+                    )
+                    popupWindow.elevation = 100f
+
+                    // 클릭 리스너들
+                    popupView.findViewById<TextView>(R.id.button_emotion_like).setOnClickListener {
+                        viewModel.setFeedEmotion(activity, item.feedId, "LIKE")
+                        popupWindow.dismiss()
+                    }
+                    popupView.findViewById<TextView>(R.id.button_emotion_best).setOnClickListener {
+                        viewModel.setFeedEmotion(activity, item.feedId, "BEST")
+                        popupWindow.dismiss()
+                    }
+                    popupView.findViewById<TextView>(R.id.button_emotion_congratulation)
+                        .setOnClickListener {
+                            viewModel.setFeedEmotion(activity, item.feedId, "CONGRAT")
+                            popupWindow.dismiss()
+                        }
+                    popupView.findViewById<TextView>(R.id.button_emotion_support)
+                        .setOnClickListener {
+                            viewModel.setFeedEmotion(activity, item.feedId, "SUPPORT")
+                            popupWindow.dismiss()
+                        }
+
+                    // 팝업 표시 (살짝 위로 위치 조정)
+                    popupWindow.showAsDropDown(binding.layoutEmotionAdd, 0, -200)
+                }
             }
         }
+    }
+
+    fun showOtherFeedPopUp(buttonKebab: ImageView, adapterPosition: Int) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_other_feed_item, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 50f
+        }
+
+        // ✅ 블러 뷰 추가
+        val blurOverlay = View(activity).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.parseColor("#4D000000"))
+            isClickable = true // 뒤쪽 클릭 막기
+        }
+        val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        rootView.addView(blurOverlay)
+
+        popupWindow.setOnDismissListener {
+            rootView.removeView(blurOverlay)
+        }
+
+        popupView.setOnClickListener {
+            // 피드 신고하기
+            var nextFragment = FeedReportFragment()
+
+            val bundle = Bundle().apply {
+                putInt("feedId", feedList[adapterPosition].feedId ?: 0)
+            }
+            // 전달할 Fragment 생성
+            nextFragment = FeedReportFragment().apply {
+                arguments = bundle
+            }
+
+            activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView_main, nextFragment)
+                .addToBackStack(null)
+                .commit()
+
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(buttonKebab, -200, 50)
+    }
+
+    fun showMyFeedPopUp(buttonKebab: ImageView, adapterPosition: Int) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_my_feed_item, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 50f
+        }
+
+        // ✅ 블러 뷰 추가
+        val blurOverlay = View(activity).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.parseColor("#4D000000"))
+            isClickable = true // 뒤쪽 클릭 막기
+        }
+        val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        rootView.addView(blurOverlay)
+
+        popupWindow.setOnDismissListener {
+            rootView.removeView(blurOverlay)
+        }
+
+        popupView.setOnClickListener {
+            // 피드 삭제하기
+            viewModel.deleteFeed(activity, feedList[adapterPosition].feedId) {
+                // 로컬 리스트에서 삭제
+                feedList.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+            }
+
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(buttonKebab, -200, 50)
     }
 }

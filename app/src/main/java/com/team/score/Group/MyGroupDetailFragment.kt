@@ -1,23 +1,39 @@
 package com.team.score.Group
 
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.share.WebSharerClient
+import com.kakao.sdk.template.model.Button
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
+import com.team.score.API.TokenManager
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupRankingResponse
 import com.team.score.API.response.group.RankerInfo
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil.formatExerciseTime
 import com.team.score.Utils.TimeUtil.formatSecondsToMinuteString
 import com.team.score.databinding.FragmentMyGroupDetailBinding
@@ -43,8 +59,6 @@ class MyGroupDetailFragment : Fragment() {
         binding = FragmentMyGroupDetailBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
-        observeViewModel()
-
         groupId = arguments?.getInt("groupId") ?: 0
 
         // Fragment 리스트 설정
@@ -54,12 +68,10 @@ class MyGroupDetailFragment : Fragment() {
             GroupMateListFragment.newInstance(groupId, arguments?.getString("groupName") ?: "")
         )
 
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
         initView()
+        observeViewModel()
+
+        return binding.root
     }
 
     fun observeViewModel() {
@@ -88,6 +100,10 @@ class MyGroupDetailFragment : Fragment() {
                         applyRankingUI(getGroupRanking?.rankersInfo ?: emptyList())
                     }
                 }
+            }
+
+            withdrawalGroupMessage.observe(viewLifecycleOwner) {
+                Toast.makeText(mainActivity, it, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -121,11 +137,81 @@ class MyGroupDetailFragment : Fragment() {
                     fragmentManager?.popBackStack()
                 }
                 buttonKebab.setOnClickListener {
+                    val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_my_group_item, null)
 
+                    val popupWindow = PopupWindow(
+                        popupView,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        true
+                    ).apply {
+                        elevation = 50f
+                    }
+
+                    // ✅ 블러 뷰 추가
+                    val blurOverlay = View(mainActivity).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                        setBackgroundColor(Color.parseColor("#4D000000"))
+                        isClickable = true // 뒤쪽 클릭 막기
+                    }
+                    val rootView = mainActivity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+                    rootView.addView(blurOverlay)
+
+                    popupWindow.setOnDismissListener {
+                        rootView.removeView(blurOverlay)
+                    }
+
+                    popupView.findViewById<LinearLayout>(R.id.layout_invite_mate).setOnClickListener {
+                        // 친구 초대
+                        shareToKakaoWithCustomTemplate(mainActivity)
+
+                        popupWindow.dismiss()
+                    }
+
+                    popupView.findViewById<LinearLayout>(R.id.layout_group_withdrawal).setOnClickListener {
+                        // 그룹 탈퇴
+                        viewModel.withdrawalGroup(mainActivity, groupId)
+
+                        popupWindow.dismiss()
+
+                    }
+
+                    popupWindow.showAsDropDown(toolbar.buttonKebab, -200, 50)
                 }
+
             }
 
             applyRankingUI(getGroupRanking?.rankersInfo ?: emptyList())
+        }
+    }
+
+    fun shareToKakaoWithCustomTemplate(context: Context) {
+        val templateArgs = mapOf(
+            "group_id" to "${groupId ?: 0}",
+            "group_name" to (getGroupDetail?.groupName ?: ""),
+            "group_image_url" to (getGroupDetail?.groupImg ?: ""),
+            "type" to "group"
+        )
+
+        val templateId = 120711L
+
+        if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
+            ShareClient.instance.shareCustom(context, templateId, templateArgs) { result, error ->
+                if (error != null) {
+                    Log.e("KakaoShare", "카카오톡 커스텀 템플릿 공유 실패", error)
+                } else if (result != null) {
+                    Log.d("KakaoShare", "공유 성공: ${result.intent.data}") // ✅ 딥링크 URI 로그
+                    context.startActivity(result.intent)
+                }
+            }
+        } else {
+            WebSharerClient.instance.makeCustomUrl(templateId, templateArgs)?.let { url ->
+                Log.d("KakaoShare", "웹 공유 URI: $url")
+                context.startActivity(Intent(Intent.ACTION_VIEW, url))
+            } ?: Log.e("KakaoShare", "웹 공유 URL 생성 실패")
         }
     }
 

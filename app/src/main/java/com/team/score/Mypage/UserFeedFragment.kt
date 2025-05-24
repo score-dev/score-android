@@ -25,7 +25,7 @@ class UserFeedFragment : Fragment() {
     lateinit var binding: FragmentUserFeedBinding
     lateinit var mainActivity: MainActivity
     private val viewModel: RecordViewModel by lazy {
-        ViewModelProvider(requireActivity())[RecordViewModel::class.java]
+        ViewModelProvider(this)[RecordViewModel::class.java]
     }
 
     lateinit var feedAdapter: FeedAdapter
@@ -48,19 +48,18 @@ class UserFeedFragment : Fragment() {
         feedAdapter = FeedAdapter(requireContext()).apply {
             itemClickListener = object : FeedAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
-                    var registerNoticeFragment = FeedDetailFragment()
+                    if (position < 0 || position >= getFeedList.size) return
 
+                    val nextFragment = FeedDetailFragment()
                     val bundle = Bundle().apply {
                         putInt("position", position)
                         putInt("feedId", getFeedList[position].feedId)
                     }
-                    // 전달할 Fragment 생성
-                    registerNoticeFragment = FeedDetailFragment().apply {
-                        arguments = bundle
-                    }
+
+                    nextFragment.arguments = bundle
 
                     mainActivity.supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView_main, registerNoticeFragment)
+                        .replace(R.id.fragmentContainerView_main, nextFragment)
                         .addToBackStack(null)
                         .commit()
                 }
@@ -112,7 +111,10 @@ class UserFeedFragment : Fragment() {
             feedList.observe(viewLifecycleOwner) { feedResponse ->
                 if (currentPage == 0) {
                     feedAdapter.clearFeeds()
+                    getFeedList.clear()
                 }
+
+                getFeedList.addAll(feedResponse)
 
                 if(isFirstPage) {
                     binding.run {
@@ -128,7 +130,7 @@ class UserFeedFragment : Fragment() {
                 }
 
                 val imageUrls = feedResponse.map { it.feedImg }
-                feedAdapter.addFeeds(imageUrls) // ✅ 꼭 새로 받은 것만 넘겨야 함
+                feedAdapter.addFeeds(imageUrls)
 
                 isLoading = false
                 currentPage++

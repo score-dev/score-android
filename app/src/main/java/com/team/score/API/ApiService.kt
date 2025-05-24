@@ -168,6 +168,15 @@ interface ApiService {
         @Query("page") page: Int
     ): Call<PagingResponse<FeedListResponse>>
 
+    // 그룹 탈퇴
+    @PUT("score/groups/leave/{groupId}/{userId}")
+    fun withdrawalGroup(
+        @Header("Authorization") token: String,
+        @Path("groupId") groupId: Int,
+        @Path("userId") userId: Int,
+    ): Call<String>
+
+    // 운동 일자 조회
     @GET("score/exercise/calendar")
     fun getMateExerciseCalendar(
         @Header("Authorization") token: String,
@@ -191,6 +200,13 @@ interface ApiService {
         @Query("userId") userId: Int
     ): Call<List<GroupUnexercisedMateResponse>>
 
+    // 메이트 차단
+    @POST("score/friends/block/{id1}/{id2}")
+    fun blockMate(
+        @Header("Authorization") token: String,
+        @Path("id1") id1: Int,
+        @Path("id2") id2: Int
+    ): Call<String?>
     // 피드 리스트
     @GET("score/exercise/list")
     fun getFeedList(
@@ -223,6 +239,13 @@ interface ApiService {
         @Query("type") type: String,
     ): Call<String>
 
+
+    // 피드 삭제
+    @DELETE("score/exercise/delete")
+    fun deleteFeed(
+        @Header("Authorization") token: String,
+        @Query("id") feedId: Int
+    ): Call<String?>
     // 회원 정보 수정
     @Multipart
     @PATCH("score/user/update/{userId}")
