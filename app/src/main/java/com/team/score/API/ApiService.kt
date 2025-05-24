@@ -239,6 +239,13 @@ interface ApiService {
         @Query("type") type: String,
     ): Call<String>
 
+
+    // 피드 삭제
+    @DELETE("score/exercise/delete")
+    fun deleteFeed(
+        @Header("Authorization") token: String,
+        @Query("id") feedId: Int
+    ): Call<String?>
     // 회원 정보 수정
     @Multipart
     @PATCH("score/user/update/{userId}")

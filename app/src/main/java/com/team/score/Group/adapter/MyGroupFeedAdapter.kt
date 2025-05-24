@@ -362,6 +362,11 @@ class MyGroupFeedAdapter(
 
         popupView.setOnClickListener {
             // 피드 삭제하기
+            viewModel.deleteFeed(activity, feedList[adapterPosition].feedId) {
+                // 로컬 리스트에서 삭제
+                feedList.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+            }
 
             popupWindow.dismiss()
         }
