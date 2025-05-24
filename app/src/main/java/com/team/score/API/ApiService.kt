@@ -60,9 +60,9 @@ interface ApiService {
     ): Call<LoginResponse>
 
     // FCM 토큰 저장
-    @POST("{userId}/token")
+    @POST("score/fcm/token/set")
     fun setFcmToken(
-        @Path("userId") id: Int,
+        @Query("userId") id: Int,
         @Header("Authorization") token: String,
         @Body body: FcmRequest
     ): Call<String>
