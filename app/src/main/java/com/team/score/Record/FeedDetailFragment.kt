@@ -1,10 +1,12 @@
 package com.team.score.Record
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -14,10 +16,13 @@ import com.bumptech.glide.Glide
 import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FeedDetailResponse
 import com.team.score.API.response.record.FeedEmotionResponse
+import com.team.score.Group.FeedReportFragment
+import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.BottomSheet.FeedEmotionBottomSheetFragment
 import com.team.score.Record.viewModel.RecordViewModel
+import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
 import com.team.score.databinding.FragmentFeedDetailBinding
 
@@ -27,6 +32,9 @@ class FeedDetailFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private val viewModel: RecordViewModel by lazy {
         ViewModelProvider(requireActivity())[RecordViewModel::class.java]
+    }
+    private val groupViewModel: GroupViewModel by lazy {
+        ViewModelProvider(requireActivity())[GroupViewModel::class.java]
     }
 
     var getFeedDetailInfo: FeedDetailResponse? = null
@@ -89,6 +97,14 @@ class FeedDetailFragment : Fragment() {
                 // 팝업 표시
                 popupWindow.showAsDropDown(layoutEmotionAdd, 10, -200)
             }
+
+            buttonKebab.setOnClickListener {
+                if(getFeedDetailInfo?.uploaderNickname == MyApplication.userNickname) {
+                    showMyFeedPopUp(buttonKebab)
+                } else {
+                    showOtherFeedPopUp(buttonKebab)
+                }
+            }
         }
 
         return binding.root
@@ -116,6 +132,7 @@ class FeedDetailFragment : Fragment() {
 
                     if(getFeedDetailInfo?.taggedNicknames?.size != 0) {
                         layoutOthers.visibility = View.VISIBLE
+                        textViewFeedDescription3.visibility = View.VISIBLE
                         Glide.with(mainActivity).load(getFeedDetailInfo?.taggedProfileImgUrls?.get(0)).into(imageViewOtherProfile)
                         textViewOtherNickname.text = getFeedDetailInfo?.taggedNicknames?.get(0)
                     } else {
@@ -226,6 +243,97 @@ class FeedDetailFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun showOtherFeedPopUp(buttonKebab: ImageView) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_other_feed_item, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 50f
+        }
+
+        // ✅ 블러 뷰 추가
+        val blurOverlay = View(activity).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.parseColor("#4D000000"))
+            isClickable = true // 뒤쪽 클릭 막기
+        }
+        val rootView = mainActivity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        rootView.addView(blurOverlay)
+
+        popupWindow.setOnDismissListener {
+            rootView.removeView(blurOverlay)
+        }
+
+        popupView.setOnClickListener {
+            // 피드 신고하기
+            var nextFragment = FeedReportFragment()
+
+            val bundle = Bundle().apply {
+                putInt("feedId", getFeedDetailInfo?.feedId ?: 0)
+            }
+            // 전달할 Fragment 생성
+            nextFragment = FeedReportFragment().apply {
+                arguments = bundle
+            }
+
+            mainActivity.supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView_main, nextFragment)
+                .addToBackStack(null)
+                .commit()
+
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(buttonKebab, -200, 50)
+    }
+
+    fun showMyFeedPopUp(buttonKebab: ImageView) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_my_feed_item, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 50f
+        }
+
+        // ✅ 블러 뷰 추가
+        val blurOverlay = View(activity).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.parseColor("#4D000000"))
+            isClickable = true // 뒤쪽 클릭 막기
+        }
+        val rootView = mainActivity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        rootView.addView(blurOverlay)
+
+        popupWindow.setOnDismissListener {
+            rootView.removeView(blurOverlay)
+        }
+
+        popupView.setOnClickListener {
+            // 피드 삭제하기
+            groupViewModel.deleteFeed(mainActivity, getFeedDetailInfo?.feedId ?: 0) {
+                fragmentManager?.popBackStack()
+            }
+
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(buttonKebab, -200, 50)
     }
 
 }
