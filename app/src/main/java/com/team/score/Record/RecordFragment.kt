@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,7 +34,7 @@ class RecordFragment : Fragment() {
     lateinit var binding: FragmentRecordBinding
     lateinit var mainActivity: MainActivity
 
-    private val LOCATION_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    private val LOCATION_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
 
     var isStart = false
@@ -84,7 +85,7 @@ class RecordFragment : Fragment() {
                 }
             }
             buttonRecord.setOnClickListener {
-                isStart = mainActivity.toggleTracking()
+                isStart = mainActivity.toggleTrackingService()
                 binding.buttonRecord.setImageResource(
                     if (isStart) R.drawable.ic_temporary_stop else R.drawable.ic_start
                 )
@@ -92,7 +93,7 @@ class RecordFragment : Fragment() {
             buttonStop.setOnClickListener {
                 if (TimerManager.startedAtIso != null) {
                     // 타이머와 위치 추적 종료
-                    mainActivity.stopTracking()
+                    mainActivity.stopTrackingService()
                     isStart = false
                     buttonRecord.setImageResource(R.drawable.ic_start)
 
@@ -110,14 +111,19 @@ class RecordFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNavigation(true)
+
+        TimerManager.load(requireContext())
+
+        // UI 상태 복원 로직
+        if (TimerManager.startedAtMillis != null && TimerManager.isRunning) {
+            val now = System.currentTimeMillis()
+            val elapsed = ((now - TimerManager.startedAtMillis!!) / 1000).toInt()
+            MyApplication.recordTimer = elapsed
+        }
     }
 
 
     fun initView() {
-        mainActivity.run {
-            initTracking()
-        }
-
         binding.run {
             startTimerUIUpdater()
 
@@ -125,12 +131,13 @@ class RecordFragment : Fragment() {
                 textViewHead.text = "기록하기"
                 buttonBack.setOnClickListener {
                     stopTimerUIUpdater()
-                    mainActivity.resetTracking()
+                    mainActivity.stopAndResetTracking()
 
                     fragmentManager?.popBackStack()
                 }
             }
 
+            isStart = TimerManager.isRunning
             if (isStart) {
                 buttonRecord.setImageResource(R.drawable.ic_temporary_stop)
             } else {
