@@ -40,6 +40,11 @@ class MateReportFragment : Fragment() {
         buttonChangeListener(causeButtons)
 
         binding.run {
+            scrollView.setOnTouchListener { v, event ->
+                mainActivity.hideKeyboard()
+                false
+            }
+
             buttonClear.setOnClickListener {
                 editTextCause.setText("")
             }
@@ -112,9 +117,9 @@ class MateReportFragment : Fragment() {
     fun checkEnabled() {
         binding.run {
             if(selectedCauseIndex != null || editTextCause.text.isNotEmpty()) {
-                buttonWithdraw.isEnabled = true
+                buttonReport.isEnabled = true
             } else {
-                buttonWithdraw.isEnabled = false
+                buttonReport.isEnabled = false
             }
         }
     }
