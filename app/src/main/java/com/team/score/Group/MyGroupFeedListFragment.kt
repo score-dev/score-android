@@ -49,7 +49,7 @@ class MyGroupFeedListFragment : Fragment() {
 
         binding = FragmentMyGroupFeedListBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        feedAdapter = MyGroupFeedAdapter(mainActivity, requireContext(), viewModel)
+        feedAdapter = MyGroupFeedAdapter(mainActivity, requireContext(), childFragmentManager, viewModel)
 
         binding.recyclerViewGroupFeed.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)

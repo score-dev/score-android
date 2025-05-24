@@ -3,6 +3,7 @@ package com.team.score.Record.BottomSheet
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,10 +25,6 @@ class FeedEmotionBottomSheetFragment(var activity: Activity, var emotions: List<
 
     lateinit var feedEmotionMateAdapter: FeedEmotionMateAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,26 +32,8 @@ class FeedEmotionBottomSheetFragment(var activity: Activity, var emotions: List<
         binding = FragmentFeedEmotionBottomSheetBinding.inflate(inflater, container, false)
 
         initAdapter()
-        observeViewModel()
-
-        binding.run {
-            recyclerViewEmotionMate.run {
-                adapter = feedEmotionMateAdapter
-                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            }
-        }
 
         return binding.root
-    }
-
-    fun observeViewModel() {
-        viewModel.run {
-            feedEmotion.observe(viewLifecycleOwner) {
-                emotions = it
-
-                feedEmotionMateAdapter.updateList(emotions)
-            }
-        }
     }
 
     fun initAdapter() {
@@ -62,5 +41,12 @@ class FeedEmotionBottomSheetFragment(var activity: Activity, var emotions: List<
             activity,
             emotions
         )
+
+        binding.run {
+            recyclerViewEmotionMate.run {
+                adapter = feedEmotionMateAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+        }
     }
 }
