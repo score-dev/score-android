@@ -61,7 +61,7 @@ class MateFragment : Fragment() {
 
         binding.run {
             buttonKakao.setOnClickListener {
-                shareToKakao(mainActivity)
+                shareToKakaoWithCustomTemplate(mainActivity)
             }
 
             recyclerViewMate.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -88,49 +88,30 @@ class MateFragment : Fragment() {
         initView()
     }
 
-    fun shareToKakao(context: Context) {
-        // FeedTemplate 생성
-        val feedTemplate = FeedTemplate(
-            content = Content(
-                title = "${MyApplication.userNickname}님이 스코어로 초대했어요!",
-                description = "#스코어 #운동 #같이해요",
-                imageUrl = "https://yourdomain.com/default-image.jpg", // 필수: 외부 이미지 URL
-                link = Link(
-                    webUrl = "https://play.google.com/store/apps/details?id=com.team.score",
-                    mobileWebUrl = "https://play.google.com/store/apps/details?id=com.team.score"
-                )
-            ),
-            buttons = listOf(
-                Button(
-                    title = "앱으로 보기",
-                    link = Link(
-                        androidExecutionParams = mapOf(
-                            "nickname" to "${MyApplication.userNickname}",
-                            "userId" to "${TokenManager(mainActivity).getUserId()}",
-                            "userProfileImage" to "${MyApplication.userInfo?.profileImgUrl}"),
-                    )
-                )
-            )
+    fun shareToKakaoWithCustomTemplate(context: Context) {
+        val templateArgs = mapOf(
+            "mate_id" to "${TokenManager(context).getUserId() ?: 0}",
+            "mate_name" to (MyApplication.userNickname ?: ""),
+            "mate_profile_image_url" to (MyApplication.userInfo?.profileImgUrl ?: ""),
+            "type" to "mate"
         )
 
-        // 카카오링크 실행
+        val templateId = 120678L
+
         if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
-            ShareClient.instance.shareDefault(context, feedTemplate) { linkResult, error ->
+            ShareClient.instance.shareCustom(context, templateId, templateArgs) { result, error ->
                 if (error != null) {
-                    Log.e("KakaoShare", "카카오톡 공유 실패", error)
-                } else if (linkResult != null) {
-                    context.startActivity(linkResult.intent)
-                    Log.d("KakaoShare", "카카오톡 공유 성공")
+                    Log.e("KakaoShare", "카카오톡 커스텀 템플릿 공유 실패", error)
+                } else if (result != null) {
+                    Log.d("KakaoShare", "공유 성공: ${result.intent.data}") // ✅ 딥링크 URI 로그
+                    context.startActivity(result.intent)
                 }
             }
         } else {
-            // 카카오톡 미설치 시 웹 공유 URL 생성
-            WebSharerClient.instance.makeDefaultUrl(feedTemplate)?.let { sharerUrl ->
-                val intent = Intent(Intent.ACTION_VIEW, sharerUrl)
-                context.startActivity(intent)
-            } ?: run {
-                Log.e("KakaoShare", "공유 URL 생성 실패")
-            }
+            WebSharerClient.instance.makeCustomUrl(templateId, templateArgs)?.let { url ->
+                Log.d("KakaoShare", "웹 공유 URI: $url")
+                context.startActivity(Intent(Intent.ACTION_VIEW, url))
+            } ?: Log.e("KakaoShare", "웹 공유 URL 생성 실패")
         }
     }
 

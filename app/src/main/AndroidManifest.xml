@@ -50,14 +50,12 @@
             android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
-                <data android:scheme="http" />
-                <data android:scheme="https" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:host="kakaolink"
-                    android:scheme="${kakao_native_key}" />
+                <data
+                    android:scheme="${kakao_native_key}"
+                    android:host="kakaolink" />
             </intent-filter>
         </activity>
 

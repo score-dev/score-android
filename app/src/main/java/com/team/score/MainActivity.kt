@@ -54,7 +54,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         viewModel.getUserInfo(this, TokenManager(this).getUserId())
 
-        initDeepLink(intent)
+        intent?.let {
+            initDeepLink(intent)
+            if (it.getBooleanExtra("record", false)) {
+                Handler(Looper.getMainLooper()).post {
+                    goToRecord(it)
+                    it.removeExtra("record") // 재진입 방지
+                }
+            }
+        }
 
         binding.run {
             fabRecord.setOnClickListener {
@@ -80,8 +88,17 @@ class MainActivity : AppCompatActivity() {
         intent.let {
             if (it != null) {
                 initDeepLink(it)
+
+                intent?.let {
+                    if (it.getBooleanExtra("record", false)) {
+                        Handler(Looper.getMainLooper()).post {
+                            goToRecord(it)
+                            it.removeExtra("record") // 재진입 방지
+                        }
+                    }
+                }
             }
-        } // 앱 실행 중 알림 클릭 처리
+        } 
     }
 
     private fun initDeepLink(intent: Intent) {
