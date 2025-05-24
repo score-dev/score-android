@@ -1,5 +1,6 @@
 package com.team.score.API
 
+import com.team.score.API.request.group.ParticipateGroupRequest
 import com.team.score.API.request.signUp.FcmRequest
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
@@ -113,11 +114,10 @@ interface ApiService {
     ): Call<Int>
 
     // 그룹 가입 신청
-    @GET("score/groups/join/request")
+    @POST("score/groups/join/request")
     fun participateGroup(
         @Header("Authorization") token: String,
-        @Query("groupId") groupId: Int,
-        @Query("userId") userId: Int
+        @Body body: ParticipateGroupRequest
     ): Call<String>
 
     // 그룹 가입 신청 - 비공개 그룹 비밀번호 일치 확인
