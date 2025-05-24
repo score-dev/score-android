@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -29,6 +30,7 @@ import com.team.score.Utils.DistanceUtil
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
 import com.team.score.Utils.TimerManager
+import com.team.score.Utils.TrackingService
 import com.team.score.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -37,16 +39,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MypageViewModel by lazy {
         ViewModelProvider(this)[MypageViewModel::class.java]
     }
-
-    private var elapsedSeconds = 0
-    private val handler = Handler(Looper.getMainLooper())
-    private lateinit var timerRunnable: Runnable
-
-    lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var locationRequest: LocationRequest
-    lateinit var locationCallback: LocationCallback
-
-    var isTracking = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,6 +100,29 @@ class MainActivity : AppCompatActivity() {
                 data = uri // 딥링크 그대로 넘기기
             }
             startActivity(kakaoIntent)
+
+            when(uri.getQueryParameter("type")) {
+                "mate" -> {
+                    val kakaoIntent = Intent(this, KakaoActivity::class.java).apply {
+                        data = uri // 딥링크 그대로 넘기기
+                    }
+                    startActivity(kakaoIntent)
+                }
+            }
+        }
+    }
+
+    fun goToRecord(intent: Intent) {
+        if (intent.getBooleanExtra("record", false)) {
+            val container = findViewById<View>(R.id.fragmentContainerView_main)
+            if (container != null) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView_main, RecordFragment())
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                Log.e("MainActivity", "FragmentContainerView가 아직 초기화되지 않았습니다.")
+            }
         }
     }
 
@@ -168,88 +183,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initTracking() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        locationRequest = LocationRequest.create().apply {
-            interval = 5000
-            fastestInterval = 3000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                for (location in result.locations) {
-                    DistanceUtil.onLocationUpdate(location)
-                }
-            }
-        }
-    }
-
-    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun startTracking() {
-        if (TimerManager.startedAtMillis == null) {
-            val now = System.currentTimeMillis()
-            TimerManager.startedAtMillis = now
-            TimerManager.startedAtIso = TimeUtil.convertMillisToIso(now)
-        }
-
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-
-        elapsedSeconds = MyApplication.recordTimer
-        timerRunnable = object : Runnable {
-            override fun run() {
-                elapsedSeconds++
-                MyApplication.recordTimer = elapsedSeconds
-                handler.postDelayed(this, 1000)
-            }
-        }
-        handler.post(timerRunnable)
-
+    fun startTrackingService() {
+        val intent = Intent(this, TrackingService::class.java)
+        ContextCompat.startForegroundService(this, intent)
         TimerManager.isRunning = true
-        isTracking = true
     }
 
-    fun stopTracking() {
-        if (::timerRunnable.isInitialized) {
-            handler.removeCallbacks(timerRunnable)
-        }
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-
-        TimerManager.completedAtMillis = System.currentTimeMillis()
-        TimerManager.completedAtIso = TimeUtil.convertMillisToIso(TimerManager.completedAtMillis!!)
+    fun stopTrackingService() {
+        val intent = Intent(this, TrackingService::class.java)
+        stopService(intent)
         TimerManager.isRunning = false
-        isTracking = false
     }
 
-    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    fun toggleTracking(): Boolean {
-        return if (isTracking) {
-            stopTracking()
+    fun toggleTrackingService(): Boolean {
+        return if (TimerManager.isRunning) {
+            stopTrackingService()
             false
         } else {
-            startTracking()
+            startTrackingService()
             true
         }
     }
 
-    fun resetTracking() {
-        // 1. 타이머 중지
-        if (::timerRunnable.isInitialized) {
-            handler.removeCallbacks(timerRunnable)
-        }
+    fun stopAndResetTracking() {
+        // 1. TrackingService 종료
+        stopTrackingService()
 
-        // 2. 위치 추적 중지
-        if (::locationCallback.isInitialized) {
-            fusedLocationClient.removeLocationUpdates(locationCallback)
-        }
+        // 2. 기록 관련 상태 전부 초기화
+        TimerManager.reset()
+        TimerManager.clear(this)
 
-        // 3. 상태 초기화
-        TimerManager.reset() // startedAt, completedAt 등 모두 null로 설정된다고 가정
-        isTracking = false
-        elapsedSeconds = 0
-
-        // 4. 기록 데이터 초기화
         MyApplication.run {
             recordTimer = 0
             totalDistance = 0

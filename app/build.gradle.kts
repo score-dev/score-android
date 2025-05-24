@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

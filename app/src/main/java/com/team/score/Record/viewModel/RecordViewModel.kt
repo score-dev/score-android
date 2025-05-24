@@ -539,7 +539,7 @@ class RecordViewModel: ViewModel() {
                     val result: String? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
-                    activity.resetTracking()
+                    activity.stopAndResetTracking()
 
                     activity.supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, RecordFeedCompleteFragment())
