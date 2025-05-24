@@ -224,7 +224,11 @@ class MyGroupFeedAdapter(
 
 
                 buttonKebab.setOnClickListener {
-                    showPopUp(buttonKebab, adapterPosition)
+                    if(feedList.get(adapterPosition).uploaderNickname == MyApplication.userNickname) {
+                        showMyFeedPopUp(buttonKebab, adapterPosition)
+                    } else {
+                        showOtherFeedPopUp(buttonKebab, adapterPosition)
+                    }
                 }
 
                 textViewEmotionPeople.setOnClickListener {
@@ -277,7 +281,7 @@ class MyGroupFeedAdapter(
         }
     }
 
-    fun showPopUp(buttonKebab: ImageView, adapterPosition: Int) {
+    fun showOtherFeedPopUp(buttonKebab: ImageView, adapterPosition: Int) {
         val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_other_feed_item, null)
 
         val popupWindow = PopupWindow(
@@ -321,6 +325,43 @@ class MyGroupFeedAdapter(
                 .replace(R.id.fragmentContainerView_main, nextFragment)
                 .addToBackStack(null)
                 .commit()
+
+            popupWindow.dismiss()
+        }
+
+        popupWindow.showAsDropDown(buttonKebab, -200, 50)
+    }
+
+    fun showMyFeedPopUp(buttonKebab: ImageView, adapterPosition: Int) {
+        val popupView = LayoutInflater.from(context).inflate(R.layout.popup_menu_my_feed_item, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        ).apply {
+            elevation = 50f
+        }
+
+        // ✅ 블러 뷰 추가
+        val blurOverlay = View(activity).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundColor(Color.parseColor("#4D000000"))
+            isClickable = true // 뒤쪽 클릭 막기
+        }
+        val rootView = activity.window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        rootView.addView(blurOverlay)
+
+        popupWindow.setOnDismissListener {
+            rootView.removeView(blurOverlay)
+        }
+
+        popupView.setOnClickListener {
+            // 피드 삭제하기
 
             popupWindow.dismiss()
         }
