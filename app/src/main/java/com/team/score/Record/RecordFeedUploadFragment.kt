@@ -12,11 +12,15 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Record.BottomSheet.OnMateSelectedListener
 import com.team.score.Record.BottomSheet.RecordFeedMateBottomSheetFragment
+import com.team.score.Record.adapter.ExerciseMateAdapter
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
 import com.team.score.Utils.MyApplication
@@ -32,7 +36,9 @@ class RecordFeedUploadFragment : Fragment() {
         ViewModelProvider(requireActivity())[RecordViewModel::class.java]
     }
 
+    lateinit var exerciseMateAdapter: ExerciseMateAdapter
     var getFriendList = mutableListOf<FriendResponse>()
+    var selectedExerciseMateList = mutableListOf<FriendResponse>()
 
     var isAlone = false
 
@@ -45,6 +51,7 @@ class RecordFeedUploadFragment : Fragment() {
         binding = FragmentRecordFeedUploadBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
+        initAdapter()
         observeViewModel()
 
         binding.run {
@@ -63,12 +70,23 @@ class RecordFeedUploadFragment : Fragment() {
                 viewModel.getFriendList(mainActivity, 0)
 
                 // 바텀시트
-                val mateBottomSheet = RecordFeedMateBottomSheetFragment(mainActivity, getFriendList)
+                val mateBottomSheet = RecordFeedMateBottomSheetFragment(mainActivity, getFriendList).apply {
+                    onMateSelectedListener = object : OnMateSelectedListener {
+                        override fun onMateSelected(mate: FriendResponse) {
+                            // 선택된 친구 처리
+                            selectedExerciseMateList.add(mate)
+                            MyApplication.recordFeedInfo.othersId = listOf(mate.id)
+                            isAlone = false
+                            checkExerciseMates()
+                        }
+                    }
+                }
+
                 mateBottomSheet.show(childFragmentManager, mateBottomSheet.tag)
             }
 
             buttonNoExerciseMate.setOnClickListener {
-                isAlone = !isAlone
+                isAlone = true
                 checkExerciseMates()
             }
 
@@ -79,6 +97,12 @@ class RecordFeedUploadFragment : Fragment() {
                     highlightSelectedFeeling(MyApplication.recordFeedInfo.feeling)
                 }
             }
+
+            recyclerViewExerciseMate.apply {
+                adapter = exerciseMateAdapter
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            }
+
 
             buttonUpload.setOnClickListener {
                 MyApplication.recordFeedInfo.run {
@@ -107,6 +131,8 @@ class RecordFeedUploadFragment : Fragment() {
         binding.run {
             if(isAlone) {
                 MyApplication.recordFeedInfo.othersId = emptyList()
+                selectedExerciseMateList = emptyList<FriendResponse>().toMutableList()
+                exerciseMateAdapter.updateList(selectedExerciseMateList)
                 buttonNoExerciseMate.run {
                     setBackgroundResource(R.drawable.background_main_circle)
                     setTextColor(resources.getColor(R.color.white))
@@ -116,6 +142,8 @@ class RecordFeedUploadFragment : Fragment() {
                     setBackgroundResource(R.drawable.background_sub3_circle)
                     setTextColor(resources.getColor(R.color.main))
                 }
+
+                exerciseMateAdapter.updateList(selectedExerciseMateList)
             }
         }
 
@@ -149,6 +177,25 @@ class RecordFeedUploadFragment : Fragment() {
                 buttonUpload.isEnabled = true
             } else {
                 buttonUpload.isEnabled = false
+            }
+        }
+    }
+
+    fun initAdapter() {
+        exerciseMateAdapter = ExerciseMateAdapter(
+            mainActivity,
+            selectedExerciseMateList
+        ).apply {
+            itemClickListener = object : ExerciseMateAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    val updatedList = MyApplication.recordFeedInfo.othersId?.toMutableList()
+                    updatedList?.remove(selectedExerciseMateList[position].id)
+                    MyApplication.recordFeedInfo.othersId = updatedList
+
+                    selectedExerciseMateList.removeAt(position)
+                    isAlone = selectedExerciseMateList.size == 0
+                    checkExerciseMates()
+                }
             }
         }
     }
