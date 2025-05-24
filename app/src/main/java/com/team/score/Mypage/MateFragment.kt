@@ -22,6 +22,7 @@ import com.kakao.sdk.template.model.Button
 import com.team.score.API.TokenManager
 import com.team.score.API.response.record.FriendResponse
 import com.team.score.API.weather.response.Main
+import com.team.score.Group.MateDetailFragment
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.adapter.MateAdapter
@@ -46,7 +47,7 @@ class MateFragment : Fragment() {
     var currentPage = 0
     val pageSize = 20
 
-    var mates: MutableList<FriendResponse>? = null
+    var mates = mutableListOf<FriendResponse>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +63,11 @@ class MateFragment : Fragment() {
         binding.run {
             buttonKakao.setOnClickListener {
                 shareToKakaoWithCustomTemplate(mainActivity)
+            }
+
+            recyclerViewMate.apply {
+                layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                adapter = mateAdapter
             }
 
             recyclerViewMate.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -118,16 +124,18 @@ class MateFragment : Fragment() {
     fun observeViewModel() {
         viewModel.run {
             friendList.observe(viewLifecycleOwner) { friendsResponse ->
-                for (friends in friendsResponse) {
-                    mates?.add(friends)
+
+                if (currentPage == 0) {
+                    mateAdapter.clearFriends()
+                    mates.clear()
                 }
+
+                mates?.addAll(friendsResponse)
 
                 binding.recyclerViewMate.apply {
                     adapter = mateAdapter
                     layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
                 }
-
-                if (currentPage == 0) mateAdapter.clearFriends()
 
                 val friendsList = mutableListOf<FriendResponse>()
                 for (i in 0..<(mates?.size ?: 0)) {
@@ -163,7 +171,20 @@ class MateFragment : Fragment() {
         mateAdapter = MateAdapter(mainActivity).apply {
             itemClickListener = object : MateAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
+                    var nextFragment = MateDetailFragment()
 
+                    val bundle = Bundle().apply {
+                        putInt("userId", mates[position].id ?: 0)
+                    }
+                    // 전달할 Fragment 생성
+                    nextFragment = MateDetailFragment().apply {
+                        arguments = bundle
+                    }
+
+                    mainActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_main, nextFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }

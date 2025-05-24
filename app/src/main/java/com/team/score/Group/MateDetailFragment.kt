@@ -91,7 +91,21 @@ class MateDetailFragment : Fragment(), ReportDialogInterface {
 
                     // 레벨 layout
                     layoutLevel.run {
-                        Glide.with(mainActivity).load(getUserInfo?.profileImgUrl).into(imageViewLevelProfile)
+                        var levelProfile =
+                            when(getUserInfo?.level ?: 1) {
+                                1 -> R.drawable.img_level1
+                                in 2..4 -> R.drawable.img_level2
+                                in 5..7 -> R.drawable.img_level5
+                                in 8..10 -> R.drawable.img_level8
+                                in 11..13 -> R.drawable.img_level11
+                                in 14..15 -> R.drawable.img_level13
+                                in 16..18 -> R.drawable.img_level16
+                                in 18..20 -> R.drawable.img_level18
+                                else -> R.drawable.img_level1
+                            }
+
+                        Glide.with(mainActivity).load(levelProfile).into(imageViewLevelProfile)
+
                         textViewLevel.text = "Lv.${getUserInfo?.level}"
                         textViewLevelPoint.text = "${500 - (getUserInfo?.point ?: 0)} 포인트"
 
@@ -217,8 +231,19 @@ class MateDetailFragment : Fragment(), ReportDialogInterface {
 
             MateType.REPORT -> {
                 // 메이트 신고하기
+                var nextFragment = MateReportFragment()
+
+                val bundle = Bundle().apply {
+                    putInt("userId", arguments?.getInt("userId") ?: 0)
+                }
+                // 전달할 Fragment 생성
+                nextFragment = MateReportFragment().apply {
+                    arguments = bundle
+                }
+
                 mainActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_main, MateReportFragment())
+                    .replace(R.id.fragmentContainerView_main, nextFragment)
+                    .addToBackStack(null)
                     .commit()
             }
 

@@ -1,6 +1,7 @@
 package com.team.score.Home.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Utils.CalendarUtil
 import com.team.score.databinding.RowHomeWeeklyResultGraphBinding
+import kotlin.math.max
 
 class WeeklyCalendarAdapter(
     private var activity: MainActivity,
@@ -72,15 +74,25 @@ class WeeklyCalendarAdapter(
                         (exerciseSeconds / 3600f) * maxHeightPx
                     }
 
+
+                    val correctedHeightPx = max(heightPx, 1f)
                     val layoutParams = holder.graph.layoutParams
-                    layoutParams.height = heightPx.toInt()
+                    layoutParams.height = correctedHeightPx.toInt()
                     holder.graph.layoutParams = layoutParams
 
                     setBackgroundResource(R.drawable.background_main_graph)
                 }
                 holder.totalHour.run {
-                    visibility = View.VISIBLE
-                    text = String.format("%.1fH", (exerciseResults[position] ?: 0) / 3600f)
+                    val seconds = exerciseResults[position] ?: 0
+                    val hours = seconds / 3600f
+
+                    if (hours >= 1f) {
+                        visibility = View.VISIBLE
+                        text = "${hours.toInt()}H"
+                    } else {
+                        visibility = View.INVISIBLE
+//                        text = String.format("%.1fH", hours)
+                    }
                 }
                 if(exerciseResults[position]!! > 3600) {
                     holder.overTime.visibility = View.VISIBLE
@@ -114,8 +126,10 @@ class WeeklyCalendarAdapter(
                         (exerciseSeconds / 3600f) * maxHeightPx
                     }
 
+
+                    val correctedHeightPx = max(heightPx, 1f)
                     val layoutParams = holder.graph.layoutParams
-                    layoutParams.height = heightPx.toInt()
+                    layoutParams.height = correctedHeightPx.toInt()
                     holder.graph.layoutParams = layoutParams
 
                     setBackgroundResource(R.drawable.background_sub2_graph)

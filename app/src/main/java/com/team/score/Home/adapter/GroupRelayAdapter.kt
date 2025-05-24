@@ -56,7 +56,7 @@ class GroupRelayAdapter(
             holder.layoutEmptyView.visibility = View.VISIBLE
             holder.layoutGroupInfo.visibility = View.GONE
         } else {
-            holder.layoutEmptyView.visibility = View.GONE
+            holder.layoutEmptyView.visibility = View.INVISIBLE
             holder.layoutGroupInfo.visibility = View.VISIBLE
 
             holder.groupName.text = groupInfos?.get(position)?.groupName ?: ""

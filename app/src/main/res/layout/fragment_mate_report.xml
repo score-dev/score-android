@@ -16,111 +16,133 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView_withdraw_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="29dp"
-        android:fontFamily="@font/pretendard_semi_bold"
-        android:text="신고하려는 이유를 알려주세요"
-        android:textColor="#2A3038"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <Button
-        android:id="@+id/button_cause1"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/grey2"
-        android:text="다른 사람을 사칭하고 있습니다."
-        android:textColor="@color/text_color2"
-        app:cornerRadius="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_withdraw_description" />
-
-    <Button
-        android:id="@+id/button_cause2"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/grey2"
-        android:text="불쾌감을 주는 표현을 자주 사용합니다."
-        android:textColor="@color/text_color2"
-        app:cornerRadius="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_cause1" />
-
-    <Button
-        android:id="@+id/button_cause3"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/grey2"
-        android:text="관심 없는 메이트입니다."
-        android:textColor="@color/text_color2"
-        app:cornerRadius="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_cause2" />
-
-    <Button
-        android:id="@+id/button_cause4"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/grey2"
-        android:text="메이트의 피드에 혐오 콘텐츠가 있습니다."
-        android:textColor="@color/text_color2"
-        app:cornerRadius="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_cause3" />
-
-    <EditText
-        android:id="@+id/editText_cause"
-        style="@style/OneLineEditText"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:paddingHorizontal="17dp"
-        android:paddingVertical="18dp"
-        android:ems="10"
-        android:inputType="text"
-        android:hint="기타( 신고사유를 입력해주세요)"
-        app:layout_constraintEnd_toEndOf="@+id/button_cause4"
-        app:layout_constraintStart_toStartOf="@+id/button_cause4"
-        app:layout_constraintTop_toBottomOf="@+id/button_cause4" />
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/button_report"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-    <ImageView
-        android:id="@+id/button_clear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="22dp"
-        android:src="@drawable/ic_clear"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_cause"
-        app:layout_constraintEnd_toEndOf="@+id/editText_cause"
-        app:layout_constraintTop_toTopOf="@+id/editText_cause" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/textView_withdraw_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="29dp"
+                android:fontFamily="@font/pretendard_semi_bold"
+                android:text="신고하려는 이유를 알려주세요"
+                android:textColor="#2A3038"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/button_cause1"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/grey2"
+                android:text="다른 사람을 사칭하고 있습니다."
+                android:textColor="@color/text_color2"
+                app:cornerRadius="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_withdraw_description" />
+
+            <Button
+                android:id="@+id/button_cause2"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/grey2"
+                android:text="불쾌감을 주는 표현을 자주 사용합니다."
+                android:textColor="@color/text_color2"
+                app:cornerRadius="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_cause1" />
+
+            <Button
+                android:id="@+id/button_cause3"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/grey2"
+                android:text="관심 없는 메이트입니다."
+                android:textColor="@color/text_color2"
+                app:cornerRadius="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_cause2" />
+
+            <Button
+                android:id="@+id/button_cause4"
+                android:layout_width="match_parent"
+                android:layout_height="57dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/grey2"
+                android:text="메이트의 피드에 혐오 콘텐츠가 있습니다."
+                android:textColor="@color/text_color2"
+                app:cornerRadius="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_cause3" />
+
+            <EditText
+                android:id="@+id/editText_cause"
+                style="@style/OneLineEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="기타( 신고사유를 입력해주세요)"
+                android:inputType="text"
+                android:paddingHorizontal="17dp"
+                android:paddingVertical="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/button_cause4"
+                app:layout_constraintStart_toStartOf="@+id/button_cause4"
+                app:layout_constraintTop_toBottomOf="@+id/button_cause4" />
+
+            <ImageView
+                android:id="@+id/button_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="22dp"
+                android:src="@drawable/ic_clear"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/editText_cause"
+                app:layout_constraintEnd_toEndOf="@+id/editText_cause"
+                app:layout_constraintTop_toTopOf="@+id/editText_cause" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <Button
-        android:id="@+id/button_withdraw"
+        android:id="@+id/button_report"
         style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
