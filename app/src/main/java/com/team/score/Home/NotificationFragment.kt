@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.team.score.API.response.home.NotificationResponse
 import com.team.score.Home.adapter.NotificationAdapter
 import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
@@ -48,6 +49,8 @@ class NotificationFragment : Fragment() {
             }
         }
 
+        observeViewModel(notificationAdapter)
+
         binding.run {
             recyclerViewNotification.apply {
                 layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -78,6 +81,34 @@ class NotificationFragment : Fragment() {
         initView()
     }
 
+    fun observeViewModel(notificationAdapter: NotificationAdapter) {
+        viewModel.run {
+            notificationList.observe(viewLifecycleOwner) { feedResponse ->
+                if (currentPage == 0) {
+                    notificationAdapter.clearNotifications()
+                    getNotificationList.clear()
+                }
+
+                getNotificationList.addAll(feedResponse)
+
+                notificationAdapter.addNotifications(getNotificationList)
+
+                isLoading = false
+                currentPage++
+            }
+
+            lastNotification.observe(viewLifecycleOwner) {
+                // 마지막 페이지 확인
+                isLastPage = it
+            }
+
+            firstNotification.observe(viewLifecycleOwner) {
+                // 첫 페이지 확인
+                isFirstPage = it
+            }
+        }
+    }
+
     fun initView() {
         // 기존 리스트 초기화
         notificationAdapter.clearNotifications()
@@ -88,6 +119,7 @@ class NotificationFragment : Fragment() {
 
         binding.root.requestLayout()
 
+        viewModel.getNotificationList(mainActivity, 0)
 
         binding.run {
             toolbar.run {

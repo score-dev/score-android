@@ -11,6 +11,7 @@ import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.group.SearchGroupResponse
 import com.team.score.API.response.home.HomeResponse
+import com.team.score.API.response.home.NotificationResponse
 import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FriendResponse
@@ -73,6 +74,14 @@ interface ApiService {
         @Query("id") id: Int,
         @Header("Authorization") token: String
     ): Call<UserInfoResponse>
+
+    // 알림 목록 조회
+    @GET("score/fcm/list")
+    fun getNotificationList(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("page") page: Int
+    ): Call<PagingResponse<NotificationResponse>>
 
     // 홈 정보
     @POST("score/home")
