@@ -105,6 +105,14 @@ interface ApiService {
         @Query("wasAccepted") wasAccepted: Boolean
     ): Call<String?>
 
+    // 그룹 가입
+    @PUT("score/groups/join/accepted")
+    fun joinGroup(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("userId") userId: Int
+    ): Call<String?>
+
     // 홈 정보
     @POST("score/home")
     fun getHomeData(

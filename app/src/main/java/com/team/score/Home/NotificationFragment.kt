@@ -55,6 +55,15 @@ class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
 
                             // 어댑터 갱신
                             notificationAdapter.notifyItemChanged(position)
+
+                            viewModel.joinGroup(mainActivity, notification.relatedGroupId ?: 0, notification.senderId ?: 0) {
+                                val dialog = ParticipateGroupAcceptDialog(notification.notificationId, notification.senderNickname ?: "", notification.senderProfileImgUrl ?: "", notification.relatedGroupName ?: "", position)
+                                // 알림창이 띄워져있는 동안 배경 클릭 막기
+                                dialog.isCancelable = false
+                                mainActivity.let {
+                                    dialog.show(it.supportFragmentManager, "ParticipateGroupAcceptDialog")
+                                }
+                            }
                         }
 
                         viewModel.readNotification(mainActivity, notification.notificationId) {
