@@ -119,6 +119,13 @@ class NotificationAdapter(
         init {
             binding.buttonDelete.setOnClickListener {
                 // 알림 삭제
+                val pos = adapterPosition
+                val id = notificationList[pos].notificationId
+
+                viewModel.deleteNotification(activity, id) {
+                    notificationList.removeAt(pos)
+                    notifyItemRemoved(pos)
+                }
             }
 
             binding.buttonLeft.setOnClickListener {
