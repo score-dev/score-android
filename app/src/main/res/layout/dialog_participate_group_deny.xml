@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingHorizontal="22dp"
+    android:paddingVertical="21dp"
+    android:background="@drawable/background_dialog">
+
+    <TextView
+        android:id="@+id/textView_title"
+        style="@style/body2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:text="님을 메이트로 거절하시겠습니까?"
+        android:textColor="@color/text_color1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_close" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey3"
+        app:layout_constraintEnd_toEndOf="@+id/textView_title"
+        app:layout_constraintStart_toStartOf="@+id/textView_title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+    <ImageView
+        android:id="@+id/button_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close_icon" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/divider">
+
+        <Button
+            android:id="@+id/button_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="아니오"
+            android:backgroundTint="@color/main"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:cornerRadius="7dp" />
+
+        <Space
+            android:layout_width="28dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="예"
+            android:backgroundTint="@color/grey2"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:textColor="@color/text_color3"
+            android:textSize="16sp"
+            app:cornerRadius="7dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
