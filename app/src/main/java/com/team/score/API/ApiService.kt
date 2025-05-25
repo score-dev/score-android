@@ -83,6 +83,12 @@ interface ApiService {
         @Query("page") page: Int
     ): Call<PagingResponse<NotificationResponse>>
 
+    // 알림 읽음
+    @PUT("score/fcm/change-status")
+    fun readNotification(
+        @Header("Authorization") token: String,
+        @Query("notificationId") notificationId: Int
+    ): Call<String?>
     // 알림 - 그룹 가입 승인 여부
     @PUT("score/fcm/change-acceptance")
     fun acceptGroupParticipate(

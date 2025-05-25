@@ -41,7 +41,7 @@ class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
 
         binding = FragmentNotificationBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        notificationAdapter = NotificationAdapter(mainActivity, requireContext()).apply {
+        notificationAdapter = NotificationAdapter(mainActivity, requireContext(), viewModel).apply {
             itemClickListener = object : NotificationAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int, accepted: Boolean) {
                     val notification = getNotificationList[position]
@@ -55,6 +55,10 @@ class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
 
                             // 어댑터 갱신
                             notificationAdapter.notifyItemChanged(position)
+                        }
+
+                        viewModel.readNotification(mainActivity, notification.notificationId) {
+
                         }
                     } else {
                         // 그룹 참여 거절
@@ -162,6 +166,10 @@ class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
 
             // 어댑터 갱신
             notificationAdapter.notifyItemChanged(position)
+        }
+
+        viewModel.readNotification(mainActivity, notification.notificationId) {
+
         }
     }
 }

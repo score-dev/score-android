@@ -6,21 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.appcompat.content.res.AppCompatResources.getColorStateList
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.NotificationResponse
+import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.RecordFragment
-import com.team.score.Record.RecordMapFragment
 import com.team.score.Utils.CalendarUtil.formatToMonthDay
 import com.team.score.databinding.RowNotificationBinding
 
 class NotificationAdapter(
     private var activity: MainActivity,
     private var context: Context,
+    private val viewModel: HomeViewModel
 ) :
     RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
 
@@ -134,6 +134,16 @@ class NotificationAdapter(
             }
 
             binding.buttonOne.setOnClickListener {
+                val pos = adapterPosition
+                val notification = notificationList[pos]
+
+                if (notification.read != true) {
+                    viewModel.readNotification(activity, notification.notificationId) {
+                        notification.read = true
+                        notifyItemChanged(pos)
+                    }
+                }
+
                 activity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_main, RecordFragment())
                     .addToBackStack(null)
