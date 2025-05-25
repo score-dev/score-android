@@ -62,11 +62,11 @@ class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
                         }
                     } else {
                         // 그룹 참여 거절
-                        val dialog = ParticipateGroupDenyDialog(this@NotificationFragment, notification.notificationId, "", position)
+                        val dialog = ParticipateGroupDenyDialog(this@NotificationFragment, notification.notificationId, notification.senderNickname ?: "", position)
                         // 알림창이 띄워져있는 동안 배경 클릭 막기
                         dialog.isCancelable = false
                         mainActivity.let {
-                            dialog.show(it.supportFragmentManager, "ProfileEditDialog")
+                            dialog.show(it.supportFragmentManager, "ParticipateGroupDenyDialog")
                         }
                     }
                 }

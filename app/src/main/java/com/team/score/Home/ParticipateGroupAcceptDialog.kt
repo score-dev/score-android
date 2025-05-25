@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.team.score.API.weather.response.Main
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
@@ -18,29 +19,25 @@ import com.team.score.databinding.DialogEnterGroupBinding
 import com.team.score.databinding.DialogParticipateGroupAcceptBinding
 import com.team.score.databinding.DialogParticipateGroupDenyBinding
 
-interface ParticipateGroupAcceptDialogInterface {
-    fun onClickRightButton(notificationId: Int, position: Int)
-}
 class ParticipateGroupAcceptDialog(
-    basicDialogInterface: ParticipateGroupAcceptDialogInterface,
-    notificationId: Int, userNickName: String, position: Int
+    notificationId: Int, userNickName: String?, userProfileImage: String?, groupName: String?, position: Int
 ) : DialogFragment() {
 
     private var _binding: DialogParticipateGroupAcceptBinding? = null
     private val binding get() = _binding!!
 
-
-    private var basicDialogInterface: ParticipateGroupAcceptDialogInterface? = null
-
     private var notificationId: Int? = null
     private var userNickName: String? = null
+    private var userProfileImage: String? = null
+    private var groupName: String? = null
     private var position: Int? = null
 
     init {
         this.notificationId = notificationId
         this.userNickName = userNickName
+        this.userProfileImage = userProfileImage
+        this.groupName = groupName
         this.position = position
-        this.basicDialogInterface = basicDialogInterface
     }
 
     override fun onCreateView(
@@ -54,7 +51,9 @@ class ParticipateGroupAcceptDialog(
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         binding.run {
-            textViewTitle.text = "00님이 00그룹의 메이트로\n함께 하게 되었어요!"
+            textViewTitle.text = "${userNickName}님이 ${groupName}그룹의 메이트로\n함께 하게 되었어요!"
+            Glide.with(this@ParticipateGroupAcceptDialog).load(userProfileImage).into(imageViewProfile)
+            textViewNickname.text = "${userNickName}님"
 
             // 닫기 버튼
             buttonClose.setOnClickListener {
