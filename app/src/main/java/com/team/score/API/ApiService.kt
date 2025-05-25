@@ -11,6 +11,7 @@ import com.team.score.API.response.group.GroupInfoResponse
 import com.team.score.API.response.group.SchoolGroupRankingResponse
 import com.team.score.API.response.group.SearchGroupResponse
 import com.team.score.API.response.home.HomeResponse
+import com.team.score.API.response.home.NotificationResponse
 import com.team.score.API.response.login.LoginResponse
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FriendResponse
@@ -73,6 +74,44 @@ interface ApiService {
         @Query("id") id: Int,
         @Header("Authorization") token: String
     ): Call<UserInfoResponse>
+
+    // 알림 목록 조회
+    @GET("score/fcm/list")
+    fun getNotificationList(
+        @Header("Authorization") token: String,
+        @Query("userId") userId: Int,
+        @Query("page") page: Int
+    ): Call<PagingResponse<NotificationResponse>>
+
+    // 알림 읽음
+    @PUT("score/fcm/change-status")
+    fun readNotification(
+        @Header("Authorization") token: String,
+        @Query("notificationId") notificationId: Int
+    ): Call<String?>
+
+    // 알림 삭제
+    @DELETE("score/fcm/delete")
+    fun deleteNotification(
+        @Header("Authorization") token: String,
+        @Query("notificationId") notificationId: Int
+    ): Call<String?>
+
+    // 알림 - 그룹 가입 승인 여부
+    @PUT("score/fcm/change-acceptance")
+    fun acceptGroupParticipate(
+        @Header("Authorization") token: String,
+        @Query("notificationId") notificationId: Int,
+        @Query("wasAccepted") wasAccepted: Boolean
+    ): Call<String?>
+
+    // 그룹 가입
+    @PUT("score/groups/join/accepted")
+    fun joinGroup(
+        @Header("Authorization") token: String,
+        @Query("groupId") groupId: Int,
+        @Query("userId") userId: Int
+    ): Call<String?>
 
     // 홈 정보
     @POST("score/home")
