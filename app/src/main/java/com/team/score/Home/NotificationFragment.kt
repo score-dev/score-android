@@ -15,7 +15,7 @@ import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
 import com.team.score.databinding.FragmentNotificationBinding
 
-class NotificationFragment : Fragment() {
+class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
 
     lateinit var binding: FragmentNotificationBinding
     lateinit var mainActivity: MainActivity
@@ -43,8 +43,28 @@ class NotificationFragment : Fragment() {
         mainActivity = activity as MainActivity
         notificationAdapter = NotificationAdapter(mainActivity, requireContext()).apply {
             itemClickListener = object : NotificationAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
+                override fun onItemClick(position: Int, accepted: Boolean) {
+                    val notification = getNotificationList[position]
 
+                    if(accepted) {
+                        // 그룹 참여 수락
+                        viewModel.acceptGroupParticipate(mainActivity, notification.notificationId, accepted) {
+                            // UI 업데이트
+                            notification.read = true
+                            notification.joinRequestAccepted = accepted
+
+                            // 어댑터 갱신
+                            notificationAdapter.notifyItemChanged(position)
+                        }
+                    } else {
+                        // 그룹 참여 거절
+                        val dialog = ParticipateGroupDenyDialog(this@NotificationFragment, notification.notificationId, "", position)
+                        // 알림창이 띄워져있는 동안 배경 클릭 막기
+                        dialog.isCancelable = false
+                        mainActivity.let {
+                            dialog.show(it.supportFragmentManager, "ProfileEditDialog")
+                        }
+                    }
                 }
             }
         }
@@ -128,6 +148,20 @@ class NotificationFragment : Fragment() {
                     fragmentManager?.popBackStack()
                 }
             }
+        }
+    }
+
+    override fun onClickRightButton(notificationId: Int, position: Int) {
+        // 그룹 참여 신청 거절
+        val notification = getNotificationList[position]
+
+        viewModel.acceptGroupParticipate(mainActivity, notification.notificationId, false) {
+            // UI 업데이트
+            notification.read = true
+            notification.joinRequestAccepted = false
+
+            // 어댑터 갱신
+            notificationAdapter.notifyItemChanged(position)
         }
     }
 }

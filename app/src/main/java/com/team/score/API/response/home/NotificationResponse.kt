@@ -11,8 +11,8 @@ data class NotificationResponse(
     val createdAt: String?,
     val title: String?,
     val body: String?,
-    val read: Boolean?,
-    val joinRequestAccepted: Boolean?
+    var read: Boolean?,
+    var joinRequestAccepted: Boolean?
 )
 
 enum class NotificationType {

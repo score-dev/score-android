@@ -24,9 +24,9 @@ class NotificationAdapter(
 ) :
     RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
 
-    private var onItemClickListener: ((Int) -> Unit)? = null
+    private var onItemClickListener: ((Int, Boolean) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Int) -> Unit) {
+    fun setOnItemClickListener(listener: (Int, Boolean) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -45,7 +45,7 @@ class NotificationAdapter(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int) {}
+        fun onItemClick(position: Int, accepted: Boolean)
     }
 
     var itemClickListener: OnItemClickListener? = null
@@ -118,24 +118,19 @@ class NotificationAdapter(
 
         init {
             binding.buttonDelete.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
-
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
+                // 알림 삭제
             }
 
             binding.buttonLeft.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
-
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
+                // 그룹 참여 거절
+                itemClickListener?.onItemClick(adapterPosition, false)
+                onItemClickListener?.invoke(position, false)
             }
 
             binding.buttonRight.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
-
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
+                // 그룹 참여 수락
+                itemClickListener?.onItemClick(adapterPosition, true)
+                onItemClickListener?.invoke(position, true)
             }
 
             binding.buttonOne.setOnClickListener {
