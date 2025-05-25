@@ -87,9 +87,15 @@ class NotificationAdapter(
                         }
 
                         if(item.joinRequestAccepted == true) {
-                            buttonOne.text = "수락하셨습니다!"
+                            buttonOne.run {
+                                text = "수락하셨습니다!"
+                                isEnabled = false
+                            }
                         } else {
-                            buttonOne.text = "거절하셨습니다."
+                            buttonOne.run {
+                                text = "거절하셨습니다."
+                                isEnabled = false
+                            }
                         }
                     } else {
                         layoutTwoButton.visibility = View.VISIBLE
@@ -99,7 +105,11 @@ class NotificationAdapter(
                     textViewDescription.visibility = View.VISIBLE
                 }
                 "BATON", "GOAL" -> {
-                    buttonOne.visibility = View.VISIBLE
+                    buttonOne.run {
+                        visibility = View.VISIBLE
+                        isEnabled = true
+                        backgroundTintList = ContextCompat.getColorStateList(context, R.color.sub)
+                    }
 
                     if(item.read == true) {
                         buttonOne.backgroundTintList = ContextCompat.getColorStateList(context, R.color.grey1)
