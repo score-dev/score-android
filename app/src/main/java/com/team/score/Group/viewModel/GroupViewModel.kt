@@ -9,6 +9,7 @@ import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
 import com.team.score.API.request.group.CreateGroupRequest
 import com.team.score.API.request.group.ParticipateGroupRequest
+import com.team.score.API.request.user.ReportMateRequest
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupMateResponse
@@ -872,6 +873,46 @@ class GroupViewModel: ViewModel() {
             }
         })
     }
+
+    // 메이트 신고
+    fun reportMate(activity: MainActivity, mateId: Int, reason: String?, comment: String?) {
+        val apiClient = ApiClient(activity)
+        val tokenManager = TokenManager(activity)
+
+        var body = ReportMateRequest(tokenManager.getUserId(), mateId, reason ?: "", comment ?: "")
+
+        apiClient.apiService.reportMate(tokenManager.getAccessToken().toString(), body).enqueue(object :
+            Callback<String?> {
+            override fun onResponse(
+                call: Call<String?>,
+                response: Response<String?>
+            ) {
+                Log.d("##", "onResponse 성공: " + response.body().toString())
+                if (response.isSuccessful) {
+                    // 정상적으로 통신이 성공된 경우
+                    val result: String? = response.body()
+                    Log.d("##", "onResponse 성공: " + result?.toString())
+
+                    activity.supportFragmentManager.popBackStack()
+                } else {
+                    // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
+                    var result: String? = response.body()
+                    Log.d("##", "onResponse 실패")
+                    Log.d("##", "onResponse 실패: " + response.code())
+                    Log.d("##", "onResponse 실패: " + response.body())
+                    val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
+                    Log.d("##", "Error Response: $errorBody")
+
+                }
+            }
+
+            override fun onFailure(call: Call<String?>, t: Throwable) {
+                // 통신 실패
+                Log.d("##", "onFailure 에러: " + t.message.toString())
+            }
+        })
+    }
+
     // 그룹 운동 쉰 메이트 리스트 정보
     fun getGroupUnexercisedMateList(activity: Activity, groupId: Int) {
 

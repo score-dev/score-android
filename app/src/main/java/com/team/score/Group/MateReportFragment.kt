@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import com.team.score.API.weather.response.Main
+import androidx.lifecycle.ViewModelProvider
+import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.databinding.FragmentMateReportBinding
@@ -17,6 +18,9 @@ class MateReportFragment : Fragment() {
 
     lateinit var binding: FragmentMateReportBinding
     lateinit var mainActivity: MainActivity
+    private val viewModel: GroupViewModel by lazy {
+        ViewModelProvider(this)[GroupViewModel::class.java]
+    }
 
     var selectedCauseIndex: Int? = null
 
@@ -49,19 +53,28 @@ class MateReportFragment : Fragment() {
                 editTextCause.setText("")
             }
 
-            buttonWithdraw.setOnClickListener {
-                val reasons = mutableListOf<String>()
+            binding.buttonReport.setOnClickListener {
+                var reason: String? = null
+                var comment = ""
 
                 selectedCauseIndex?.let { index ->
-                    val causeText = causeButtons[index].text.toString()
-                    reasons.add(causeText)
+                    reason = when (index) {
+                        0 -> "사칭"
+                        1 -> "불쾌감을주는표현"
+                        2 -> "관심없는메이트"
+                        3 -> "혐오콘텐츠"
+                        else -> "기타"
+                    }
                 }
 
-                if (editTextCause.text.isNotEmpty()) {
-                    reasons.add(editTextCause.text.toString())
+                // 기타가 입력된 경우
+                if (binding.editTextCause.text.isNotEmpty()) {
+                    reason = "기타"
+                    comment = binding.editTextCause.text.toString()
                 }
 
                 // 메이트 신고하기
+                viewModel.reportMate(mainActivity, arguments?.getInt("userId") ?: 0, reason, comment)
             }
         }
 
@@ -94,6 +107,11 @@ class MateReportFragment : Fragment() {
     fun buttonChangeListener(causeButtons: List<Button>) {
         causeButtons.forEachIndexed { index, button ->
             button.setOnClickListener {
+                // 텍스트가 입력되어 있다면 초기화
+                if (binding.editTextCause.text.isNotEmpty()) {
+                    binding.editTextCause.setText("")
+                }
+
                 // 같은 버튼 누르면 선택 해제
                 selectedCauseIndex = if (selectedCauseIndex == index) null else index
 

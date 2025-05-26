@@ -2,6 +2,7 @@ package com.team.score.API
 
 import com.team.score.API.request.group.ParticipateGroupRequest
 import com.team.score.API.request.signUp.FcmRequest
+import com.team.score.API.request.user.ReportMateRequest
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.group.GroupDetailResponse
 import com.team.score.API.response.group.GroupMateResponse
@@ -246,6 +247,14 @@ interface ApiService {
         @Path("id1") id1: Int,
         @Path("id2") id2: Int
     ): Call<String?>
+
+    // 메이트 신고
+    @POST("score/user/report")
+    fun reportMate(
+        @Header("Authorization") token: String,
+        @Body request: ReportMateRequest
+    ): Call<String?>
+
     // 피드 리스트
     @GET("score/exercise/list")
     fun getFeedList(
