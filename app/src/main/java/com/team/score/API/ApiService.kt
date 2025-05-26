@@ -1,6 +1,7 @@
 package com.team.score.API
 
 import com.team.score.API.request.group.ParticipateGroupRequest
+import com.team.score.API.request.group.ReportFeedRequest
 import com.team.score.API.request.signUp.FcmRequest
 import com.team.score.API.request.user.ReportMateRequest
 import com.team.score.API.response.PagingResponse
@@ -287,6 +288,12 @@ interface ApiService {
         @Query("type") type: String,
     ): Call<String>
 
+    // 피드 신고
+    @POST("score/exercise/report")
+    fun reportFeed(
+        @Header("Authorization") token: String,
+        @Body request: ReportFeedRequest
+    ): Call<String?>
 
     // 피드 삭제
     @DELETE("score/exercise/delete")
@@ -294,6 +301,7 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("id") feedId: Int
     ): Call<String?>
+
     // 회원 정보 수정
     @Multipart
     @PATCH("score/user/update/{userId}")
