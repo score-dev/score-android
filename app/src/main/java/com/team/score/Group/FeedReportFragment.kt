@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
-import com.team.score.API.weather.response.Main
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
 import com.team.score.R
-import com.team.score.Utils.MainUtil.updateViewPositionForKeyboard
 import com.team.score.databinding.FragmentFeedReportBinding
 
 class FeedReportFragment : Fragment() {
@@ -60,18 +56,28 @@ class FeedReportFragment : Fragment() {
             }
 
             buttonReport.setOnClickListener {
-                var reasons = ""
+                var reason: String? = null
+                var comment = ""
 
                 selectedCauseIndex?.let { index ->
-                    val causeText = causeButtons[index].text.toString()
-                    reasons = causeText
+                    reason = when (index) {
+                        0 -> "민감한글이나사진"
+                        1 -> "가학적이거나유해"
+                        2 -> "불법촬영물"
+                        3 -> "욕설비하혐오발언"
+                        4 -> "광고"
+                        5 -> "마음에들지않음"
+                        else -> "기타"
+                    }
                 }
 
-                if (editTextCause.text.isNotEmpty()) {
-                    reasons = editTextCause.text.toString()
+                if (binding.editTextCause.text.isNotEmpty()) {
+                    reason = "기타"
+                    comment = binding.editTextCause.text.toString()
                 }
 
                 // 피드 신고하기
+                viewModel.reportFeed(mainActivity, arguments?.getInt("feedId") ?: 0, reason, comment)
             }
         }
 
@@ -104,6 +110,11 @@ class FeedReportFragment : Fragment() {
     fun buttonChangeListener(causeButtons: List<Button>) {
         causeButtons.forEachIndexed { index, button ->
             button.setOnClickListener {
+                // 텍스트가 입력되어 있다면 초기화
+                if (binding.editTextCause.text.isNotEmpty()) {
+                    binding.editTextCause.setText("")
+                }
+
                 // 같은 버튼 누르면 선택 해제
                 selectedCauseIndex = if (selectedCauseIndex == index) null else index
 
