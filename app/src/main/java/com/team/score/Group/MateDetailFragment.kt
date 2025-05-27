@@ -17,24 +17,16 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.team.score.API.TokenManager
 import com.team.score.API.response.login.UserInfoResponse
-import com.team.score.API.weather.response.Main
-import com.team.score.BasicDialog
-import com.team.score.BasicDialogInterface
 import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.MainActivity
-import com.team.score.Mypage.Setting.NotificationSettingFragment
-import com.team.score.Mypage.Setting.SettingFragment
 import com.team.score.Mypage.UserCalendarFragment
 import com.team.score.Mypage.UserFeedFragment
-import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
 import com.team.score.ReportDialog
 import com.team.score.ReportDialogInterface
-import com.team.score.Utils.TimeUtil.formatExerciseTimeToKorean
+import com.team.score.Utils.ImageUtil.setLevelProfileImage
 import com.team.score.databinding.FragmentMateDetailBinding
-import kotlinx.coroutines.channels.ticker
 
 class MateDetailFragment : Fragment(), ReportDialogInterface {
 
@@ -91,20 +83,7 @@ class MateDetailFragment : Fragment(), ReportDialogInterface {
 
                     // 레벨 layout
                     layoutLevel.run {
-                        var levelProfile =
-                            when(getUserInfo?.level ?: 1) {
-                                1 -> R.drawable.img_level1
-                                in 2..4 -> R.drawable.img_level2
-                                in 5..7 -> R.drawable.img_level5
-                                in 8..10 -> R.drawable.img_level8
-                                in 11..13 -> R.drawable.img_level11
-                                in 14..15 -> R.drawable.img_level13
-                                in 16..18 -> R.drawable.img_level16
-                                in 18..20 -> R.drawable.img_level18
-                                else -> R.drawable.img_level1
-                            }
-
-                        Glide.with(mainActivity).load(levelProfile).into(imageViewLevelProfile)
+                        setLevelProfileImage(getUserInfo?.level, imageViewLevelProfile, mainActivity)
 
                         textViewLevel.text = "Lv.${getUserInfo?.level}"
                         textViewLevelPoint.text = "${500 - (getUserInfo?.point ?: 0)} 포인트"

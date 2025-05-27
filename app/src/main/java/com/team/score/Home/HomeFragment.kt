@@ -31,6 +31,7 @@ import com.team.score.Mypage.MypageMainFragment
 import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
 import com.team.score.Utils.DynamicSpacingItemDecoration
+import com.team.score.Utils.ImageUtil.setLevelProfileImage
 import com.team.score.Utils.TimeUtil.formatExerciseTime
 import com.team.score.Utils.VerticalSpacingItemDecoration
 import com.team.score.databinding.FragmentHomeBinding
@@ -164,7 +165,8 @@ class HomeFragment : Fragment() {
 
                     // 레벨 layout
                     layoutLevel.run {
-                        Glide.with(mainActivity).load(getHomeData?.profileImgUrl).into(imageViewLevelProfile)
+                        setLevelProfileImage(getHomeData?.level, imageViewLevelProfile, mainActivity)
+
                         textViewLevel.text = "Lv.${getHomeData?.level}"
                         textViewLevelPoint.text = "${500 - (getHomeData?.point ?: 0)} 포인트"
 
