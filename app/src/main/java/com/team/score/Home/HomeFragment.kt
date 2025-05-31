@@ -26,6 +26,7 @@ import com.team.score.Group.viewModel.GroupViewModel
 import com.team.score.Home.adapter.GroupRelayAdapter
 import com.team.score.Home.adapter.WeeklyCalendarAdapter
 import com.team.score.Home.viewModel.HomeViewModel
+import com.team.score.Login.viewModel.UserViewModel
 import com.team.score.MainActivity
 import com.team.score.Mypage.MypageMainFragment
 import com.team.score.Mypage.viewModel.MypageViewModel
@@ -40,7 +41,12 @@ class HomeFragment : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var mainActivity: MainActivity
-    lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by lazy {
+        ViewModelProvider(requireActivity())[HomeViewModel::class.java]
+    }
+    private val userViewModel: UserViewModel by lazy {
+        ViewModelProvider(requireActivity())[UserViewModel::class.java]
+    }
     private val mypageViewModel: MypageViewModel by lazy {
         ViewModelProvider(requireActivity())[MypageViewModel::class.java]
     }
@@ -61,7 +67,6 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
-        viewModel = ViewModelProvider(mainActivity)[HomeViewModel::class.java]
 
         // 알림 권한 설정
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
@@ -78,6 +83,7 @@ class HomeFragment : Fragment() {
             )
         } else {
             // 이미 권한이 있는 경우 바로 화면 전환
+            userViewModel.getFcmToken(mainActivity)
         }
 
 
@@ -230,12 +236,23 @@ class HomeFragment : Fragment() {
         }
     }
 
-    // Fragment에서 권한 요청 결과 처리
+    // 알림 권한 요청 처리
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 123) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 알림 권한 허용
+                userViewModel.getFcmToken(mainActivity)
+            } else {
+                // 알림 권한 거부
+
+            }
+        }
     }
+
 }
