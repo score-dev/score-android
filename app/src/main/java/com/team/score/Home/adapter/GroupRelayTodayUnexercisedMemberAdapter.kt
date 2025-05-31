@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.HomeGroupUnexercisedMemebrInfo
@@ -18,15 +19,15 @@ class GroupRelayTodayUnexercisedMemberAdapter(
 
     private var onItemClickListener: ((Int) -> Unit)? = null
     private var context: Context? = null
-    var selectedPosition = -1
+    var selectedPositions = mutableSetOf<Int>()
 
     fun setOnItemClickListener(listener: (Int) -> Unit) {
         onItemClickListener = listener
     }
 
-    fun updateList(newMemberInfos: List<HomeGroupUnexercisedMemebrInfo>?, batonMemberPostion: Int) {
+    fun updateList(newMemberInfos: List<HomeGroupUnexercisedMemebrInfo>?, newlySelectedPosition: Int?) {
         unexercisedMembers = newMemberInfos
-        selectedPosition = batonMemberPostion
+        newlySelectedPosition?.let { selectedPositions.add(it) }
         notifyDataSetChanged()
     }
 
@@ -49,27 +50,13 @@ class GroupRelayTodayUnexercisedMemberAdapter(
         Glide.with(activity).load(unexercisedMembers?.get(position)?.profileImgUrl).into(holder.profile)
         holder.memberName.text = unexercisedMembers?.get(position)?.nickname.toString()
 
-        if(unexercisedMembers?.get(position)?.canTurnOverBaton == true) {
-            holder.buttonBaton.run {
-                text = "바통 찌르기"
-                backgroundTintList = resources.getColorStateList(R.color.sub)
-            }
-        } else {
-            holder.buttonBaton.run {
+        holder.buttonBaton.run {
+            if (selectedPositions.contains(position) || unexercisedMembers?.get(position)?.canTurnOverBaton == false) {
                 text = "찌르기 완료!"
-                backgroundTintList = resources.getColorStateList(R.color.main)
-            }
-        }
-
-        if(position == selectedPosition) {
-            holder.buttonBaton.run {
-                text = "찌르기 완료!"
-                backgroundTintList = resources.getColorStateList(R.color.main)
-            }
-        } else {
-            holder.buttonBaton.run {
+                backgroundTintList = context?.let { ContextCompat.getColorStateList(it, R.color.main) }
+            } else {
                 text = "바통 찌르기"
-                backgroundTintList = resources.getColorStateList(R.color.sub)
+                backgroundTintList = context?.let { ContextCompat.getColorStateList(it, R.color.sub) }
             }
         }
     }
@@ -85,10 +72,14 @@ class GroupRelayTodayUnexercisedMemberAdapter(
 
         init {
             binding.buttonBaton.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
+                val pos = adapterPosition
+                if (pos != RecyclerView.NO_POSITION) {
+                    selectedPositions.add(pos)
+                    notifyItemChanged(pos)
 
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
+                    itemClickListener?.onItemClick(pos)
+                    onItemClickListener?.invoke(pos)
+                }
             }
         }
     }

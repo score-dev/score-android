@@ -8,6 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.team.score.R
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -80,5 +83,22 @@ object ImageUtil {
         // 3. MyApplication에 저장
         MyApplication.recordFeedImage = multipart
     }
+
+    fun setLevelProfileImage(level: Int?, targetImageView: ImageView, context: Context) {
+        val drawableRes = when (level ?: 1) {
+            in 0..1 -> R.drawable.img_level1
+            in 2..4 -> R.drawable.img_level2
+            in 5..7 -> R.drawable.img_level5
+            in 8..10 -> R.drawable.img_level8
+            in 11..13 -> R.drawable.img_level11
+            in 14..16 -> R.drawable.img_level14
+            in 17..19 -> R.drawable.img_level17
+            in 20..Int.MAX_VALUE -> R.drawable.img_level20
+            else -> R.drawable.img_level1
+        }
+
+        Glide.with(context).load(drawableRes).into(targetImageView)
+    }
+
 
 }

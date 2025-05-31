@@ -52,17 +52,19 @@ class GroupRelayAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(position == (groupInfos?.size)) {
+        if (position == (groupInfos?.size)) {
             holder.layoutEmptyView.visibility = View.VISIBLE
             holder.layoutGroupInfo.visibility = View.GONE
         } else {
             holder.layoutEmptyView.visibility = View.INVISIBLE
             holder.layoutGroupInfo.visibility = View.VISIBLE
 
-            holder.groupName.text = groupInfos?.get(position)?.groupName ?: ""
+            val group = groupInfos?.get(position) ?: return
+
+            holder.groupName.text = group.groupName
 
             // 그룹 프로필 이미지 설정 (최대 3개 표시)
-            val profileImages = groupInfos?.get(position)?.wholeMatesImgUrl ?: emptyList()
+            val profileImages = group.wholeMatesImgUrl ?: emptyList()
             val profileViews = listOf(holder.groupProfile1, holder.groupProfile2, holder.groupProfile3)
 
             profileViews.forEachIndexed { index, imageView ->
@@ -74,41 +76,34 @@ class GroupRelayAdapter(
                 }
             }
 
-            if((groupInfos?.get(position)?.numOfMembers ?: 0) > 3) {
+            if (group.numOfMembers > 3) {
                 holder.overGroupMemberNum.run {
                     visibility = View.VISIBLE
-                    text = "+${(groupInfos?.get(position)?.numOfMembers ?: 0) - 3}"
+                    text = "+${group.numOfMembers - 3}"
                 }
             } else {
                 holder.overGroupMemberNum.visibility = View.INVISIBLE
             }
 
-            holder.totalGroupMemberNum.text = "${groupInfos?.get(position)?.numOfMembers}명 중 "
-            holder.exercisedGroupMemberNum.text = "${groupInfos?.get(position)?.todayExercisedMatesImgUrl?.size}명"
+            holder.totalGroupMemberNum.text = "${group.numOfMembers}명 중 "
+            holder.exercisedGroupMemberNum.text = "${group.todayExercisedMatesImgUrl?.size ?: 0}명"
             holder.userName.text = "${MyApplication.userNickname}님"
 
             // RecyclerView 설정
             holder.relayExercisedMemberProfile.run {
-                adapter = GroupExercisedMemberProfileAdapter(activity, groupInfos?.get(position)?.numOfMembers ?: 0, groupInfos?.get(position)?.todayExercisedMatesImgUrl)
+                adapter = GroupExercisedMemberProfileAdapter(activity, group.numOfMembers, group.todayExercisedMatesImgUrl)
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                 val spacingRatio = 20f
-                addItemDecoration(
-                    DynamicSpacingItemDecoration(spacingRatio)
-                )
+                addItemDecoration(DynamicSpacingItemDecoration(spacingRatio))
             }
 
             holder.recyclerViewUnexercisedMember.run {
-                adapter = GroupRelayTodayUnexercisedMemberAdapter(activity, groupInfos?.get(position)?.notExercisedUsers ?: emptyList()).apply {
+                adapter = GroupRelayTodayUnexercisedMemberAdapter(activity, group.notExercisedUsers ?: emptyList()).apply {
                     itemClickListener = object : GroupRelayTodayUnexercisedMemberAdapter.OnItemClickListener {
                         override fun onItemClick(unexerciseMemberPosition: Int) {
-                            val currentAdapterPosition = holder.adapterPosition
-                            if (currentAdapterPosition != RecyclerView.NO_POSITION) {
-                                val currentGroup = groupInfos?.get(currentAdapterPosition)
-                                val userId = currentGroup?.notExercisedUsers?.get(unexerciseMemberPosition)?.userId ?: 0
-
-                                viewModel.batonGroupMember(activity, userId)
-                                updateList(currentGroup?.notExercisedUsers, unexerciseMemberPosition)
-                            }
+                            val userId = group.notExercisedUsers?.get(unexerciseMemberPosition)?.userId ?: return
+                            viewModel.batonGroupMember(activity, userId)
+                            updateList(group.notExercisedUsers, unexerciseMemberPosition)
                         }
                     }
                 }
@@ -117,13 +112,12 @@ class GroupRelayAdapter(
 
             holder.itemView.setOnClickListener {
                 val bundle = Bundle().apply {
-                    putInt("groupId", groupInfos?.get(position)?.groupId ?: 0)
-                    putString("groupName", groupInfos?.get(position)?.groupName ?: "")
+                    putInt("groupId", group.groupId)
+                    putString("groupName", group.groupName)
                 }
 
-                // 전달할 Fragment 생성
-                val  nextFragment = MyGroupDetailFragment().apply {
-                    arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                val nextFragment = MyGroupDetailFragment().apply {
+                    arguments = bundle
                 }
 
                 activity.supportFragmentManager.beginTransaction()
@@ -137,26 +131,21 @@ class GroupRelayAdapter(
     override fun getItemCount() = (groupInfos?.size ?: 0) + 1
 
     inner class ViewHolder(val binding: RowHomeGroupBinding) : RecyclerView.ViewHolder(binding.root) {
-        // layout
         val layoutEmptyView = binding.layoutCreateGroup
         val layoutGroupInfo = binding.layoutGroupInfo
 
-        // 그룹 정보
         val groupName = binding.textViewGroupName
         val groupProfile1 = binding.imageViewGroupMemberProfile1
         val groupProfile2 = binding.imageViewGroupMemberProfile2
         val groupProfile3 = binding.imageViewGroupMemberProfile3
         val overGroupMemberNum = binding.textViewGroupMemberNum
 
-        // 릴레이 현황
         val relayExercisedMemberProfile = binding.layoutRelayProfile.recyclerViewExercisedMemberProfile
         val totalGroupMemberNum = binding.textViewGroupRelayGroupMemberCountDescription
         val exercisedGroupMemberNum = binding.textViewGroupRelayCompleteMemberCountDescription
         val userName = binding.textViewGroupRelayNicknameDescription
 
-        // 참여 전 그룹 멤버
         val recyclerViewUnexercisedMember = binding.recyclerviewTodayRelayUnexercisedMember
-
 
         init {
             binding.layoutCreateGroup.setOnClickListener {

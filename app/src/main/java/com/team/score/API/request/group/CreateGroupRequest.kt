@@ -6,5 +6,5 @@ data class CreateGroupRequest(
     val groupDescription: String?,
     val userLimit: Int,
     val groupPassword: String?,
-    val `private`: Boolean
+    val isPrivate: Boolean
 )

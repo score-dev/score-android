@@ -1,7 +1,9 @@
 package com.team.score.Group.viewModel
 
 import android.app.Activity
+import android.os.Bundle
 import android.util.Log
+import androidx.core.graphics.createBitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
@@ -24,6 +26,7 @@ import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.record.FeedEmotionResponse
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.CreateGroupCompleteFragment
+import com.team.score.Group.MyGroupDetailFragment
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Utils.MyApplication
@@ -154,8 +157,18 @@ class GroupViewModel: ViewModel() {
                     val result: Int? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
+                    val bundle = Bundle().apply {
+                        putInt("groupId", result ?: 0)
+                        putString("groupName", groupName ?: "")
+                    }
+
+                    // 전달할 Fragment 생성
+                    val  nextFragment = CreateGroupCompleteFragment().apply {
+                        arguments = bundle // 생성한 Bundle을 Fragment의 arguments에 설정
+                    }
+
                     activity.supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainerView_main, CreateGroupCompleteFragment())
+                        .replace(R.id.fragmentContainerView_main, nextFragment)
                         .commit()
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)

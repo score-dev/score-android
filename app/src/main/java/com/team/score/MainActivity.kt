@@ -95,12 +95,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initDeepLink(intent: Intent) {
         intent?.data?.let { uri ->
-
-            val kakaoIntent = Intent(this, KakaoActivity::class.java).apply {
-                data = uri // 딥링크 그대로 넘기기
-            }
-            startActivity(kakaoIntent)
-
             when(uri.getQueryParameter("type")) {
                 "mate" -> {
                     val kakaoIntent = Intent(this, KakaoActivity::class.java).apply {
