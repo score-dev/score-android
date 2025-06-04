@@ -52,10 +52,12 @@ class FeedDetailFragment : Fragment() {
         observeViewModel()
 
         binding.layoutFeedDetail.run {
-            textViewEmotionPeople.setOnClickListener {
+            textViewEmotionPeople.setOnLongClickListener {
                 // 바텀시트
                 val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(mainActivity, getFeedEmotionList)
                 emotionMateBottomSheet.show(childFragmentManager, emotionMateBottomSheet.tag)
+
+                true
             }
             layoutEmotionAdd.setOnClickListener {
                 val popupView =
