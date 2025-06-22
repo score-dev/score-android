@@ -148,7 +148,6 @@ class MyGroupDetailFragment : Fragment() {
                         elevation = 50f
                     }
 
-                    // ✅ 블러 뷰 추가
                     val blurOverlay = View(mainActivity).apply {
                         layoutParams = ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -244,6 +243,14 @@ class MyGroupDetailFragment : Fragment() {
                 graphRanking5
             )
 
+            val spaces = listOf(
+                spaceRanking1,
+                spaceRanking2,
+                spaceRanking3,
+                spaceRanking4,
+                spaceRanking5
+            )
+
             val times = listOf(
                 textViewRanking1ExerciseTime,
                 textViewRanking2ExerciseTime,
@@ -276,11 +283,19 @@ class MyGroupDetailFragment : Fragment() {
             rankersInfo.forEachIndexed { index, ranker ->
                 if (index >= 5) return@forEachIndexed
 
-                val timeText = formatSecondsToMinuteString(ranker.weeklyExerciseTime)
+                val timeText = formatSecondsToMinuteString(ranker.weeklyExerciseTime.toInt())
                 val hasExercise = ranker.weeklyExerciseTime > 0
 
                 times[index].text = if (hasExercise) timeText else ""  // 기록 없으면 시간 텍스트 없음
-                times[index].visibility = if (hasExercise) View.VISIBLE else View.INVISIBLE
+                times[index].visibility = if (hasExercise) View.VISIBLE else View.GONE
+                spaces[index].visibility = if (hasExercise) View.VISIBLE else View.GONE
+                val graphWidth = (37 * resources.displayMetrics.density).toInt()
+
+                graphs[index].layoutParams = graphs[index].layoutParams.apply {
+                    width = graphWidth
+                }
+                graphs[index].requestLayout() // 레이아웃 갱신
+
 
                 Glide.with(profiles[index].context)
                     .load(ranker.profileImgUrl)
@@ -289,6 +304,7 @@ class MyGroupDetailFragment : Fragment() {
 
                 // 그래프 뷰 자체도 기록 없으면 숨김
                 graphs[index].visibility = if (hasExercise) View.VISIBLE else View.INVISIBLE
+                spaces[index].visibility = if (hasExercise) View.VISIBLE else View.INVISIBLE
 
                 nicknames[index].text = ranker.nickname
             }

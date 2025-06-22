@@ -14,6 +14,6 @@ data class RankerInfo(
     val rankNum: Int,
     val changedAmount: Int,
     val weeklyLevelIncrement: Int,
-    val weeklyExerciseTime: Int
+    val weeklyExerciseTime: Double
 )
 
