@@ -15,6 +15,7 @@ import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Utils.DynamicSpacingItemDecoration
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.RowHomeGroupBinding
 
@@ -149,6 +150,8 @@ class GroupRelayAdapter(
 
         init {
             binding.layoutCreateGroup.setOnClickListener {
+                firebaseAnalytics.logEvent("click_make_group", null)
+
                 activity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_main, CreateGroupFragment())
                     .addToBackStack(null)

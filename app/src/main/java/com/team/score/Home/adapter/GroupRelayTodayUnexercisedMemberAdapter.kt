@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team.score.API.response.home.HomeGroupUnexercisedMemebrInfo
 import com.team.score.R
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.databinding.RowTodayUnexercisedMemberBinding
 
 class GroupRelayTodayUnexercisedMemberAdapter(
@@ -72,6 +73,8 @@ class GroupRelayTodayUnexercisedMemberAdapter(
 
         init {
             binding.buttonBaton.setOnClickListener {
+                firebaseAnalytics.logEvent("select_give_to_baton", null)
+
                 val pos = adapterPosition
                 if (pos != RecyclerView.NO_POSITION) {
                     selectedPositions.add(pos)
