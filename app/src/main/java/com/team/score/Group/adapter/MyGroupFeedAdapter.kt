@@ -231,7 +231,7 @@ class MyGroupFeedAdapter(
                     }
                 }
 
-                textViewEmotionPeople.setOnClickListener {
+                textViewEmotionPeople.setOnLongClickListener {
                     // 바텀시트
                     println("emotion : ${feedEmotionMap[feedList.get(adapterPosition).feedId]}")
                     val emotionMateBottomSheet = FeedEmotionBottomSheetFragment(
@@ -239,6 +239,8 @@ class MyGroupFeedAdapter(
                         feedEmotionMap[feedList[adapterPosition].feedId]
                     )
                     emotionMateBottomSheet.show(fragmentManager, emotionMateBottomSheet.tag)
+
+                    true
                 }
 
                 layoutEmotionAdd.setOnClickListener { view ->

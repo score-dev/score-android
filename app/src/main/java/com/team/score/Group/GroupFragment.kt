@@ -129,7 +129,7 @@ class GroupFragment : Fragment() {
         viewModel.run {
             schoolGroupRanking.observe(viewLifecycleOwner) { it ->
                 getGroupData = it
-                Log.d("##", "group ranking : ${getGroupData}")
+                
                 getGroupData?.allRankers = getGroupData?.allRankers?.sortedBy { it.rank } ?: emptyList()
 
                 initAdapter()
@@ -192,7 +192,7 @@ class GroupFragment : Fragment() {
                 isClickable = true
             }
 
-            val weekInfo = getCurrentWeekInfo()
+            val weekInfo = moveToPreviousWeek()
             textViewWeekMonth.text = "${weekInfo.month}월 ${weekInfo.weekOfMonth}주차"
             textViewWeekDays.text = "${weekInfo.startDate} ~ ${weekInfo.endDate}"
 

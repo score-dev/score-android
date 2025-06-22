@@ -58,7 +58,7 @@ class MyGroupRankingAdapter(
         }
     }
 
-    override fun getItemCount() = (groupInfos?.size ?: 0) + 1
+    override fun getItemCount() = (groupInfos?.size ?: 1)
 
     inner class ViewHolder(val binding: RowMyGroupRankingBinding) : RecyclerView.ViewHolder(binding.root) {
         val profile = binding.imageViewGroupProfile

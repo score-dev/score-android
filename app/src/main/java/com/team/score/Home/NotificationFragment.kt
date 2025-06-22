@@ -143,6 +143,8 @@ class NotificationFragment : Fragment(), ParticipateGroupDenyDialogInterface {
     }
 
     fun initView() {
+        mainActivity.hideBottomNavigation(true)
+
         // 기존 리스트 초기화
         notificationAdapter.clearNotifications()
 
