@@ -116,6 +116,10 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
+    // Google Analytics
+    implementation("com.google.firebase:firebase-analytics:21.5.0")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
     // 네이버 지도
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.naver.maps:map-sdk:3.21.0")
