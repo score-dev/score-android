@@ -21,6 +21,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.team.score.BuildConfig
 import com.team.score.Login.viewModel.UserViewModel
 import com.team.score.OnBoarding.OnboardingActivity
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentLoginBinding
 
@@ -40,6 +41,8 @@ class LoginFragment : Fragment() {
             Log.i(TAG, "카카오계정으로 로그인 성공 ${token.idToken}")
             MyApplication.signUpInfo?.userDto?.provider = "kakao"
             MyApplication.signUpInfo?.userDto?.idToken = token.idToken.toString()
+
+            firebaseAnalytics.logEvent("login_kakao", null)
             viewModel.checkOauth(onboardingActivity, "kakao", token.idToken.toString())
         }
     }
@@ -54,6 +57,8 @@ class LoginFragment : Fragment() {
             account.idToken?.let {
                 MyApplication.signUpInfo?.userDto?.provider = "google"
                 MyApplication.signUpInfo?.userDto?.idToken = it.toString()
+
+                firebaseAnalytics.logEvent("login_google", null)
                 viewModel.checkOauth(onboardingActivity,"google", it.toString())
             }
         } catch (e: ApiException) {
@@ -91,6 +96,8 @@ class LoginFragment : Fragment() {
                             Log.i("##", "카카오톡으로 로그인 성공 ${token.idToken}")
                             MyApplication.signUpInfo?.userDto?.provider = "kakao"
                             MyApplication.signUpInfo?.userDto?.idToken = token.idToken.toString()
+
+                            firebaseAnalytics.logEvent("login_kakao", null)
                             viewModel.checkOauth(onboardingActivity, "kakao", token.idToken.toString())
                         }
                     }
