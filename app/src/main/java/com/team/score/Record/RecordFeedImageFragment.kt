@@ -29,6 +29,7 @@ import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.CalendarUtil.getAmPmAndTime
 import com.team.score.Utils.CalendarUtil.getTodayDateFormatted
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.ImageUtil.captureAndSaveToUri
 import com.team.score.Utils.ImageUtil.captureAndStoreImage
 import com.team.score.Utils.MyApplication
@@ -106,12 +107,16 @@ class RecordFeedImageFragment : Fragment() {
 
         binding.run {
             imageViewFeed.setOnClickListener {
+                firebaseAnalytics.logEvent("select_picture", null)
+
                 // Launch the photo picker and let the user choose only images.
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
             buttonShare.setOnClickListener {
                 if(isImageUpload) {
+                    firebaseAnalytics.logEvent("click_share_to_SNS", null)
+
                     captureImage()
 
                     val intent = Intent(Intent.ACTION_SEND)
@@ -123,6 +128,8 @@ class RecordFeedImageFragment : Fragment() {
             }
 
             buttonUpload.setOnClickListener {
+                firebaseAnalytics.logEvent("click_feed_final_upload", null)
+
                 captureImage()
 
                 viewModel.uploadFeed(mainActivity)
@@ -152,7 +159,8 @@ class RecordFeedImageFragment : Fragment() {
             val frameAdapter = FeedFrameAdpater(mainActivity, frames).apply {
                 itemClickListener = object : FeedFrameAdpater.OnItemClickListener {
                     override fun onItemClick(position: Int) {
-                        Log.d("##", "click")
+                        firebaseAnalytics.logEvent("select_frame", null)
+
                         layoutFrame1.layoutFrame.visibility = View.GONE
                         layoutFrame2.layoutFrame.visibility = View.GONE
                         layoutFrame3.layoutFrame.visibility = View.GONE
@@ -160,7 +168,6 @@ class RecordFeedImageFragment : Fragment() {
                         layoutFrame5.layoutFrame.visibility = View.GONE
 
                         if (isImageUpload) {
-                            Log.d("##", "isImageUpload : $isImageUpload $position")
                             selectedFrameIndex = position
 
                             when (position) {

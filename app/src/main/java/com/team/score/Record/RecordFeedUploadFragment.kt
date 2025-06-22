@@ -23,6 +23,7 @@ import com.team.score.Record.BottomSheet.RecordFeedMateBottomSheetFragment
 import com.team.score.Record.adapter.ExerciseMateAdapter
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.CalendarUtil.getTodayFormatted
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil.convertToSimpleIso
 import com.team.score.Utils.TimerManager
@@ -73,6 +74,8 @@ class RecordFeedUploadFragment : Fragment() {
                 val mateBottomSheet = RecordFeedMateBottomSheetFragment(mainActivity, getFriendList).apply {
                     onMateSelectedListener = object : OnMateSelectedListener {
                         override fun onMateSelected(mate: FriendResponse) {
+                            firebaseAnalytics.logEvent("select_mate", null)
+
                             // 선택된 친구 처리
                             selectedExerciseMateList.add(mate)
                             MyApplication.recordFeedInfo.othersId = listOf(mate.id)
@@ -86,12 +89,16 @@ class RecordFeedUploadFragment : Fragment() {
             }
 
             buttonNoExerciseMate.setOnClickListener {
+                firebaseAnalytics.logEvent("select_alone", null)
+
                 isAlone = true
                 checkExerciseMates()
             }
 
             for ((layout, textView, imageView) in feelingViews) {
                 layout.setOnClickListener {
+                    firebaseAnalytics.logEvent("select_feelings", null)
+
                     MyApplication.recordFeedInfo.feeling = textView.text.toString()
 
                     highlightSelectedFeeling(MyApplication.recordFeedInfo.feeling)
@@ -105,6 +112,8 @@ class RecordFeedUploadFragment : Fragment() {
 
 
             buttonUpload.setOnClickListener {
+                firebaseAnalytics.logEvent("click_upload", null)
+
                 MyApplication.recordFeedInfo.run {
                     startedAt = convertToSimpleIso(TimerManager.startedAtIso.toString())
                     completedAt = convertToSimpleIso(TimerManager.completedAtIso.toString())
