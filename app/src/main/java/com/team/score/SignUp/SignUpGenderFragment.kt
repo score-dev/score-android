@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.team.score.OnBoarding.OnboardingActivity
 import com.team.score.R
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentSignUpGenderBinding
 
@@ -97,6 +98,8 @@ class SignUpGenderFragment : Fragment() {
             }
 
             buttonSkip.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_gender_skip", null)
+
                 onboardingActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_onboarding, SignUpPhysicalFragment())
                     .addToBackStack(null)
@@ -104,6 +107,8 @@ class SignUpGenderFragment : Fragment() {
             }
 
             buttonNext.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_gender_select", null)
+
                 MyApplication.signUpInfo?.userDto?.gender = gender.toString()
                 onboardingActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_onboarding, SignUpPhysicalFragment())

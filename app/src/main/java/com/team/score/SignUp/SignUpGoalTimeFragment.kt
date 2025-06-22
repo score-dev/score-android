@@ -21,6 +21,7 @@ import com.team.score.OnBoarding.OnboardingActivity
 import com.team.score.R
 import com.team.score.SignUp.BottomSheet.SignUpGoalTimeBottomSheetFragment
 import com.team.score.SignUp.BottomSheet.SignUpGoalTimeBottomSheetListener
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentSignUpGoalTimeBinding
 
@@ -49,11 +50,15 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
             }
 
             buttonNext.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_alarm_select", null)
+
                 MyApplication.signUpInfo?.userDto?.exercisingTime = true
                 viewModel.signUp(onboardingActivity)
             }
 
             buttonSkip.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_alarm_skip", null)
+
                 MyApplication.signUpInfo?.userDto?.exercisingTime = false
                 viewModel.signUp(onboardingActivity)
             }

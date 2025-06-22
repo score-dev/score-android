@@ -11,6 +11,7 @@ import com.team.score.SignUp.BottomSheet.SignUpGradeBottomSheetFragment
 import com.team.score.SignUp.BottomSheet.SignUpGradeBottomSheetListener
 import com.team.score.SignUp.BottomSheet.SignUpSchoolBottomSheetFragment
 import com.team.score.SignUp.BottomSheet.SignUpSchoolBottomSheetListener
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentSignUpSchoolBinding
 
@@ -34,6 +35,8 @@ class SignUpSchoolFragment : Fragment(), SignUpGradeBottomSheetListener, SignUpS
         binding.run {
 
             editTextSchoolname.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_school_name", null)
+
                 val schoolBottomSheet = SignUpSchoolBottomSheetFragment(onboardingActivity)
                 schoolBottomSheet.show(childFragmentManager, schoolBottomSheet.tag)
             }
@@ -44,6 +47,8 @@ class SignUpSchoolFragment : Fragment(), SignUpGradeBottomSheetListener, SignUpS
             }
 
             editTextGrade.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_school_grade", null)
+
                 gradeBottomSheet.show(childFragmentManager, gradeBottomSheet.tag)
             }
 

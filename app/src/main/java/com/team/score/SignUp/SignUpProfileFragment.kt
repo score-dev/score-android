@@ -14,6 +14,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.team.score.OnBoarding.OnboardingActivity
 import com.team.score.R
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentSignUpProfileBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -92,6 +93,8 @@ class SignUpProfileFragment : Fragment() {
             }
 
             buttonNext.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_profile", null)
+
                 if(profileImage != 0) {
                     MyApplication.signUpInfo?.userDto?.profileImgId = profileImage
                 }
