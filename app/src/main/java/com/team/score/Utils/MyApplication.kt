@@ -37,6 +37,7 @@ class MyApplication : Application() {
             ),
             file = ""
         )
+        var signUpIsStudent = true
 
         var userInfo: UserInfoResponse? = null
         var userNickname = ""

@@ -11,6 +11,7 @@ import android.widget.ImageView
 import com.team.score.OnBoarding.OnboardingActivity
 import com.team.score.R
 import com.team.score.SignUp.SignUpNicknameFragment
+import com.team.score.SignUp.SignUpTypeFragment
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentAgreementBinding
 
@@ -77,7 +78,7 @@ class AgreementFragment : Fragment() {
             buttonNext.setOnClickListener {
                 MyApplication.signUpInfo?.userDto?.marketing = agreement3
                 onboardingActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_onboarding, SignUpNicknameFragment())
+                    .replace(R.id.fragmentContainerView_onboarding, SignUpTypeFragment())
                     .addToBackStack(null)
                     .commit()
             }
