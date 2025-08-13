@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.team.score.Login.viewModel.UserViewModel
 import com.team.score.OnBoarding.OnboardingActivity
 import com.team.score.R
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentSignUpNicknameBinding
 
@@ -48,6 +49,8 @@ class SignUpNicknameFragment : Fragment() {
             }
 
             buttonNext.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_username", null)
+
                 MyApplication.signUpInfo?.userDto?.nickname = editTextNickname.text.toString()
                 onboardingActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_onboarding, SignUpProfileFragment())

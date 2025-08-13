@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.team.score.MainActivity
 import com.team.score.R
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.databinding.FragmentRecordBinding
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
@@ -74,9 +75,13 @@ class RecordFragment : Fragment() {
 
         binding.run {
             buttonCamera.setOnClickListener {
+                firebaseAnalytics.logEvent("click_camera_stamp", null)
+
                 checkCameraPermissionAndOpen()
             }
             buttonMap.setOnClickListener {
+                firebaseAnalytics.logEvent("click_map", null)
+
                 if (TimerManager.startedAtIso != null) {
                     mainActivity.supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, RecordMapFragment())
@@ -85,6 +90,8 @@ class RecordFragment : Fragment() {
                 }
             }
             buttonRecord.setOnClickListener {
+                firebaseAnalytics.logEvent("click_start_record", null)
+
                 isStart = mainActivity.toggleTrackingService()
                 binding.buttonRecord.setImageResource(
                     if (isStart) R.drawable.ic_temporary_stop else R.drawable.ic_start
@@ -92,6 +99,8 @@ class RecordFragment : Fragment() {
             }
             buttonStop.setOnClickListener {
                 if (TimerManager.startedAtIso != null) {
+                    firebaseAnalytics.logEvent("click_end_record", null)
+
                     // 타이머와 위치 추적 종료
                     mainActivity.stopTrackingService()
                     isStart = false
@@ -130,6 +139,8 @@ class RecordFragment : Fragment() {
             toolbar.run {
                 textViewHead.text = "기록하기"
                 buttonBack.setOnClickListener {
+                    firebaseAnalytics.logEvent("click_stopwatch_back", null)
+
                     stopTimerUIUpdater()
                     mainActivity.stopAndResetTracking()
 

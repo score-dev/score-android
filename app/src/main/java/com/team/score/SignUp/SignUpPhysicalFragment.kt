@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import com.team.score.OnBoarding.OnboardingActivity
 import com.team.score.R
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.databinding.FragmentSignUpPhysicalBinding
 
@@ -39,6 +40,8 @@ class SignUpPhysicalFragment : Fragment() {
             }
 
             buttonNext.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_PI_select", null)
+
                 MyApplication.signUpInfo?.userDto?.height = editTextPhysicalHeight.text.toString().toInt()
                 MyApplication.signUpInfo?.userDto?.weight = editTextPhysicalWeight.text.toString().toInt()
 
@@ -49,6 +52,8 @@ class SignUpPhysicalFragment : Fragment() {
             }
 
             buttonSkip.setOnClickListener {
+                firebaseAnalytics.logEvent("onboarding_PI_skip", null)
+
                 onboardingActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_onboarding, SignUpGoalTimeFragment())
                     .addToBackStack(null)

@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.team.score.BuildConfig
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.DistanceUtil
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 
 class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
 
@@ -60,6 +61,8 @@ class RecordTodayExerciseFragment : Fragment(), OnMapReadyCallback {
                 NaverMapSdk.NaverCloudPlatformClient("${com.team.score.BuildConfig.MAP_API_KEY}")
 
             buttonFeed.setOnClickListener {
+                firebaseAnalytics.logEvent("click_go_to_feed_upload", null)
+
                 mainActivity.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView_main, RecordFeedUploadFragment())
                     .addToBackStack(null)

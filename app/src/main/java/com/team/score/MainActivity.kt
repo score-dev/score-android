@@ -27,6 +27,7 @@ import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.Record.RecordFragment
 import com.team.score.Record.viewModel.RecordViewModel
 import com.team.score.Utils.DistanceUtil
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.Utils.MyApplication
 import com.team.score.Utils.TimeUtil
 import com.team.score.Utils.TimerManager
@@ -124,6 +125,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_home -> {
+                    firebaseAnalytics.logEvent("GNB_home", null)
+
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, HomeFragment())
                         .addToBackStack(null)
@@ -132,6 +135,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_record -> {
+                    firebaseAnalytics.logEvent("GNB_record", null)
+
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, RecordFragment())
                         .addToBackStack(null)
@@ -140,6 +145,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_group -> {
+                    firebaseAnalytics.logEvent("GNB_school_group", null)
+
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragmentContainerView_main, GroupFragment())
                         .addToBackStack(null)

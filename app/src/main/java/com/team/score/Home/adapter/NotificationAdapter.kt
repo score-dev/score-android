@@ -15,6 +15,7 @@ import com.team.score.MainActivity
 import com.team.score.R
 import com.team.score.Record.RecordFragment
 import com.team.score.Utils.CalendarUtil.formatToMonthDay
+import com.team.score.Utils.GlobalApplication.Companion.firebaseAnalytics
 import com.team.score.databinding.RowNotificationBinding
 
 class NotificationAdapter(
@@ -140,17 +141,23 @@ class NotificationAdapter(
 
             binding.buttonLeft.setOnClickListener {
                 // 그룹 참여 거절
+                firebaseAnalytics.logEvent("click_invitation_mate_alarm", null)
+
                 itemClickListener?.onItemClick(adapterPosition, false)
                 onItemClickListener?.invoke(position, false)
             }
 
             binding.buttonRight.setOnClickListener {
                 // 그룹 참여 수락
+                firebaseAnalytics.logEvent("click_invitation_mate_alarm", null)
+
                 itemClickListener?.onItemClick(adapterPosition, true)
                 onItemClickListener?.invoke(position, true)
             }
 
             binding.buttonOne.setOnClickListener {
+                firebaseAnalytics.logEvent("click_go_to_exersise_alarm", null)
+
                 val pos = adapterPosition
                 val notification = notificationList[pos]
 
