@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.TokenUtil.refreshToken
 import com.team.score.API.response.login.UserInfoResponse
 import com.team.score.API.response.user.BlockedMateListResponse
 import com.team.score.API.response.user.NotificationInfoResponse
@@ -60,6 +61,15 @@ class MypageViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getUserInfo(activity, userId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -108,6 +118,13 @@ class MypageViewModel: ViewModel() {
                         400 -> {
                             isUpdateUserInfo.value = false
                         }
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { updateUserInfo(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
                     }
                 }
             }
@@ -147,6 +164,15 @@ class MypageViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getNotificationInfo(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -184,6 +210,15 @@ class MypageViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { updateNotificationInfo(activity, notificationInfo) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -233,6 +268,15 @@ class MypageViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getBlockedMateList(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -272,6 +316,16 @@ class MypageViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
 
                     isAddMate.value = false
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { addNewFriends(activity, mateId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -310,6 +364,15 @@ class MypageViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { cancelBlockedMate(activity, mateId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -321,11 +384,11 @@ class MypageViewModel: ViewModel() {
     }
 
     // 회원탈퇴
-    fun withdrawal(activity: MainActivity, result: String) {
+    fun withdrawal(activity: MainActivity, withdrawalResult: String) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
-        apiClient.apiService.withdrawal(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), result).enqueue(object :
+        apiClient.apiService.withdrawal(tokenManager.getAccessToken().toString(), tokenManager.getUserId(), withdrawalResult).enqueue(object :
             Callback<String> {
             override fun onResponse(
                 call: Call<String>,
@@ -347,6 +410,15 @@ class MypageViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { withdrawal(activity, withdrawalResult) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 

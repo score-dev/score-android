@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.TokenUtil.refreshToken
 import com.team.score.API.request.group.CreateGroupRequest
 import com.team.score.API.request.group.ParticipateGroupRequest
 import com.team.score.API.request.group.ReportFeedRequest
@@ -114,6 +115,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getMyGroupList(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -179,6 +189,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { createGroup(activity, groupName, groupDescription, groupMemberNum, groupPassword, isPrivate) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -217,6 +236,16 @@ class GroupViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
 
                     isParticipated.value = false
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { participateGroup(activity, groupId, message) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -260,6 +289,16 @@ class GroupViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
 
                     isValidPassword.value = null
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { verifyGroupPassword(activity, groupId, password) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -301,6 +340,13 @@ class GroupViewModel: ViewModel() {
 
                     when(response.code()) {
                         400 -> withdrawalGroupMessage.value = "방장은 그룹에서 탈퇴할 수 없습니다."
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { withdrawalGroup(activity, groupId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
                         else -> withdrawalGroupMessage.value = "그룹 탈퇴에 실패하였습니다. 다시 시도해주세요"
                     }
                 }
@@ -343,12 +389,19 @@ class GroupViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
 
                     when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getSchoolGroupRanking(activity, date) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
                         404 -> {
                             schoolGroupRanking.value == null
                         }
-                         500 -> {
+                        500 -> {
                              schoolGroupRanking.value == null
-                         }
+                        }
                     }
                 }
             }
@@ -410,6 +463,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { searchSchoolGroup(activity, schoolId, keyword) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -470,6 +532,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getRecommendGroup(activity, schoolId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -509,6 +580,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getGroupDetail(activity, groupId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -549,6 +629,14 @@ class GroupViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
 
                     when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getGroupRanking(activity, groupId, date) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+
                         404 -> {
                             groupRanking.value = null
                         }
@@ -618,6 +706,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getGroupFeedList(activity, groupId, currentPage) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -676,6 +773,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getFeedEmotion(activity, feedId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -712,6 +818,16 @@ class GroupViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { setFeedEmotion(activity, feedId, type) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
 
                 }
             }
@@ -752,6 +868,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { reportFeed(activity, feedId, reason, comment) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -789,6 +914,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { deleteFeed(activity, feedId, onSuccess) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -842,6 +976,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getGroupMateList(activity, groupId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -879,6 +1022,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getUserInfo(activity, userId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -917,6 +1069,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { blockMate(activity, mateId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -956,6 +1117,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { reportMate(activity, mateId, reason, comment) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -1010,6 +1180,15 @@ class GroupViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getGroupUnexercisedMateList(activity, groupId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
