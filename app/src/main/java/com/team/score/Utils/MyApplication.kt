@@ -21,8 +21,8 @@ class MyApplication : Application() {
                 nickname = "",
                 profileImgId = 0,
                 grade = 0,
-                height = null,
-                weight = null,
+                height = 0,
+                weight = 0,
                 gender = null,
                 goal = null,
                 marketing = false,
@@ -31,9 +31,8 @@ class MyApplication : Application() {
                 idToken = ""
             ),
             schoolDto = UserSchool(
-                schoolName = "",
-                schoolAddress = "",
-                schoolCode = ""
+                schoolName = "일반",
+                schoolCode = "general"
             ),
             file = ""
         )
@@ -54,6 +53,7 @@ class MyApplication : Application() {
             ),
             file = null
         )
+        var schoolAddress = ""
 
         // group
         var groupImage: MultipartBody.Part? = null

@@ -7,7 +7,6 @@ data class UserInfoUpdateRequest(
 
 data class UserSchoolInfo(
     var schoolName: String,
-    var schoolAddress: String,
     var schoolCode: String
 )
 

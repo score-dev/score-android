@@ -8,7 +8,6 @@ data class SignUpRequest(
 
 data class UserSchool(
     var schoolName: String,
-    var schoolAddress: String,
     var schoolCode: String
 )
 
