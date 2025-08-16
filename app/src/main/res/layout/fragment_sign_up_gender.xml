@@ -107,6 +107,7 @@
         android:id="@+id/textView_school_intro2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/pretendard_regular"
         android:text="불편하시다면 건너뛰기를 눌러주세요!"
         android:textColor="@color/text_color2"
