@@ -67,10 +67,28 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        initView()
+    }
+
     fun observeViewModel() {
         viewModel.run {
             isSignUp.observe(viewLifecycleOwner) {
                 setNotification()
+            }
+        }
+    }
+
+    fun initView() {
+        binding.run {
+            buttonNext.visibility = View.INVISIBLE
+
+            toolbar.run {
+                buttonBack.setOnClickListener {
+                    fragmentManager?.popBackStack()
+                }
             }
         }
     }
@@ -108,11 +126,13 @@ class SignUpGoalTimeFragment : Fragment(), BasicDialogInterface, SignUpGoalTimeB
 
     override fun onTimeSelected(time: String) {
         binding.run {
+            buttonNext.visibility = View.VISIBLE
+
             editTextGoalTime.run {
                 setText(time)
-                setTextColor(resources.getColor(R.color.main))
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setTextAppearance(R.style.body1)
+                setTextColor(resources.getColor(R.color.main))
                 setBackgroundResource(R.drawable.background_edittext_enabled)
             }
         }

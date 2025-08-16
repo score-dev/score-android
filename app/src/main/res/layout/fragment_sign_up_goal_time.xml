@@ -135,6 +135,7 @@
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="목표 운동 시간"
+        android:textColor="@color/main"
         android:inputType="text"
         android:focusable="false"
         android:paddingHorizontal="17dp"
