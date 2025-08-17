@@ -21,7 +21,7 @@ class SignUpNicknameFragment : Fragment() {
     lateinit var onboardingActivity: OnboardingActivity
     lateinit var viewModel: UserViewModel
 
-    val regex = Regex("^[가-힣a-zA-Z0-9]{1,20}$")
+    val regex = Regex("^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]{1,20}\$")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
