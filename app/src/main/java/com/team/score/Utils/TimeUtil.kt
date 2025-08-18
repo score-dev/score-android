@@ -34,7 +34,9 @@ object TimeUtil {
 
     // 목표 시간 표시 포맷
     @RequiresApi(Build.VERSION_CODES.O)
-    fun formatExerciseTimeToKorean(time: String): String {
+    fun formatExerciseTimeToKorean(time: String?): String {
+        if(time.isNullOrEmpty()) return "없음"
+
         val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         val localTime = LocalTime.parse(time, formatter)
 
