@@ -92,10 +92,12 @@ class RecordFragment : Fragment() {
             buttonRecord.setOnClickListener {
                 firebaseAnalytics.logEvent("click_start_record", null)
 
-                isStart = mainActivity.toggleTrackingService()
-                binding.buttonRecord.setImageResource(
-                    if (isStart) R.drawable.ic_temporary_stop else R.drawable.ic_start
-                )
+                if (checkLocationPermission()) {
+                    isStart = mainActivity.toggleTrackingService()
+                    binding.buttonRecord.setImageResource(
+                        if (isStart) R.drawable.ic_temporary_stop else R.drawable.ic_start
+                    )
+                }
             }
             buttonStop.setOnClickListener {
                 if (TimerManager.startedAtIso != null) {
@@ -126,8 +128,9 @@ class RecordFragment : Fragment() {
         // UI 상태 복원 로직
         if (TimerManager.startedAtMillis != null && TimerManager.isRunning) {
             val now = System.currentTimeMillis()
-            val elapsed = ((now - TimerManager.startedAtMillis!!) / 1000).toInt()
+            val elapsed = ((now - TimerManager.startedAtMillis!!).toInt())/ 1000
             MyApplication.recordTimer = elapsed
+            startTimerUIUpdater()
         }
     }
 
@@ -154,7 +157,6 @@ class RecordFragment : Fragment() {
             } else {
                 buttonRecord.setImageResource(R.drawable.ic_start)
             }
-            textViewTimer.text = TimeUtil.formatRecordTime(MyApplication.recordTimer)
 
             checkLocationPermission()
 
