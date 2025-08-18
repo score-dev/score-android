@@ -251,31 +251,34 @@ class RecordFeedImageFragment : Fragment() {
 
     private fun convertResizeImage(imageUri: Uri): Uri {
         val contentResolver = requireContext().contentResolver
-        val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        val originalBitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
 
-        // 이미지 리사이즈 (절반 크기로)
-        val resizedBitmap =
-            Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true)
+        // 1. 이미지 리사이즈 (너무 크면 줄이기)
+        val resizedBitmap = Bitmap.createScaledBitmap(
+            originalBitmap,
+            originalBitmap.width / 4,
+            originalBitmap.height / 4,
+            true
+        )
 
-        // 임시 파일 생성
+        // 2. 최대 2MB 이하가 될 때까지 압축
+        val maxFileSize = 2 * 1024 * 1024 // 2MB
+        var quality = 100
+        val stream = ByteArrayOutputStream()
+
+        do {
+            stream.reset()
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream)
+            quality -= 5
+        } while (stream.size() > maxFileSize && quality > 10)
+
+        // 3. 임시 파일 생성 후 저장
         val tempFile = File.createTempFile("resized_image", ".jpg", requireContext().cacheDir)
+        FileOutputStream(tempFile).use { it.write(stream.toByteArray()) }
 
-        // 이미지 파일 쓰기
-        try {
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
-
-            FileOutputStream(tempFile).use { outputStream ->
-                outputStream.write(byteArrayOutputStream.toByteArray())
-                outputStream.flush()
-            }
-
-        } catch (e: Exception) {
-            Log.e("ImageResize", "Failed to write file: ${e.message}")
-        } finally {
-            // 메모리 해제
-            resizedBitmap.recycle()
-        }
+        // 4. 메모리 해제
+        resizedBitmap.recycle()
+        originalBitmap.recycle()
 
         return Uri.fromFile(tempFile)
     }
