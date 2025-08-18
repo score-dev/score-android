@@ -384,7 +384,7 @@ class MypageViewModel: ViewModel() {
     }
 
     // 회원탈퇴
-    fun withdrawal(activity: MainActivity, withdrawalResult: String) {
+    fun withdrawal(activity: MainActivity, withdrawalResult: String, onSuccess: () -> Unit) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
@@ -400,7 +400,7 @@ class MypageViewModel: ViewModel() {
                     val result: String? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
-                    activity.finish()
+                    onSuccess()
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     var result: String? = response.body()
@@ -414,7 +414,7 @@ class MypageViewModel: ViewModel() {
                         401 -> {
                             refreshToken(
                                 activity,
-                                retryRequest = { withdrawal(activity, withdrawalResult) },
+                                retryRequest = { withdrawal(activity, withdrawalResult, onSuccess) },
                                 onFailure = { activity.finish() }
                             )
                         }
