@@ -5,5 +5,4 @@ data class FeedEmotionResponse(
     val agentProfileImgUrl: String,
     val agentNickname: String,
     val emotionType: String, // "LIKE", "BEST", "SUPPORT", "CONGRAT"
-    val reactedAt: String
 )

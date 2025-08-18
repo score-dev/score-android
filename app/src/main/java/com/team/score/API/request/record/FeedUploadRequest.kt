@@ -7,9 +7,9 @@ data class FeedUploadRequest(
     var othersId: List<Int>?,
     var distance: Int,
     var reducedKcal: Int,
-    var location: String,
-    var weather: String,
-    var temperature: Int,
-    var fineDust: String,
+    var location: String?,
+    var weather: String?,
+    var temperature: Int?,
+    var fineDust: String?,
     var feeling: String?
 )
