@@ -212,6 +212,7 @@
             android:id="@+id/imageView_next_agreement4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:src="@drawable/ic_next_white" />
 
