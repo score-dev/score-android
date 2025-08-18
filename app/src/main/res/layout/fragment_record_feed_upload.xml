@@ -243,7 +243,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/img_mood_empty" />
+                            android:src="@drawable/img_mood_empty_thick" />
 
                         <TextView
                             android:id="@+id/textView_dust_value"
@@ -305,7 +305,7 @@
                         android:layout_height="63dp"
                         android:background="@drawable/background_grey2_circle"
                         android:padding="17dp"
-                        android:src="@drawable/img_mood_smile"
+                        android:src="@drawable/img_mood_smile_thick"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -334,7 +334,7 @@
                         android:layout_height="63dp"
                         android:background="@drawable/background_grey2_circle"
                         android:padding="17dp"
-                        android:src="@drawable/img_mood_happy"
+                        android:src="@drawable/img_mood_happy_thick"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -363,7 +363,7 @@
                         android:layout_height="63dp"
                         android:background="@drawable/background_grey2_circle"
                         android:padding="17dp"
-                        android:src="@drawable/img_mood_cry"
+                        android:src="@drawable/img_mood_cry_thick"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -392,7 +392,7 @@
                         android:layout_height="63dp"
                         android:background="@drawable/background_grey2_circle"
                         android:padding="17dp"
-                        android:src="@drawable/img_mood_empty"
+                        android:src="@drawable/img_mood_empty_thick"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

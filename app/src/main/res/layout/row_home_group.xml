@@ -46,6 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="28dp"
+                android:layout_marginHorizontal="10dp"
+                android:textAlignment="center"
                 android:text="내 친구들과 함께 운동하러 가볼까요?" />
         </LinearLayout>
 

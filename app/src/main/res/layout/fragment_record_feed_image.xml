@@ -140,8 +140,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginHorizontal="16dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -150,10 +151,12 @@
             android:id="@+id/button_share"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="20dp"
             android:layout_weight="1.5"
             android:background="@drawable/background_sub3_radius15"
             android:fontFamily="@font/pretendard_semi_bold"
-            android:layout_marginBottom="20dp"
+            android:gravity="center"
             android:paddingVertical="19dp"
             android:text="SNS 공유"
             android:textAlignment="center"
@@ -166,15 +169,18 @@
 
         <Space
             android:layout_width="8dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom" />
 
         <Button
             android:id="@+id/button_upload"
             style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="bottom"
             android:layout_weight="1"
             android:enabled="false"
+            android:gravity="center"
             android:paddingVertical="19dp"
             android:text="저장하고 피드 업로드하기"
             app:cornerRadius="15dp"
