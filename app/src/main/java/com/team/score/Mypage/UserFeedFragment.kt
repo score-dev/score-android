@@ -5,12 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.team.score.API.TokenManager
 import com.team.score.API.response.user.FeedListResponse
 import com.team.score.Group.OtherGroupFeedListFragment
+import com.team.score.Home.viewModel.HomeViewModel
 import com.team.score.MainActivity
 import com.team.score.Mypage.Adapter.FeedAdapter
 import com.team.score.R
@@ -26,6 +29,9 @@ class UserFeedFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private val viewModel: RecordViewModel by lazy {
         ViewModelProvider(this)[RecordViewModel::class.java]
+    }
+    private val homeViewModel: HomeViewModel by lazy {
+        ViewModelProvider(requireActivity())[HomeViewModel::class.java]
     }
 
     lateinit var feedAdapter: FeedAdapter
@@ -77,6 +83,17 @@ class UserFeedFragment : Fragment() {
                     .commit()
             }
 
+            buttonBaton.setOnClickListener {
+                // 바통 찌르기
+                homeViewModel.batonGroupMember(mainActivity, arguments?.getInt("userId") ?: 0) {
+                    binding.buttonBaton.run {
+                        text = "찌르기 완료!"
+                        backgroundTintList =
+                            context?.let { ContextCompat.getColorStateList(it, R.color.main) }
+                    }
+                }
+            }
+
             recyclerViewFeed.apply {
                 layoutManager = GridLayoutManager(context, 3)
                 adapter = feedAdapter
@@ -90,7 +107,6 @@ class UserFeedFragment : Fragment() {
 
                     // 마지막 항목이 보이고, 로딩 중이 아니며, 마지막 페이지도 아닐 경우
                     if (!isLoading && !isLastPage && lastVisible >= totalItemCount - 1 && !(isFirstPage == true && isLastPage == true)) {
-                        Log.d("##", "reload")
                         isLoading = true
                         viewModel.getFeedList(mainActivity, arguments?.getInt("userId") ?: 0, currentPage)
                     }
@@ -119,11 +135,18 @@ class UserFeedFragment : Fragment() {
                 if(isFirstPage) {
                     binding.run {
                         if(feedResponse.isEmpty()) {
-                            layoutEmptyFeed.visibility = View.VISIBLE
-                            textViewEmptyTitle.text = "${MyApplication.userNickname}님만의 운동기록을\n채워보세요!"
-                            recyclerViewFeed.visibility = View.GONE
+                            if(arguments?.getInt("userId") ?: 0 == TokenManager(mainActivity).getUserId()) {
+                                layoutEmptyFeed.visibility = View.GONE
+                                layoutEmptyMyFeed.visibility = View.VISIBLE
+                                textViewMyEmptyTitle.text = "${MyApplication.userNickname}님만의 운동기록을\n채워보세요!"
+                                recyclerViewFeed.visibility = View.GONE
+                            } else {
+                                layoutEmptyFeed.visibility = View.VISIBLE
+                                layoutEmptyMyFeed.visibility = View.GONE
+                            }
                         } else {
                             layoutEmptyFeed.visibility = View.GONE
+                            layoutEmptyMyFeed.visibility = View.GONE
                             recyclerViewFeed.visibility = View.VISIBLE
                         }
                     }

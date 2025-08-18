@@ -103,8 +103,9 @@ class GroupRelayAdapter(
                     itemClickListener = object : GroupRelayTodayUnexercisedMemberAdapter.OnItemClickListener {
                         override fun onItemClick(unexerciseMemberPosition: Int) {
                             val userId = group.notExercisedUsers?.get(unexerciseMemberPosition)?.userId ?: return
-                            viewModel.batonGroupMember(activity, userId)
-                            updateList(group.notExercisedUsers, unexerciseMemberPosition)
+                            viewModel.batonGroupMember(activity, userId) {
+                                updateList(group.notExercisedUsers, unexerciseMemberPosition)
+                            }
                         }
                     }
                 }

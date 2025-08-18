@@ -77,7 +77,7 @@ class HomeViewModel: ViewModel() {
     }
 
     // 바통 찌르기
-    fun batonGroupMember(activity: Activity, receiverId: Int) {
+    fun batonGroupMember(activity: Activity, receiverId: Int, onSuccess: () -> Unit) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
@@ -95,6 +95,8 @@ class HomeViewModel: ViewModel() {
 
                     isBaton.value = BatonStatus(true, receiverId)
 
+                    onSuccess()
+
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     var result: Boolean? = response.body()
@@ -110,7 +112,7 @@ class HomeViewModel: ViewModel() {
                         401 -> {
                             refreshToken(
                                 activity,
-                                retryRequest = { batonGroupMember(activity, receiverId) },
+                                retryRequest = { batonGroupMember(activity, receiverId, onSuccess) },
                                 onFailure = { activity.finish() }
                             )
                         }
