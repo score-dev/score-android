@@ -289,12 +289,14 @@ class MyGroupDetailFragment : Fragment() {
                 times[index].text = if (hasExercise) timeText else ""  // 기록 없으면 시간 텍스트 없음
                 times[index].visibility = if (hasExercise) View.VISIBLE else View.GONE
                 spaces[index].visibility = if (hasExercise) View.VISIBLE else View.GONE
-                val graphWidth = (37 * resources.displayMetrics.density).toInt()
+                if(!hasExercise) {
+                    val graphWidth = (37 * resources.displayMetrics.density).toInt()
 
-                graphs[index].layoutParams = graphs[index].layoutParams.apply {
-                    width = graphWidth
+                    graphs[index].layoutParams = graphs[index].layoutParams.apply {
+                        width = graphWidth
+                    }
+                    graphs[index].requestLayout() // 레이아웃 갱신
                 }
-                graphs[index].requestLayout() // 레이아웃 갱신
 
 
                 Glide.with(profiles[index].context)

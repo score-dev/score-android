@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="10dp"
-    android:paddingHorizontal="24dp"
+    android:paddingHorizontal="19dp"
     android:background="@drawable/background_sub_radius15"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -40,10 +40,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginLeft="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/layout_profile"
@@ -51,8 +52,9 @@
 
         <LinearLayout
             android:id="@+id/layout_group_total_exercise_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -63,6 +65,7 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:text="총 운동 시간"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -74,6 +77,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
                 android:text="-시간"
+                android:textAlignment="center"
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -81,13 +85,14 @@
             android:id="@+id/divider1"
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="15dp"
             android:background="@color/white" />
 
         <LinearLayout
             android:id="@+id/layout_group_participation_rate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -98,6 +103,7 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:text="레벨 상승"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -120,8 +126,8 @@
                     style="@style/body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
                     android:text="-"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -132,13 +138,14 @@
             android:id="@+id/divider2"
             android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="15dp"
             android:background="@color/white" />
 
         <LinearLayout
             android:id="@+id/layout_group_ranking"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -148,7 +155,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/pretendard_regular"
-                android:text="랭킹"
+                android:text=" 랭킹 "
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp" />
 
@@ -160,6 +168,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
                 android:text="-위"
+                android:textAlignment="center"
                 android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
