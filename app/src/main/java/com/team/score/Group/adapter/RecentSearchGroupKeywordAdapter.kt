@@ -31,7 +31,8 @@ class RecentSearchGroupKeywordAdapter(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int) {}
+        fun onItemClick(position: Int)
+        fun onDeleteClick(position: Int)
     }
 
     var itemClickListener: OnItemClickListener? = null
@@ -58,13 +59,12 @@ class RecentSearchGroupKeywordAdapter(
             binding.buttonDelete.setOnClickListener {
                 MyApplication.preferences.removeRecentSearch(activity, MyApplication.preferences.getRecentSearchesLimited(activity).get(position))
                 updateList(MyApplication.preferences.getRecentSearchesLimited(activity))
+
+                itemClickListener?.onDeleteClick(adapterPosition)
             }
 
             binding.root.setOnClickListener {
                 itemClickListener?.onItemClick(adapterPosition)
-
-                // 클릭 리스너 호출
-                onItemClickListener?.invoke(position)
             }
         }
     }

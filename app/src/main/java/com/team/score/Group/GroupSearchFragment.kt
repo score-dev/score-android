@@ -62,7 +62,16 @@ class GroupSearchFragment : Fragment() {
                     // 검색
                     if(editTextSearch.text.isNotEmpty()) {
                         keyword = editTextSearch.text.toString()
-                        viewModel.searchSchoolGroup(mainActivity, schoolId, keyword)
+
+                        recyclerViewSearchResult.visibility = View.VISIBLE
+                        textViewSearchTitle.text = "‘${keyword}’ 검색 결과"
+
+                        viewModel.searchSchoolGroup(mainActivity, schoolId, keyword) {
+                            layoutSearchResult.visibility = View.VISIBLE
+                            recyclerViewSearchResult.visibility = View.GONE
+                            layoutSearchResultEmpty.visibility = View.VISIBLE
+                            layoutSearchEmpty.visibility = View.GONE
+                        }
                     }
 
                     true
@@ -72,7 +81,18 @@ class GroupSearchFragment : Fragment() {
                     editTextSearch.text.clear()
                     layoutSearchEmpty.visibility = View.VISIBLE
                     layoutSearchResult.visibility = View.GONE
+                    layoutSearchResultEmpty.visibility = View.GONE
+
+                    searchKewordUiUpdate()
+
                     searchKewordAdapter.updateList(MyApplication.preferences.getRecentSearchesLimited(mainActivity))
+                }
+
+                buttonSearchOtherGroup.setOnClickListener {
+                    editTextSearch.text.clear()
+                    layoutSearchEmpty.visibility = View.VISIBLE
+                    layoutSearchResult.visibility = View.GONE
+                    layoutSearchResultEmpty.visibility = View.GONE
                 }
             }
         }
@@ -123,13 +143,30 @@ class GroupSearchFragment : Fragment() {
         }
 
         searchKewordAdapter = RecentSearchGroupKeywordAdapter(mainActivity, MyApplication.preferences.getRecentSearchesLimited(mainActivity)).apply {
-            itemClickListener = object : RecentSearchGroupKeywordAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
-                    keyword = MyApplication.preferences.getRecentSearchesLimited(mainActivity).get(position)
-                    binding.searchBar.editTextSearch.setText(keyword)
-                    viewModel.searchSchoolGroup(mainActivity, schoolId, keyword)
+                itemClickListener = object : RecentSearchGroupKeywordAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        // 검색어 클릭 시
+                        keyword = MyApplication.preferences.getRecentSearchesLimited(mainActivity)[position]
+                        binding.run {
+                            searchBar.editTextSearch.setText(keyword)
+                            recyclerViewSearchResult.visibility = View.VISIBLE
+                            textViewSearchTitle.text = "‘${keyword}’ 검색 결과"
+                        }
+                        viewModel.searchSchoolGroup(mainActivity, schoolId, keyword) {
+                            binding.run {
+                                layoutSearchResult.visibility = View.VISIBLE
+                                recyclerViewSearchResult.visibility = View.GONE
+                                layoutSearchResultEmpty.visibility = View.VISIBLE
+                                layoutSearchEmpty.visibility = View.GONE
+                            }
+                        }
+                    }
+
+                    override fun onDeleteClick(position: Int) {
+                        // 삭제 시 동작 필요 시 작성
+                        searchKewordUiUpdate()
+                    }
                 }
-            }
         }
 
         recommendGroupAdapter = SearchGroupAdapter(mainActivity, getRecommendGroupInfo).apply {
@@ -195,7 +232,6 @@ class GroupSearchFragment : Fragment() {
                 binding.run {
                     layoutSearchResult.visibility = View.VISIBLE
                     layoutSearchEmpty.visibility = View.GONE
-                    textViewSearchTitle.text = "‘${keyword}’ 검색 결과"
                 }
 
                 searchGroupAdapter.updateList(getGroupInfo)
@@ -219,10 +255,24 @@ class GroupSearchFragment : Fragment() {
             layoutSearchEmpty.visibility = View.VISIBLE
             layoutSearchResult.visibility = View.GONE
 
+            searchKewordUiUpdate()
+
             toolbar.run {
                 buttonBack.setOnClickListener {
                     fragmentManager?.popBackStack()
                 }
+            }
+        }
+    }
+
+    fun searchKewordUiUpdate() {
+        binding.run {
+            if(MyApplication.preferences.getRecentSearchesLimited(mainActivity).isEmpty()) {
+                textViewRecentSearchTitle.visibility = View.GONE
+                recyclerViewSearchWord.visibility = View.GONE
+            } else {
+                textViewRecentSearchTitle.visibility = View.VISIBLE
+                recyclerViewSearchWord.visibility = View.VISIBLE
             }
         }
     }

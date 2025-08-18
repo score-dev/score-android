@@ -26,8 +26,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_search_result"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
@@ -36,77 +35,140 @@
         app:layout_constraintStart_toStartOf="@+id/search_bar"
         app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
-        <TextView
-            android:id="@+id/textView_search_title"
-            style="@style/body1"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="'검색어' 검색 결과"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_search_result"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView_search_title"
-            app:layout_constraintTop_toBottomOf="@+id/textView_search_title" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_search_result"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textView_search_title"
+                    style="@style/body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="'검색어' 검색 결과"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_search_empty"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/search_bar"
-        app:layout_constraintStart_toStartOf="@+id/search_bar"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_search_result"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView_search_title"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_search_title" />
 
-        <TextView
-            android:id="@+id/textView_recent_search_title"
-            style="@style/body1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="최근 검색어"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_search_result_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="120dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView_search_title">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_search_word"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView_recent_search_title"
-            app:layout_constraintTop_toBottomOf="@+id/textView_recent_search_title" />
+                    <ImageView
+                        android:id="@+id/imageView_empty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/img_mood_cry"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView_recommend_title"
-            style="@style/body1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="학교 그룹 추천"
-            app:layout_constraintEnd_toEndOf="@+id/textView_recent_search_title"
-            app:layout_constraintStart_toStartOf="@+id/textView_recent_search_title"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView_search_word" />
+                    <TextView
+                        android:id="@+id/textView_empty_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12sp"
+                        android:fontFamily="@font/pretendard_semi_bold"
+                        android:text="해당 그룹은\n존재하지 않아요"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView_empty"
+                        app:layout_constraintStart_toStartOf="@+id/imageView_empty"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView_empty" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_recommend"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView_recommend_title"
-            app:layout_constraintTop_toBottomOf="@+id/textView_recommend_title" />
+                    <TextView
+                        android:id="@+id/textView_empty_description"
+                        style="@style/caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="다른 그룹을 찾아보세요"
+                        android:textAlignment="center"
+                        android:textColor="@color/text_color2"
+                        app:layout_constraintEnd_toEndOf="@+id/textView_empty_title"
+                        app:layout_constraintStart_toStartOf="@+id/textView_empty_title"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_empty_title" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <Button
+                        android:id="@+id/button_search_other_group"
+                        style="@style/body3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:backgroundTint="@color/sub"
+                        android:paddingHorizontal="11.5dp"
+                        android:paddingVertical="10.5dp"
+                        android:text="다른 그룹 살펴보기"
+                        android:textColor="@color/white"
+                        app:cornerRadius="8dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textView_empty_description"
+                        app:layout_constraintStart_toStartOf="@+id/textView_empty_description"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_empty_description" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:id="@+id/layout_search_empty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView_recent_search_title"
+                    style="@style/body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="최근 검색어" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_search_word"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="24dp" />
+
+                <TextView
+                    android:id="@+id/textView_recommend_title"
+                    style="@style/body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="학교 그룹 추천" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_recommend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

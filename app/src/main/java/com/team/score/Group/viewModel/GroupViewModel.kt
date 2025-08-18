@@ -414,7 +414,7 @@ class GroupViewModel: ViewModel() {
     }
 
     // 학교 그룹 검색
-    fun searchSchoolGroup(activity: MainActivity, schoolId: Int, keyword: String?) {
+    fun searchSchoolGroup(activity: MainActivity, schoolId: Int, keyword: String?, onFailure: () -> Unit) {
 
         val tempGroupList = mutableListOf<GroupInfoResponse>()
 
@@ -467,9 +467,12 @@ class GroupViewModel: ViewModel() {
                         401 -> {
                             refreshToken(
                                 activity,
-                                retryRequest = { searchSchoolGroup(activity, schoolId, keyword) },
+                                retryRequest = { searchSchoolGroup(activity, schoolId, keyword, onFailure) },
                                 onFailure = { activity.finish() }
                             )
+                        }
+                        404 -> {
+                            onFailure()
                         }
                     }
                 }
