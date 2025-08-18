@@ -81,6 +81,7 @@
                 android:ems="10"
                 android:hint="현재 닉네임"
                 android:inputType="text"
+                android:textColor="@color/text_color3"
                 android:textColorHint="@color/text_color3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -257,6 +258,7 @@
                         android:ems="10"
                         android:hint="000cm"
                         android:inputType="number"
+                        android:textColor="@color/text_color3"
                         android:textColorHint="@color/text_color3" />
                 </LinearLayout>
 
@@ -289,6 +291,7 @@
                         android:ems="10"
                         android:hint="00kg"
                         android:inputType="number"
+                        android:textColor="@color/text_color3"
                         android:textColorHint="@color/text_color3" />
                 </LinearLayout>
             </LinearLayout>

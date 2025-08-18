@@ -26,8 +26,6 @@ class MypageViewModel: ViewModel() {
     var notificationInfo: MutableLiveData<NotificationInfoResponse?> = MutableLiveData()
     var blockedMateList = MutableLiveData<MutableList<BlockedMateListResponse>>()
 
-    var isUpdateUserInfo: MutableLiveData<Boolean?> = MutableLiveData()
-
     var isAddMate: MutableLiveData<Boolean?> = MutableLiveData()
 
     // 유저 정보
@@ -81,7 +79,7 @@ class MypageViewModel: ViewModel() {
     }
 
     // 회원 정보 수정
-    fun updateUserInfo(activity: MainActivity) {
+    fun updateUserInfo(activity: MainActivity, onSuccess: () -> Unit, onFailure: () -> Unit) {
         val apiClient = ApiClient(activity)
         val tokenManager = TokenManager(activity)
 
@@ -105,7 +103,7 @@ class MypageViewModel: ViewModel() {
                     val result: String? = response.body()
                     Log.d("##", "onResponse 성공: " + result?.toString())
 
-                    isUpdateUserInfo.value = true
+                    onSuccess()
                 } else {
                     // 통신이 실패한 경우(응답코드 3xx, 4xx 등)
                     var result: String? = response.body()
@@ -116,12 +114,12 @@ class MypageViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
                     when(response.code()) {
                         400 -> {
-                            isUpdateUserInfo.value = false
+                            onFailure()
                         }
                         401 -> {
                             refreshToken(
                                 activity,
-                                retryRequest = { updateUserInfo(activity) },
+                                retryRequest = { updateUserInfo(activity, onSuccess, onFailure) },
                                 onFailure = { activity.finish() }
                             )
                         }
@@ -132,7 +130,6 @@ class MypageViewModel: ViewModel() {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 // 통신 실패
                 Log.d("##", "onFailure 에러: " + t.message.toString())
-                isUpdateUserInfo.value = null
             }
         })
     }
