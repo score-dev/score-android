@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.TokenUtil.refreshToken
 import com.team.score.API.response.PagingResponse
 import com.team.score.API.response.home.BatonStatus
 import com.team.score.API.response.home.HomeResponse
@@ -55,6 +56,16 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getHomeData(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -94,6 +105,16 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "Error Response: $errorBody")
 
                     isBaton.value = BatonStatus(false, receiverId)
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { batonGroupMember(activity, receiverId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -161,6 +182,15 @@ class HomeViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getNotificationList(activity, currentPage) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -198,6 +228,16 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { acceptGroupParticipate(activity, notificationId, isAccept, onSuccess) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -235,6 +275,16 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { joinGroup(activity, groupId, userId, onSuccess) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -272,6 +322,16 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { readNotification(activity, notificationId, onSuccess) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -309,6 +369,16 @@ class HomeViewModel: ViewModel() {
                     Log.d("##", "onResponse 실패: " + response.body())
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
+
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { deleteNotification(activity, notificationId, onSuccess) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 

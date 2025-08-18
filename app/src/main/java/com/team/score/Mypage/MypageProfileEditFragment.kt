@@ -292,7 +292,7 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
 
     // 학교 선택
     override fun onSchoolSelected(position: Int) {
-        val dialog = ProfileEditDialog(this, MyApplication.userUpdateInfo?.userUpdateDto?.school?.schoolName.toString(), MyApplication.userUpdateInfo?.userUpdateDto?.school?.schoolAddress.toString())
+        val dialog = ProfileEditDialog(this, MyApplication.userUpdateInfo?.userUpdateDto?.school?.schoolName.toString(), MyApplication.schoolAddress.toString())
         // 알림창이 띄워져있는 동안 배경 클릭 막기
         dialog.isCancelable = false
         mainActivity.let {

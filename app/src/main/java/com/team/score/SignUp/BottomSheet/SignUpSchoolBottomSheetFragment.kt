@@ -101,11 +101,13 @@ class SignUpSchoolBottomSheetFragment(var activity: Activity) : BottomSheetDialo
             itemClickListener = object : SchoolListAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     MyApplication.signUpInfo?.schoolDto = UserSchool(
-                        getSchoolList?.get(position)?.SCHUL_NM!!, getSchoolList?.get(position)?.ORG_RDNMA!!, getSchoolList?.get(position)?.SD_SCHUL_CODE!!
+                        getSchoolList?.get(position)?.SCHUL_NM!!, getSchoolList?.get(position)?.SD_SCHUL_CODE!!
                     )
                     MyApplication.userUpdateInfo?.userUpdateDto?.school = UserSchoolInfo(
-                        getSchoolList?.get(position)?.SCHUL_NM!!, getSchoolList?.get(position)?.ORG_RDNMA!!, getSchoolList?.get(position)?.SD_SCHUL_CODE!!
+                        getSchoolList?.get(position)?.SCHUL_NM!!, getSchoolList?.get(position)?.SD_SCHUL_CODE!!
                     )
+                    MyApplication.schoolAddress = getSchoolList?.get(position)?.ORG_RDNMA!!
+
                     Log.d("##", "school : ${MyApplication.signUpInfo?.schoolDto}")
 
                     listener.onSchoolSelected(position)

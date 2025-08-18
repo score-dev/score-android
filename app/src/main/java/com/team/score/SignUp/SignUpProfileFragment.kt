@@ -99,10 +99,17 @@ class SignUpProfileFragment : Fragment() {
                     MyApplication.signUpInfo?.userDto?.profileImgId = profileImage
                 }
 
-                onboardingActivity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView_onboarding, SignUpSchoolFragment())
-                    .addToBackStack(null)
-                    .commit()
+                if(MyApplication.signUpIsStudent) {
+                    onboardingActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_onboarding, SignUpSchoolFragment())
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    onboardingActivity.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragmentContainerView_onboarding, SignUpLinkFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
 

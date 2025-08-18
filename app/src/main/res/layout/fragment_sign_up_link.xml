@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SignUp.SignUpPhysicalFragment">
+    tools:context=".SignUp.SignUpLinkFragment">
 
     <include
         android:id="@+id/toolbar"
@@ -13,19 +13,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/button_skip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="19dp"
-        android:fontFamily="@font/pretendard_bold"
-        android:text="건너뛰기"
-        android:textColor="@color/text_color2"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -61,7 +48,7 @@
             android:layout_height="3dp"
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
-            android:background="@drawable/background_progress_selected" />
+            android:background="@drawable/background_progress_unselected" />
 
         <TextView
             android:id="@+id/progress4"
@@ -69,7 +56,7 @@
             android:layout_height="3dp"
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
-            android:background="@drawable/background_progress_selected" />
+            android:background="@drawable/background_progress_unselected" />
 
         <TextView
             android:id="@+id/progress5"
@@ -98,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_semi_bold"
-        android:text="님의 키와 몸무게를"
+        android:text="님이 함께 운동하고 싶은"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/textView_physical_username"
         app:layout_constraintTop_toTopOf="@+id/textView_physical_username" />
@@ -108,130 +95,118 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_semi_bold"
-        android:text="알려주세요"
+        android:text="친구들이 있나요?"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/textView_physical_username"
         app:layout_constraintTop_toBottomOf="@+id/textView_physical_username" />
 
     <TextView
-        android:id="@+id/textView_physical_intro3"
+        android:id="@+id/textView_school_intro3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/pretendard_regular"
-        android:text="불편하시다면 건너뛰기를 눌러주세요!"
-        android:textColor="@color/text_color3"
+        android:text="스코어 가입링크를 보내 함께 시작해보세요!"
+        android:textColor="@color/text_color2"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView_physical_intro2"
         app:layout_constraintTop_toBottomOf="@+id/textView_physical_intro2" />
 
     <LinearLayout
+        android:id="@+id/linearLayout10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="19.5dp"
+        android:layout_marginTop="36dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_physical_intro3">
+        app:layout_constraintTop_toBottomOf="@+id/textView_school_intro3">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/button_kakao"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/background_kakao"
+            android:gravity="center"
+            android:paddingVertical="13dp">
 
-            <TextView
-                android:id="@+id/textView_physical_height_title"
+            <ImageView
+                android:id="@+id/imageView_kakao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:fontFamily="@font/pretendard_regular"
-                android:text="키"
-                android:textColor="@color/text_color3"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editText_physical_height"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="#2A3038"
-                android:background="@drawable/background_edittext"
-                android:ems="10"
-                android:inputType="number"
-                android:paddingHorizontal="17dp"
-                android:paddingVertical="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_physical_height_title"
-                app:layout_constraintVertical_bias="0.0" />
+                android:src="@drawable/ic_kakao" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/textView_kakao"
+                style="@style/body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="17dp"
-                android:text="cm"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/text_color3"
-                app:layout_constraintBottom_toBottomOf="@+id/editText_physical_height"
-                app:layout_constraintEnd_toEndOf="@+id/editText_physical_height"
-                app:layout_constraintTop_toTopOf="@+id/editText_physical_height" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginStart="8dp"
+                android:text="카카오톡 초대"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <Space
+            android:layout_width="17dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/button_link"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/background_sub_radius8"
+            android:gravity="center"
+            android:paddingVertical="13dp">
 
-            <TextView
-                android:id="@+id/textView_physical_weight_title"
+            <ImageView
+                android:id="@+id/imageView_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:fontFamily="@font/pretendard_regular"
-                android:text="몸무게"
-                android:textColor="@color/text_color3"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editText_physical_weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="#2A3038"
-                android:background="@drawable/background_edittext"
-                android:ems="10"
-                android:inputType="number"
-                android:paddingHorizontal="17dp"
-                android:paddingVertical="18dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_physical_weight_title"
-                app:layout_constraintVertical_bias="0.0" />
+                android:src="@drawable/ic_link" />
 
             <TextView
-                android:id="@+id/textView_physical_weight_unit"
+                android:id="@+id/textView_link"
+                style="@style/body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="17dp"
-                android:text="kg"
-                android:fontFamily="@font/pretendard_regular"
-                android:textSize="16sp"
-                android:textColor="@color/text_color3"
-                app:layout_constraintBottom_toBottomOf="@+id/editText_physical_weight"
-                app:layout_constraintEnd_toEndOf="@+id/editText_physical_weight"
-                app:layout_constraintTop_toTopOf="@+id/editText_physical_weight" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginStart="8dp"
+                android:text="초대링크 복사"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_alone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/background_grey2_radius8"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="19.5dp"
+        android:paddingVertical="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
+
+        <ImageView
+            android:id="@+id/imageView_check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_complete" />
+
+        <TextView
+            android:id="@+id/textView_alone"
+            style="@style/body3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="혼자 시작하고 싶어요!"
+            android:textColor="@color/text_color2" />
     </LinearLayout>
 
     <Button
@@ -242,10 +217,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="21dp"
+        android:enabled="false"
         android:text="다음으로"
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

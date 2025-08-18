@@ -40,6 +40,13 @@ import retrofit2.http.Query
 
 interface ApiService {
 
+    // 토큰 재발급
+    @POST("score/auth/refresh")
+    fun refreshToken(
+        @Query("userId") userId: Int,
+        @Query("refreshToken") refreshToken: String
+    ): Call<String>
+
     // 소셜 로그인 인증 및 기존 회원 여부 확인
     @POST("score/auth/oauth")
     fun checkOauth(
@@ -62,7 +69,7 @@ interface ApiService {
         @Part file: MultipartBody.Part?
     ): Call<LoginResponse>
 
-    // FCM 토큰 저장
+    // FCM 토큰 확인
     @GET("score/fcm/token/get")
     fun getFcmToken(
         @Query("userId") id: Int,

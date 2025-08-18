@@ -34,6 +34,12 @@ class TokenManager(val context: Context) {
         editor.apply()
     }
 
+    fun saveAccessToken(accessToken: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("access_token", accessToken)
+        editor.apply()
+    }
+
     fun getAccessToken(): String? {
         return sharedPreferences.getString("access_token", null)
     }

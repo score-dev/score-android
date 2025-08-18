@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.TokenUtil.refreshToken
 import com.team.score.API.neis.NeisApiClient
 import com.team.score.API.neis.response.NeisSchoolResponse
 import com.team.score.API.neis.response.SchoolDto
@@ -53,7 +54,7 @@ class UserViewModel  : ViewModel() {
                             .addToBackStack(null)
                             .commit()
                     } else {
-                        tokenManager.saveTokens("Bearer ${result?.accessToken.toString()}", "Bearer ${result?.refreshToken.toString()}")
+                        tokenManager.saveTokens("Bearer ${result?.accessToken.toString()}", "${result?.refreshToken.toString()}")
                         tokenManager.saveUserId(result?.id ?: 0)
 
                         val mainIntent = Intent(activity, MainActivity::class.java)
@@ -252,6 +253,15 @@ class UserViewModel  : ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getFcmToken(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -289,6 +299,15 @@ class UserViewModel  : ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { setFcmToken(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 

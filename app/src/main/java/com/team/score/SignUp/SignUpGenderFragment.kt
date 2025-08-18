@@ -37,7 +37,7 @@ class SignUpGenderFragment : Fragment() {
                             setTextColor(resources.getColor(R.color.text_color3))
                         }
                     }
-                    "OTHER" -> {
+                    "NONE" -> {
                         buttonGenderOthers.run {
                             backgroundTintList = resources.getColorStateList(R.color.grey2)
                             setTextColor(resources.getColor(R.color.text_color3))
@@ -60,7 +60,7 @@ class SignUpGenderFragment : Fragment() {
                             setTextColor(resources.getColor(R.color.text_color3))
                         }
                     }
-                    "OTHER" -> {
+                    "NONE" -> {
                         buttonGenderOthers.run {
                             backgroundTintList = resources.getColorStateList(R.color.grey2)
                             setTextColor(resources.getColor(R.color.text_color3))
@@ -94,7 +94,7 @@ class SignUpGenderFragment : Fragment() {
                     backgroundTintList = resources.getColorStateList(R.color.main)
                     setTextColor(resources.getColor(R.color.white))
                 }
-                gender = "OTHER"
+                gender = "NONE"
             }
 
             buttonSkip.setOnClickListener {

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.team.score.API.ApiClient
 import com.team.score.API.TokenManager
+import com.team.score.API.TokenUtil.refreshToken
 import com.team.score.API.map.ReverseGeoCodingClient
 import com.team.score.API.map.response.ReverseGeocodingResponse
 import com.team.score.API.response.PagingResponse
@@ -101,6 +102,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getFeedList(activity, userId, currentPage) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -138,6 +148,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getFeedDetail(activity, feedId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -192,6 +211,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getFeedEmotion(activity, feedId) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -229,6 +257,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { setFeedEmotion(activity, feedId, type) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -276,6 +313,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getExerciseCalendar(activity, userId, year, month) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -328,8 +374,17 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
-                    if(response.code() == 500) {
-                        searchFriendList.value = null
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getSearchExerciseFriend(activity, nickname) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                        500 -> {
+                            searchFriendList.value = null
+                        }
                     }
                 }
             }
@@ -386,6 +441,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { getFriendList(activity, currentPage) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
@@ -554,6 +618,15 @@ class RecordViewModel: ViewModel() {
                     val errorBody = response.errorBody()?.string() // 에러 응답 데이터를 문자열로 얻음
                     Log.d("##", "Error Response: $errorBody")
 
+                    when(response.code()) {
+                        401 -> {
+                            refreshToken(
+                                activity,
+                                retryRequest = { uploadFeed(activity) },
+                                onFailure = { activity.finish() }
+                            )
+                        }
+                    }
                 }
             }
 
