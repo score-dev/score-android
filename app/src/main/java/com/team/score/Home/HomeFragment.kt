@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
             layoutWeeklyResult.recyclerViewGraph.apply {
                 adapter = weeklyGraphAdapter
                 layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                val spacingRatio = 0.15f
+                val spacingRatio = 0.18f
                 addItemDecoration(
                     DynamicSpacingItemDecoration(spacingRatio)
                 )

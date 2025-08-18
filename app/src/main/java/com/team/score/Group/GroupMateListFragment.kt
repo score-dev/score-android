@@ -105,7 +105,9 @@ class GroupMateListFragment : Fragment() {
                 override fun onItemClick(position: Int) {
                     val userId = getGroupUnexercisedMateInfo?.get(position)?.userId ?: 0
 
-                    homeViewModel.batonGroupMember(mainActivity, userId)
+                    homeViewModel.batonGroupMember(mainActivity, userId) {
+
+                    }
                 }
             }
         }

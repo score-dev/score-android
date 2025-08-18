@@ -89,7 +89,7 @@ class MypageMainFragment : Fragment() {
                    Glide.with(this@MypageMainFragment)
                        .load(getUserInfo?.profileImgUrl)
                        .into(imageViewProfile)
-                   textViewNotificationTime.text = "${formatExerciseTimeToKorean(getUserInfo?.goal ?: "00:00:00")}"
+                   textViewNotificationTime.text = "${formatExerciseTimeToKorean(getUserInfo?.goal)}"
 
                    // 레벨 layout
                    layoutLevel.run {

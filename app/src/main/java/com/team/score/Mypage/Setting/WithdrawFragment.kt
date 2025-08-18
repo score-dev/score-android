@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import com.team.score.API.TokenManager
 import com.team.score.MainActivity
 import com.team.score.Mypage.viewModel.MypageViewModel
 import com.team.score.R
@@ -54,7 +57,13 @@ class WithdrawFragment : Fragment() {
 
                 val result = reasons.joinToString(separator = ", ")
 
-                viewModel.withdrawal(mainActivity, result)
+                viewModel.withdrawal(mainActivity, result) {
+
+                    TokenManager(mainActivity).deleteAccessToken()
+                    TokenManager(mainActivity).deleteRefreshToken()
+
+                    mainActivity.finish()
+                }
             }
         }
 

@@ -67,7 +67,6 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
         mainActivity = activity as MainActivity
 
         initView()
-        observeViewModel()
 
         // Registers a photo picker activity launcher in single-select mode.
         val pickMedia =
@@ -198,7 +197,14 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
                 MyApplication.userUpdateInfo?.userUpdateDto?.height = height ?: 0
                 MyApplication.userUpdateInfo?.userUpdateDto?.weight = weight ?: 0
 
-                viewModel.updateUserInfo(mainActivity)
+                viewModel.updateUserInfo(mainActivity,
+                    onSuccess = {
+                        parentFragmentManager.popBackStack()
+                    },
+                    onFailure = {
+                        Toast.makeText(mainActivity, "마지막으로 학교 정보를 변경한 후 30일이 경과하지 않아 학교 정보를 수정할 수 없습니다.", Toast.LENGTH_LONG).show()
+                    }
+                )
             }
 
         }
@@ -213,19 +219,6 @@ class MypageProfileEditFragment : Fragment(), SignUpGoalTimeBottomSheetListener,
 
     fun checkEnabled() {
         binding.buttonEdit.isEnabled = true
-    }
-
-    fun observeViewModel() {
-        viewModel.run {
-            isUpdateUserInfo.observe(viewLifecycleOwner) {
-                if(it == true) {
-                    fragmentManager?.popBackStack()
-                } else if(it == false) {
-                    // 학교 정보 수정 불가 toast message
-                    Toast.makeText(mainActivity, "마지막으로 학교 정보를 변경한 후 30일이 경과하지 않아 학교 정보를 수정할 수 없습니다.", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

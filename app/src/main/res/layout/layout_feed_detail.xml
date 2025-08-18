@@ -197,182 +197,215 @@
             android:textColor="@color/text_color2" />
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/layout_description1"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginHorizontal="17.5dp"
         android:layout_marginTop="16dp"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:alignItems="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/background_grey2_circle"
-            android:paddingHorizontal="9dp"
-            android:paddingVertical="6dp">
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:gravity="center">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_uploader_profile"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_profile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView_uploader_nickname"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/pretendard_medium"
-                android:text="닉네임"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_uploader_profile"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView_uploader_profile"
-                app:layout_constraintTop_toTopOf="@+id/imageView_uploader_profile" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_gravity="center"
+                android:background="@drawable/background_grey2_circle"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="6dp">
 
-        <TextView
-            android:id="@+id/textView_feed_description1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="4dp"
-            android:fontFamily="@font/pretendard_medium"
-            android:text="님이" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageView_uploader_profile"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_profile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/background_grey2_circle"
-            android:paddingHorizontal="9dp"
-            android:paddingVertical="6dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_location"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_location_grey"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/textView_uploader_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="닉네임"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_uploader_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView_uploader_profile"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_uploader_profile" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textView_location"
+                android:id="@+id/textView_feed_description1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginStart="4dp"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="위치"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_location"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView_location"
-                app:layout_constraintTop_toTopOf="@+id/imageView_location" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:text="님이" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_feed_description2"
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="4dp"
-            android:fontFamily="@font/pretendard_medium"
-            android:text="에서" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:gravity="center">
 
-    <LinearLayout
-        android:id="@+id/layout_description2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginHorizontal="17.5dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_description1">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_others"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/background_grey2_circle"
-            android:paddingHorizontal="9dp"
-            android:paddingVertical="6dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView_other_profile"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_profile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView_other_nickname"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/pretendard_medium"
-                android:text="닉네임"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_other_profile"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView_other_profile"
-                app:layout_constraintTop_toTopOf="@+id/imageView_other_profile" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_gravity="center"
+                android:background="@drawable/background_grey2_circle"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="6dp">
 
-        <TextView
-            android:id="@+id/textView_feed_description3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="4dp"
-            android:fontFamily="@font/pretendard_medium"
-            android:text="님과 함께" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageView_location"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_location_grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/background_sub_radius10"
-            android:paddingHorizontal="9dp"
-            android:paddingVertical="6dp">
+                <TextView
+                    android:id="@+id/textView_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="위치"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView_location"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_location" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textView_exercise_time"
+                android:id="@+id/textView_feed_description2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00분"
+                android:layout_gravity="center"
+                android:layout_marginStart="4dp"
                 android:fontFamily="@font/pretendard_medium"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:text="에서" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_feed_description4"
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="6dp"
-            android:fontFamily="@font/pretendard_medium"
-            android:text="동안 운동했어요" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:gravity="center">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_others"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/background_grey2_circle"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="6dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageView_other_profile"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_profile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView_other_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:text="닉네임"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_other_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView_other_profile"
+                    app:layout_constraintTop_toTopOf="@+id/imageView_other_profile" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView_feed_description3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="님과 함께" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="6dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:gravity="center">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/background_sub_radius10"
+                android:paddingHorizontal="9dp"
+                android:paddingVertical="6dp">
+
+                <TextView
+                    android:id="@+id/textView_exercise_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00분"
+                    android:fontFamily="@font/pretendard_medium"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView_feed_description4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="동안 운동했어요" />
+        </LinearLayout>
+    </com.google.android.flexbox.FlexboxLayout>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -382,7 +415,7 @@
         android:layout_marginHorizontal="17.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_description2">
+        app:layout_constraintTop_toBottomOf="@+id/layout_description1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"

@@ -61,13 +61,19 @@ class GroupMemberOthersRankingAdapter(
 
             if((item?.changedAmount ?: 0) < 0) {
                 imageViewRankingChange.setImageResource(R.drawable.ic_arrow_down_blue)
-                textViewRankingChange.text = "${(item?.changedAmount ?: 0)}"
+                textViewRankingChange.run {
+                    text = "${-(item?.changedAmount ?: 0)}"
+                    setTextColor(resources.getColor(R.color.blue))
+                }
             } else if((item?.changedAmount ?: 0) == 0) {
                 imageViewRankingChange.visibility = View.INVISIBLE
                 textViewRankingChange.visibility = View.INVISIBLE
             } else {
                 imageViewRankingChange.setImageResource(R.drawable.ic_arrow_up_red)
-                textViewRankingChange.text = "${(item?.changedAmount ?: 0)}"
+                textViewRankingChange.run {
+                    text = "${(item?.changedAmount ?: 0)}"
+                    setTextColor(resources.getColor(R.color.red))
+                }
             }
         }
     }

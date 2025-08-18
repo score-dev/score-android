@@ -193,7 +193,8 @@ class MyGroupRankingFragment : Fragment() {
         binding.run {
             if(myRanking != null) {
                 layoutGroupMyRanking.run {
-                    textViewGroupTotalExerciseTimeValue.text = "${myRanking.weeklyExerciseTime?.div(60)}시간"
+                    var time = if(myRanking.weeklyExerciseTime == 0.0) 0 else myRanking.weeklyExerciseTime?.div(60)?.toInt()
+                    textViewGroupTotalExerciseTimeValue.text = "${time}시간"
                     textViewGroupLevelValue.text = "${myRanking.weeklyLevelIncrement}"
                     textViewGroupRankingValue.text = "${myRanking.rankNum}위"
                 }

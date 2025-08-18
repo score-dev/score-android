@@ -69,6 +69,7 @@
         android:layout_marginTop="32dp"
         android:fontFamily="@font/pretendard_semi_bold"
         android:text="학교 정보 수정은 30일에 한 번 가능해요"
+        android:textAlignment="center"
         android:textColor="@color/red"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

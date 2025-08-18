@@ -15,25 +15,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_empty_feed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="94dp"
+        android:layout_marginBottom="90dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageView_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/img_mood_happy"
+            android:src="@drawable/img_mood_cry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,9 +44,9 @@
             android:id="@+id/textView_empty_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12sp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/pretendard_bold"
-            android:text="닉네임님만의 운동기록을\n채워보세요!"
+            android:text="피드가 아직 없어요"
             android:textAlignment="center"
             android:textColor="@color/text_color3"
             android:textSize="24sp"
@@ -52,15 +54,80 @@
             app:layout_constraintStart_toStartOf="@+id/imageView_empty"
             app:layout_constraintTop_toBottomOf="@+id/imageView_empty" />
 
+        <TextView
+            android:id="@+id/textView_empty_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:text="친구에게 바통을 넘겨 보세요!"
+            android:textAlignment="center"
+            android:textColor="@color/text_color3"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_empty"
+            app:layout_constraintStart_toStartOf="@+id/imageView_empty"
+            app:layout_constraintTop_toBottomOf="@+id/textView_empty_title" />
+
+        <Button
+            android:id="@+id/button_baton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/sub"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:paddingVertical="7dp"
+            android:layout_marginTop="12dp"
+            android:text="바통찌르기"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_empty_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_empty_my_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="94dp"
+        android:layout_marginBottom="90dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView_my_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_mood_happy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_my_empty_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="닉네임님만의 운동기록을\n채워보세요!"
+            android:textAlignment="center"
+            android:textColor="@color/text_color3"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView_my_empty"
+            app:layout_constraintStart_toStartOf="@+id/imageView_my_empty"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_my_empty" />
+
         <LinearLayout
             android:id="@+id/button_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/textView_empty_title"
-            app:layout_constraintStart_toStartOf="@+id/textView_empty_title"
-            app:layout_constraintTop_toBottomOf="@+id/textView_empty_title">
+            app:layout_constraintEnd_toEndOf="@+id/textView_my_empty_title"
+            app:layout_constraintStart_toStartOf="@+id/textView_my_empty_title"
+            app:layout_constraintTop_toBottomOf="@+id/textView_my_empty_title">
 
             <TextView
                 android:id="@+id/textView_empty_record"

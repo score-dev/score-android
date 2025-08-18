@@ -194,8 +194,7 @@ class RecordViewModel: ViewModel() {
                             feed.agentId,
                             feed.agentProfileImgUrl,
                             feed.agentNickname,
-                            feed.emotionType,
-                            feed.reactedAt
+                            feed.emotionType
                         )
 
                         tempFeedEmotion.add(feedEmotionList)
